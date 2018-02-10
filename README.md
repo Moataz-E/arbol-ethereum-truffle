@@ -18,11 +18,9 @@ Install Ganache using your web browser. Start Ganache and make sure the RPC serv
 
 Migrate smart contracts to Ganache using Truffle.
 
-    $ truffle migrate
+    $ truffle deploy
 
 Interact with the application via Truffle console or via a front end application.
-
-    $ truffle deploy
 
 -----------------------
 Testing
