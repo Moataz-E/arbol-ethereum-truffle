@@ -14,5 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "zeppelin-solidity": "^1.6.0"
+  },
+  "devDependencies": {
+    "expect": "^22.2.2"
   }
 }
