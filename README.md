@@ -1,9 +1,8 @@
------------------------------------------------
-Ethereum Crop Solidity Application
------------------------------------------------
-
+Weather Immunity ÐApp
+============================
+-------------------------
 Quick Start
-===========
+-------------------------
 
 If NPM isn't installed already on your computer, install it using your web browser.
 
@@ -25,8 +24,9 @@ Interact with the application via Truffle console or via a front end application
 
     $ truffle deploy
 
+-----------------------
 Testing
-=======
+-----------------------
 
 Run the tests.
 
