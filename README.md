@@ -4,17 +4,24 @@ Weather Immunity ÐApp
 Quick Start
 -------------------------
 
-If NPM isn't installed already on your computer, install it using your web browser.
+If Node.js and NPM aren't installed already on your computer, install them using your web browser.
+
+If they are installed, make sure you are using the latest version.
+
+    $ sudo npm cache clean -f
+    $ sudo npm install -g n
+    $ sudo n stable
+
 
 Install truffle globally on your computer.
 
-    $ npm install truffle -g
+    $ sudo npm install truffle -g
 
 Install the local dependencies specified in package.json
 
     $ npm install
 
-Install Ganache using your web browser. Start Ganache and make sure the RPC server is configured to use HTTP://127.0.0.1:7545
+Install Ganache using your web browser. http://truffleframework.com/ganache/ Start Ganache and make sure the RPC server is configured to use HTTP://127.0.0.1:7545
 
 Migrate smart contracts to Ganache using Truffle.
 
