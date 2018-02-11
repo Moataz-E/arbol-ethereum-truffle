@@ -314,7 +314,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 623,
+          "SourceUnit": 722,
           "absolutePath": "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol",
           "file": "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol",
           "scope": 47,
@@ -330,20 +330,20 @@
       {
         "attributes": {
           "contractDependencies": [
-            301,
-            344,
-            376,
-            622
+            400,
+            443,
+            475,
+            721
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
             46,
-            622,
-            301,
-            344,
-            376
+            721,
+            400,
+            443,
+            475
           ],
           "name": "CropToken",
           "scope": 47
@@ -360,7 +360,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "StandardToken",
-                  "referencedDeclaration": 622,
+                  "referencedDeclaration": 721,
                   "type": "contract StandardToken"
                 },
                 "id": 3,
@@ -725,7 +725,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 220,
+                              "referencedDeclaration": 319,
                               "type": "uint256",
                               "value": "totalSupply_"
                             },
@@ -786,7 +786,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 218,
+                                  "referencedDeclaration": 317,
                                   "type": "mapping(address => uint256)",
                                   "value": "balances"
                                 },
@@ -812,7 +812,7 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1184,
+                                      "referencedDeclaration": 1283,
                                       "type": "msg",
                                       "value": "msg"
                                     },
@@ -890,7 +890,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 375,
+                              "referencedDeclaration": 474,
                               "type": "function (address,address,uint256)",
                               "value": "Transfer"
                             },
@@ -933,7 +933,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1184,
+                                  "referencedDeclaration": 1283,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -998,9 +998,9 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x345ca3e014aaf5dca488057592ee47305d9b3e10"
+      "address": "0x3b863735261925eb860c7f2729e07612ff8326e8"
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-10T08:31:36.305Z"
+  "updatedAt": "2018-02-11T10:45:35.785Z"
 }
