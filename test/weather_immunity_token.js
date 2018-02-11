@@ -10,7 +10,7 @@ contract('WeatherImmunityToken', function(accounts) {
       return WIT.totalSupply();
     }).then(function(supply){
     	assert.equal(supply, 1, "totalSupply was not incremented.");
-        return WIT.ownerOf.call(0);
+        return WIT.ownerOf.call(1);
     }).then(function(owner){
     	assert.equal(owner, accounts[0], "Token was not transferred to it's creator.");
     });

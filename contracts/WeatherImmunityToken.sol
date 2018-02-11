@@ -15,8 +15,14 @@ import 'zeppelin-solidity/contracts/math/SafeMath.sol';
  */
 contract WeatherImmunityToken is ERC721Token {
 
+    uint256[] tokenIDs; // We keep track of our IDs like good ethereum citizens.
+
     function CreateToken() public {
-      _mint(msg.sender, totalSupply());
+
+      
+      _mint(msg.sender, totalSupply()+1);
+
+
     }
 
 }
