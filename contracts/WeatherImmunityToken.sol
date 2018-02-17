@@ -176,7 +176,7 @@ contract WeatherImmunityToken is ERC721Token {
 
       if (weiContributing > weiAsking) {         // If user is contributing more than asking, they are the seller and they pay the fee.
         return totalEscrow.mul(systemFeePPM).div(1000000);
-      } else if (weiContributing == weiAsking) {
+      } else if (weiContributing < weiAsking) {
         return 0; // Buyer role pays no feel
       } else {
         return totalEscrow.mul(systemFeePPM).div(1000000).div(2);  // If this is a 50-50 thing, split the fee.
