@@ -13,9 +13,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.5",
     "zeppelin-solidity": "^1.6.0"
   },
   "devDependencies": {
-    "expect": "^22.2.2"
+    "expect": "^22.2.2",
+    "smart-contract-deployer": "^1.0.1"
   }
 }
