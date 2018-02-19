@@ -62,10 +62,10 @@ contract WeatherImmunityToken is ERC721Token {
     event ProposalOffered(uint indexed tokenID, uint indexed weiContributing, uint indexed weiAsking, string index, string threshold, string location, uint start, uint end);
 
 
-    event Debug(address one, address two, uint three);
-
-
-
+   /**
+    * @dev Constructor which sets the CropToken address.
+    * @param _cropAddress The address of the CropToken contract.
+   */    
     function WeatherImmunityToken(address _cropAddress) public {
       cropContract = CropToken(_cropAddress);
     }
@@ -81,11 +81,7 @@ contract WeatherImmunityToken is ERC721Token {
     * @param end The end date of the WIT.
     * @param makeStale If set to true, the WIT will be taken off the open market after its start date passes. That is, no one will be able to accept it.
     */
-
-    //, uint weiAsking, string index, string threshold, string location, uint start, uint end, bool makeStale
     function createWITProposal(uint weiContributing, uint weiAsking, string index, string threshold, string location, uint start, uint end, bool makeStale) public payable {
-
-     // Debug(msg.sender, cropContract, 123);
 
       require(weiContributing > 0);
       require(weiAsking > 0);
@@ -97,8 +93,6 @@ contract WeatherImmunityToken is ERC721Token {
   
       // Validate amount of wei sent.
       require(msg.value == weiContributing);
-      
-
 
       // Calculate and take CROP fee.
       uint fee = calculateFee(weiContributing, weiAsking);
@@ -126,25 +120,24 @@ contract WeatherImmunityToken is ERC721Token {
       require(ownerOf(proposalID) != address(0));
   
       // Specified partner must not already have a partner.
-      WIT storage partner = WITs[proposalID];
-      require(partner.partnerID == 0);
+      require(WITs[proposalID].partnerID == 0);
 
-      if (partner.makeStale) {
-        require(now < partner.start);
+      if (WITs[proposalID].makeStale) {
+        require(now < WITs[proposalID].start);
       }
 
       // Validate amount of wei sent.
-      require(msg.value == partner.weiPartnerEscrow);
+      require(msg.value == WITs[proposalID].weiPartnerEscrow);
 
       // Calculate and take CROP fee.
-      uint fee = calculateFee(partner.weiPartnerEscrow, partner.weiEscrow);
+      uint fee = calculateFee(WITs[proposalID].weiPartnerEscrow, WITs[proposalID].weiEscrow);
       if (fee != 0) {
           require(cropContract.transferFrom(msg.sender, systemFeeWallet, fee));
       }
 
       // Create the token and set the "proposal" as "accepted."
       uint ID = tokenIDCounter.add(1);
-      WITs[ID] = WIT(partner.weiEscrow, partner.weiPartnerEscrow, partner.index, partner.threshold, partner.location, proposalID, partner.start, partner.end, false);
+      WITs[ID] = WIT(WITs[proposalID].weiEscrow, WITs[proposalID].weiPartnerEscrow, WITs[proposalID].index, WITs[proposalID].threshold, WITs[proposalID].location, proposalID, WITs[proposalID].start, WITs[proposalID].end, false);
       _mint(msg.sender, ID);
       tokenIDCounter = ID;
       WITs[proposalID].partnerID = ID;
@@ -205,11 +198,11 @@ contract WeatherImmunityToken is ERC721Token {
     /**
     * @dev Cancel an unpartnered WIT that you have created. Redeem the ETH escrowed therein.
     * @param tokenID The ID of your token that you want to cancel.
+    TODO CROP redemption
     */ 
     function cancelAndRedeem(uint tokenID) onlyOwnerOf(tokenID) public {
-      WIT storage token = WITs[tokenID];
-      uint redemptionAmount = token.weiEscrow;
-      require(token.partnerID == 0); 
+      uint redemptionAmount = WITs[tokenID].weiEscrow;
+      require(WITs[tokenID].partnerID == 0); 
       burnWIT(tokenID);
       msg.sender.transfer(redemptionAmount);
       Redemption(tokenID, redemptionAmount, msg.sender);
