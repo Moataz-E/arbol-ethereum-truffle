@@ -87,6 +87,8 @@ contract WeatherImmunityToken is ERC721Token {
 
      // Debug(msg.sender, cropContract, 123);
 
+      require(weiContributing > 0);
+      require(weiAsking > 0);
 
       require(now < start); // Don't let people create WITs that start in the past. Opens the door for abuse.
       require(start < end);
@@ -101,8 +103,9 @@ contract WeatherImmunityToken is ERC721Token {
       // Calculate and take CROP fee.
       uint fee = calculateFee(weiContributing, weiAsking);
 
-      cropContract.transferFrom(msg.sender, systemFeeWallet, fee);
-
+      if (fee != 0) {
+          require(cropContract.transferFrom(msg.sender, systemFeeWallet, fee));
+      }
 
       uint ID = tokenIDCounter.add(1);
       WITs[ID] = WIT(weiContributing, weiAsking, index, threshold, location, 0, start, end, makeStale);
@@ -145,12 +148,7 @@ contract WeatherImmunityToken is ERC721Token {
       _mint(msg.sender, ID);
       tokenIDCounter = ID;
       WITs[proposalID].partnerID = ID;
-    
       ProposalAccepted(proposalID, ID);
-    }
-
-    function ping() public returns (string){
-      return "pong";
     }
 
 
