@@ -11,50 +11,55 @@ var one_month = 2629746000;
 var one_month_from_now = now + one_month;
 var two_months_from_now = now + (2 * one_month);
 
-let ethPropose = 9000
-let ethAsk = 1000
+var ethPropose = 9000
+var ethAsk = 1000
 
 
 contract('WeatherImmunityToken', function(accounts) {
     it("should create a WIT proposal and a WIT acceptance with the proposer as the seller", async function() {
 
-        
+        var ethPropose = 9000
+        var ethAsk = 1000        
+        var proposerAccount = accounts[0];
+        var accepterAccount = accounts[3];
+        var systemFeeWallet = accounts[9];
+        var WIT = await	WeatherImmunityToken.deployed();
+        var CROP = await CropToken.deployed();
 
-        let WIT = await	WeatherImmunityToken.deployed();
-        let CROP = await CropToken.deployed();
-
-        let beforeBalance = await web3.eth.getBalance(WIT.address);
+        var beforeBalance = await web3.eth.getBalance(WIT.address);
       
-        let beforeAllowance = await CROP.allowance(accounts[0], WIT.address);
+        var beforeAllowance = await CROP.allowance(proposerAccount, WIT.address);
         assert.equal(beforeAllowance.toNumber(), 0, "CROP allowance isnt initialized to 0");
  	
- 		let approval = await CROP.approve(WIT.address, ethPropose + ethAsk, {from: accounts[0]});
+        var CROPFee = await WIT.calculateFee(ethPropose, ethAsk);
+
+ 		var approval = await CROP.approve(WIT.address, CROPFee, {from: proposerAccount});
  		assert(approval, "CROP approval failed");
+            
+        var afterAllowance = await CROP.allowance(proposerAccount, WIT.address);
+        assert.equal(afterAllowance.toNumber(), CROPFee, "allowance of 10000 CROP failed");
     
-        let afterAllowance = await CROP.allowance(accounts[0], WIT.address);
-        assert.equal(afterAllowance.toNumber(), ethPropose + ethAsk, "allowance of 10000 CROP failed");
+        await WIT.createWITProposal(ethPropose, ethAsk, "rain", "one inch", "india", one_month_from_now, two_months_from_now, true, {value: ethPropose, from:proposerAccount});
     
-        await WIT.createWITProposal(ethPropose, ethAsk, "rain", "one inch", "india", one_month_from_now, two_months_from_now, true, {value: ethPropose, from:accounts[0]});
-    
-        let supply = await WIT.totalSupply();
+        var supply = await WIT.totalSupply();
         assert.equal(supply.toNumber(), 1, "WIT creation failed");
     
        // utils.assertEvent(WIT, {event: "ProposalOffered", logIndex: 1, args: {tokenID: new BigNumber(1)}});
     
-        let cropBalance = await CROP.balanceOf(accounts[9]);
-        assert.equal(cropBalance.toNumber(), ethPropose + ethAsk, "CROP wasn't properly transferred to system wallet");
+        var cropBalance = await CROP.balanceOf(systemFeeWallet);
+        assert.equal(cropBalance.toNumber(), CROPFee, "CROP wasn't properly transferred to system wallet");
     
-        let afterBalance = await web3.eth.getBalance(WIT.address);
+        var afterBalance = await web3.eth.getBalance(WIT.address);
         assert(afterBalance - ethPropose == beforeBalance, 'ETH was not taken from proposer properly');
     
-        let owner = await WIT.ownerOf(1);
-        assert.equal(accounts[0], owner);
+        var owner = await WIT.ownerOf(1);
+        assert.equal(proposerAccount, owner);
 
         // now the acceptance
   
         beforeBalance = await web3.eth.getBalance(WIT.address);
 
-        await WIT.createWITAcceptance(1, {from: accounts[1], value: ethAsk});
+        await WIT.createWITAcceptance(1, {from: accepterAccount, value: ethAsk});
 
         supply = await WIT.totalSupply();
         assert.equal(supply.toNumber(), 2, "WIT creation failed");
@@ -63,7 +68,7 @@ contract('WeatherImmunityToken', function(accounts) {
         assert(afterBalance - ethAsk == beforeBalance, "Eth was not taken from accepter properly");
 
         owner = await WIT.ownerOf(2);
-        assert.equal(accounts[1], owner, "Second WIT was not transferred to accepter"); 
+        assert.equal(accepterAccount, owner, "Second WIT was not transferred to accepter"); 
 
 
 
@@ -71,44 +76,45 @@ contract('WeatherImmunityToken', function(accounts) {
 });
 
 
-let ethPropose2 = 1000
-let ethAsk2 = 9000
+
 
 
 contract('WeatherImmunityToken', function(accounts) {
     it("should create a WIT proposal and a WIT acceptance with the accepter as the seller", async function() {
 
-  
+        var proposerAccount = accounts[0];
+        var accepterAccount = accounts[3];
+        var systemFeeWallet = accounts[9];
+        var WIT = await	WeatherImmunityToken.deployed();
+        var CROP = await CropToken.deployed();
+        var ethPropose2 = 1000
+        var ethAsk2 = 9000
 
-        let WIT = await	WeatherImmunityToken.deployed();
-        let CROP = await CropToken.deployed();
-
-        let beforeBalance = await web3.eth.getBalance(WIT.address);
+        var beforeBalance = await web3.eth.getBalance(WIT.address);
     
-        await WIT.createWITProposal(ethPropose2, ethAsk2, "rain", "one inch", "india", one_month_from_now, two_months_from_now, true, {value: ethPropose2, from:accounts[0]});
+        await WIT.createWITProposal(ethPropose2, ethAsk2, "rain", "one inch", "india", one_month_from_now, two_months_from_now, true, {value: ethPropose2, from:proposerAccount});
     
-        let supply = await WIT.totalSupply();
+        var supply = await WIT.totalSupply();
         assert.equal(supply.toNumber(), 1, "WIT creation failed");
     
 
+        await CROP.transfer(accepterAccount, 20000, {from: proposerAccount});     
 
-        await CROP.transfer(accounts[1], 20000, {fron: accounts[0]});
-     
-
-        let beforeAllowance = await CROP.allowance(accounts[1], WIT.address);
+        var beforeAllowance = await CROP.allowance(accepterAccount, WIT.address);
         assert.equal(beforeAllowance.toNumber(), 0, "CROP allowance isnt initialized to 0");
  	
- 		let approval = await CROP.approve(WIT.address, ethPropose2 + ethAsk2, {from: accounts[1]});
+        var CROPFee = await WIT.calculateFee(ethAsk2, ethPropose2);
+
+
+ 		var approval = await CROP.approve(WIT.address, CROPFee, {from: accepterAccount});
  		assert(approval, "CROP approval failed");
     
-        let afterAllowance = await CROP.allowance(accounts[1], WIT.address);
-        assert.equal(afterAllowance.toNumber(), ethPropose2 + ethAsk2, "allowance of 10000 CROP failed");
+        var afterAllowance = await CROP.allowance(accepterAccount, WIT.address);
+        assert.equal(afterAllowance.toNumber(), CROPFee, "allowance of 10000 CROP failed");
 
-
-  
         beforeBalance = await web3.eth.getBalance(WIT.address);
 
-        await WIT.createWITAcceptance(1, {from: accounts[1], value: ethAsk2});
+        await WIT.createWITAcceptance(1, {from: accepterAccount, value: ethAsk2});
 
         supply = await WIT.totalSupply();
         assert.equal(supply.toNumber(), 2, "WIT creation failed");
@@ -117,10 +123,10 @@ contract('WeatherImmunityToken', function(accounts) {
         assert(afterBalance - ethAsk2 == beforeBalance, "Eth was not taken from accepter properly");
 
         owner = await WIT.ownerOf(2);
-        assert.equal(accounts[1], owner, "Second WIT was not transferred to accepter");        
+        assert.equal(accepterAccount, owner, "Second WIT was not transferred to accepter");        
 
-        let cropBalance = await CROP.balanceOf(accounts[9]);
-        assert.equal(cropBalance.toNumber(), ethPropose + ethAsk, "CROP wasn't properly transferred to system wallet");
+        var cropBalance = await CROP.balanceOf(systemFeeWallet);
+        assert.equal(cropBalance.toNumber(), CROPFee, "CROP wasn't properly transferred to system wallet");
 
     }); 
 }); 
