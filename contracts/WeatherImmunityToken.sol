@@ -2,10 +2,10 @@ pragma solidity ^0.4.18;
 
 import 'zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
-import './CropToken.sol';
+import './Arbolcoin.sol';
 
 /**
- * @title Weather Immunity Token for crop and weather protection agreements.
+ * @title Weather Immunity Token for ARBOL and weather protection agreements.
  *
  * @dev If you hold this token you are eligible for a payout based on the outcome of the weather.
  * @dev WITs are a representation of a protection agreement between two parties.
@@ -41,16 +41,16 @@ contract WeatherImmunityToken is ERC721Token {
     // Trusted address to update the system fee rate.
     address systemFeeSetter = 0x0F4F2Ac550A1b4e2280d04c21cEa7EBD822934b5;
 
-    // Crop Token smart contract (contains address). 
-    CropToken cropContract;
+    // Arbolcoin smart contract (contains address). 
+    Arbolcoin arbolContract;
 
-    // CROP fees go to this wallet.
+    // ARBOL fees go to this wallet.
     address systemFeeWallet = 0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE;
 
     // All the weatherAPI names
     string[] public weatherAPIs;
 
-    // The CROP system fee in parts per million. (of wei.) 100% for now.
+    // The ARBOL system fee in parts per million. (of wei.) 100% for now.
     uint public systemFeePPM = 1000000;
 
     // Use a simple counter to create new token IDs.
@@ -63,11 +63,11 @@ contract WeatherImmunityToken is ERC721Token {
 
 
    /**
-    * @dev Constructor which sets the CropToken address.
-    * @param _cropAddress The address of the CropToken contract.
+    * @dev Constructor which sets the Arbolcoin address.
+    * @param _arbolAddress The address of the Arbolcoin contract.
    */    
-    function WeatherImmunityToken(address _cropAddress) public {
-      cropContract = CropToken(_cropAddress);
+    function WeatherImmunityToken(address _arbolAddress) public {
+      arbolContract = Arbolcoin(_arbolAddress);
     }
 
 
@@ -94,11 +94,11 @@ contract WeatherImmunityToken is ERC721Token {
       // Validate amount of wei sent.
       require(msg.value == weiContributing);
 
-      // Calculate and take CROP fee.
+      // Calculate and take ARBOL fee.
       uint fee = calculateFee(weiContributing, weiAsking);
 
       if (fee != 0) {
-          require(cropContract.transferFrom(msg.sender, systemFeeWallet, fee));
+          require(arbolContract.transferFrom(msg.sender, systemFeeWallet, fee));
       }
 
       uint ID = tokenIDCounter.add(1);
@@ -129,10 +129,10 @@ contract WeatherImmunityToken is ERC721Token {
       // Validate amount of wei sent.
       require(msg.value == WITs[proposalID].weiPartnerEscrow);
 
-      // Calculate and take CROP fee.
+      // Calculate and take ARBOL fee.
       uint fee = calculateFee(WITs[proposalID].weiPartnerEscrow, WITs[proposalID].weiEscrow);
       if (fee != 0) {
-          require(cropContract.transferFrom(msg.sender, systemFeeWallet, fee));
+          require(arbolContract.transferFrom(msg.sender, systemFeeWallet, fee));
       }
 
       // Create the token and set the "proposal" as "accepted."
@@ -157,10 +157,10 @@ contract WeatherImmunityToken is ERC721Token {
 
 
     /**
-    * @dev Calculates the fee in CROP associated with a WIT. Fees are paid by the seller, and are a percentage of the total escrowed ETH amount.
+    * @dev Calculates the fee in ARBOL associated with a WIT. Fees are paid by the seller, and are a percentage of the total escrowed ETH amount.
     * @param weiContributing One half of the total escrowed ETH in a partnered WIT pair (an agreement).
     * @param weiAsking The other half of the total escrowed ETH.
-    * @return the fee in CROP
+    * @return the fee in ARBOL
     */
     function calculateFee(uint weiContributing, uint weiAsking) public constant returns (uint) {
       uint totalEscrow = weiContributing.add(weiAsking);
@@ -198,7 +198,7 @@ contract WeatherImmunityToken is ERC721Token {
     /**
     * @dev Cancel an unpartnered WIT that you have created. Redeem the ETH escrowed therein.
     * @param tokenID The ID of your token that you want to cancel.
-    TODO CROP redemption
+    TODO ARBOL redemption
     */ 
     function cancelAndRedeem(uint tokenID) onlyOwnerOf(tokenID) public {
       uint redemptionAmount = WITs[tokenID].weiEscrow;

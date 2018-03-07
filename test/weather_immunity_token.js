@@ -1,5 +1,5 @@
 var WeatherImmunityToken = artifacts.require("WeatherImmunityToken");
-var CropToken = artifacts.require("CropToken")
+var Arbolcoin = artifacts.require("Arbolcoin")
 var expect = require('expect');
 var utils = require("./utils.js");
 var BigNumber = require('bignumber.js');
@@ -24,20 +24,20 @@ contract('WeatherImmunityToken', function(accounts) {
         var accepterAccount = accounts[3];
         var systemFeeWallet = accounts[9];
         var WIT = await	WeatherImmunityToken.deployed();
-        var CROP = await CropToken.deployed();
+        var ARBOL = await Arbolcoin.deployed();
 
         var beforeBalance = await web3.eth.getBalance(WIT.address);
       
-        var beforeAllowance = await CROP.allowance(proposerAccount, WIT.address);
-        assert.equal(beforeAllowance.toNumber(), 0, "CROP allowance isnt initialized to 0");
+        var beforeAllowance = await ARBOL.allowance(proposerAccount, WIT.address);
+        assert.equal(beforeAllowance.toNumber(), 0, "ARBOL allowance isnt initialized to 0");
  	
-        var CROPFee = await WIT.calculateFee(ethPropose, ethAsk);
+        var ARBOLFee = await WIT.calculateFee(ethPropose, ethAsk);
 
- 		var approval = await CROP.approve(WIT.address, CROPFee, {from: proposerAccount});
- 		assert(approval, "CROP approval failed");
+ 		var approval = await ARBOL.approve(WIT.address, ARBOLFee, {from: proposerAccount});
+ 		assert(approval, "ARBOL approval failed");
             
-        var afterAllowance = await CROP.allowance(proposerAccount, WIT.address);
-        assert.equal(afterAllowance.toNumber(), CROPFee, "allowance of 10000 CROP failed");
+        var afterAllowance = await ARBOL.allowance(proposerAccount, WIT.address);
+        assert.equal(afterAllowance.toNumber(), ARBOLFee, "allowance of 10000 ARBOL failed");
     
         await WIT.createWITProposal(ethPropose, ethAsk, "rain", "one inch", "india", one_month_from_now, two_months_from_now, true, {value: ethPropose, from:proposerAccount});
     
@@ -46,8 +46,8 @@ contract('WeatherImmunityToken', function(accounts) {
     
        // utils.assertEvent(WIT, {event: "ProposalOffered", logIndex: 1, args: {tokenID: new BigNumber(1)}});
     
-        var cropBalance = await CROP.balanceOf(systemFeeWallet);
-        assert.equal(cropBalance.toNumber(), CROPFee, "CROP wasn't properly transferred to system wallet");
+        var arbolBalance = await ARBOL.balanceOf(systemFeeWallet);
+        assert.equal(arbolBalance.toNumber(), ARBOLFee, "ARBOL wasn't properly transferred to system wallet");
     
         var afterBalance = await web3.eth.getBalance(WIT.address);
         assert(afterBalance - ethPropose == beforeBalance, 'ETH was not taken from proposer properly');
@@ -77,8 +77,6 @@ contract('WeatherImmunityToken', function(accounts) {
 
 
 
-
-
 contract('WeatherImmunityToken', function(accounts) {
     it("should create a WIT proposal and a WIT acceptance with the accepter as the seller", async function() {
 
@@ -86,7 +84,7 @@ contract('WeatherImmunityToken', function(accounts) {
         var accepterAccount = accounts[3];
         var systemFeeWallet = accounts[9];
         var WIT = await	WeatherImmunityToken.deployed();
-        var CROP = await CropToken.deployed();
+        var ARBOL = await Arbolcoin.deployed();
         var ethPropose2 = 1000
         var ethAsk2 = 9000
 
@@ -96,21 +94,20 @@ contract('WeatherImmunityToken', function(accounts) {
     
         var supply = await WIT.totalSupply();
         assert.equal(supply.toNumber(), 1, "WIT creation failed");
-    
 
-        await CROP.transfer(accepterAccount, 20000, {from: proposerAccount});     
+        await ARBOL.transfer(accepterAccount, 20000, {from: proposerAccount});     
 
-        var beforeAllowance = await CROP.allowance(accepterAccount, WIT.address);
-        assert.equal(beforeAllowance.toNumber(), 0, "CROP allowance isnt initialized to 0");
+        var beforeAllowance = await ARBOL.allowance(accepterAccount, WIT.address);
+        assert.equal(beforeAllowance.toNumber(), 0, "ARBOL allowance isnt initialized to 0");
  	
-        var CROPFee = await WIT.calculateFee(ethAsk2, ethPropose2);
+        var ARBOLFee = await WIT.calculateFee(ethAsk2, ethPropose2);
 
 
- 		var approval = await CROP.approve(WIT.address, CROPFee, {from: accepterAccount});
- 		assert(approval, "CROP approval failed");
+ 		var approval = await ARBOL.approve(WIT.address, ARBOLFee, {from: accepterAccount});
+ 		assert(approval, "ARBOL approval failed");
     
-        var afterAllowance = await CROP.allowance(accepterAccount, WIT.address);
-        assert.equal(afterAllowance.toNumber(), CROPFee, "allowance of 10000 CROP failed");
+        var afterAllowance = await ARBOL.allowance(accepterAccount, WIT.address);
+        assert.equal(afterAllowance.toNumber(), ARBOLFee, "allowance of 10000 ARBOL failed");
 
         beforeBalance = await web3.eth.getBalance(WIT.address);
 
@@ -125,11 +122,14 @@ contract('WeatherImmunityToken', function(accounts) {
         owner = await WIT.ownerOf(2);
         assert.equal(accepterAccount, owner, "Second WIT was not transferred to accepter");        
 
-        var cropBalance = await CROP.balanceOf(systemFeeWallet);
-        assert.equal(cropBalance.toNumber(), CROPFee, "CROP wasn't properly transferred to system wallet");
+        var arbolBalance = await ARBOL.balanceOf(systemFeeWallet);
+        assert.equal(arbolBalance.toNumber(), ARBOLFee, "ARBOL wasn't properly transferred to system wallet");
 
     }); 
 }); 
+
+
+
 
 
 
