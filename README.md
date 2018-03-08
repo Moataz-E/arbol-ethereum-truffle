@@ -4,36 +4,55 @@ Weather Immunity ÐApp
 Quick Start
 -------------------------
 
-If Node.js and NPM aren't installed already on your computer, install them using your web browser.
-
-If they are installed, make sure you are using the latest version.
-
-    $ sudo npm cache clean -f
-    $ sudo npm install -g n
-    $ sudo n stable
-
-
 Install truffle globally on your computer.
 
-    $ sudo npm install truffle -g
+    $ sudo npm install -g truffle
 
-Install the local dependencies specified in package.json
+Install ganache-cli on your computer. The GUI version of Ganache will sadly no longer work for our purposes, as it lacks a feature that is necessary for ethereum bridge (unlocking accounts).
 
+    $ sudo npm install -g ganache-cli
+
+Clone this repo (if you haven't already) and install node packages.
+
+    $ git clone https://github.com/bandrebandrebandre/crop-dapp.git
+    $ cd crop-dapp
     $ npm install
 
-Install Ganache using your web browser. http://truffleframework.com/ganache/ Start Ganache and make sure the RPC server is configured to use HTTP://127.0.0.1:7545
+We need to install ethereum bridge, which lets us make calls to Oraclize from our testing environment.
 
-Migrate smart contracts to Ganache using Truffle.
+Install etherem bridge. Don't do this inside the crop-dapp directory.
 
-    $ truffle deploy
+    $ git clone https://github.com/oraclize/ethereum-bridge.git
+    $ cd ethereum-bridge
+    $ npm install
+
+Ethereum bridge (soon to be replaced by Stargate) needs an older version of node. 
+
+Install node version manager (nvm) using the instructions on this page: https://github.com/creationix/nvm/blob/master/README.md
+
+Make sure the latest version of node is installed.
+
+    $ nvm install node
+
+Start ganache-cli with latest node version (9.x as of this writing).
+
+    $ nvm use node
+    $ ganache-cli --unlock 0 --unlock 1 --deterministic --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
+
+Open a new terminal window, move to your ethereum bridge directory, and start ethereum bridge with node 6.9.1. It takes a while to finish starting.
+
+    $ cd etherem-bridge
+    $ nvm use 6.9.1
+    $ node bridge -H 127.0.0.1:8545 -a 1 --dev
+
+Open a third terminal window and run the truffle tests in the crop-dapp directory with node 9.x
+
+    $ cd crop-dapp
+    $ nvm use node
+    $ truffle test
 
 Interact with the application via Truffle console or via a front end application.
 
------------------------
-Testing
------------------------
-
-Run the tests.
-
-    $ truffle test
-
+    $ cd crop-dapp
+    $ nvm use node
+    $ truffle deploy

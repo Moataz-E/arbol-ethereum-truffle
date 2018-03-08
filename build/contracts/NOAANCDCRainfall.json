@@ -1,0 +1,1461 @@
+{
+  "contractName": "NOAANCDCRainfall",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "myid",
+          "type": "bytes32"
+        },
+        {
+          "name": "result",
+          "type": "string"
+        }
+      ],
+      "name": "__callback",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "myid",
+          "type": "bytes32"
+        },
+        {
+          "name": "result",
+          "type": "string"
+        },
+        {
+          "name": "proof",
+          "type": "bytes"
+        }
+      ],
+      "name": "__callback",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "testQuery",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "name": "newOraclizeQuery",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "debug",
+          "type": "string"
+        }
+      ],
+      "name": "debug",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x6060604052606060405190810160405280602981526020017f68747470733a2f2f7777772e6e6364632e6e6f61612e676f762f63646f2d776581526020017f622f6170692f76322f0000000000000000000000000000000000000000000000815250600590805190602001906200007892919062000187565b50606060405190810160405280602e81526020017f516d644b4b333139566568613833683641596751716878395952734a394d4a4581526020017f377933336f4358795a344d71484500000000000000000000000000000000000081525060069080519060200190620000ed92919062000187565b5060e06040519081016040528060ba815260200162000fda60ba9139600790805190602001906200012092919062000187565b5034156200012d57600080fd5b736f485c8bf6fc43ea212e93bbf8ce046c7f1cb4756000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555062000236565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10620001ca57805160ff1916838001178555620001fb565b82800160010185558215620001fb579182015b82811115620001fa578251825591602001919060010190620001dd565b5b5090506200020a91906200020e565b5090565b6200023391905b808211156200022f57600081600090555060010162000215565b5090565b90565b610d9480620002466000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806327dc297e1461005c57806338bbfa50146100c6578063bb418bf914610173575b600080fd5b341561006757600080fd5b6100c460048080356000191690602001909190803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610188565b005b34156100d157600080fd5b61017160048080356000191690602001909190803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509190803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610228565b005b341561017e57600080fd5b61018661022d565b005b7f2f50fbfa89e10026c273a59cb3202a86c6c09a4116d874b4ad412c42d9042468816040518080602001828103825283818151815260200191508051906020019080838360005b838110156101ea5780820151818401526020810190506101cf565b50505050905090810190601f1680156102175780820380516001836020036101000a031916815260200191505b509250505060405180910390a15050565b505050565b6102c86040805190810160405280600381526020017f55524c0000000000000000000000000000000000000000000000000000000000815250606060405190810160405280603a81526020017f6a736f6e28687474703a2f2f6170692e66697865722e696f2f6c61746573743f81526020017f73796d626f6c733d5553442c474250292e72617465732e4742500000000000008152506102cb565b50565b60008060008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16148061033d5750600061033b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1661080d565b145b1561034e5761034c6000610818565b505b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166338cc48316000604051602001526040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b15156103db57600080fd5b6102c65a03f115156103ec57600080fd5b5050506040518051905073ffffffffffffffffffffffffffffffffffffffff16600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141515610535576000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166338cc48316000604051602001526040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b15156104d957600080fd5b6102c65a03f115156104ea57600080fd5b50505060405180519050600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663524f3889856000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018080602001828103825283818151815260200191508051906020019080838360005b838110156105e85780820151818401526020810190506105cd565b50505050905090810190601f1680156106155780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b151561063357600080fd5b6102c65a03f1151561064457600080fd5b50505060405180519050905062030d403a02670de0b6b3a7640000018111156106735760006001029150610806565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663adf59f9982600087876000604051602001526040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808481526020018060200180602001838103835285818151815260200191508051906020019080838360005b83811015610734578082015181840152602081019050610719565b50505050905090810190601f1680156107615780820380516001836020036101000a031916815260200191505b50838103825284818151815260200191508051906020019080838360005b8381101561079a57808201518184015260208101905061077f565b50505050905090810190601f1680156107c75780820380516001836020036101000a031916815260200191505b50955050505050506020604051808303818588803b15156107e757600080fd5b6125ee5a03f115156107f857600080fd5b505050506040518051905091505b5092915050565b6000813b9050919050565b600080610838731d3b2638a7cc9f2cb3d298a3da7a90b67e5506ed61080d565b11156108d957731d3b2638a7cc9f2cb3d298a3da7a90b67e5506ed6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506108d06040805190810160405280600b81526020017f6574685f6d61696e6e6574000000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b60006108f873c03a2615d5efaf5f49f60b7bb6583eaec212fdf161080d565b11156109995773c03a2615d5efaf5f49f60b7bb6583eaec212fdf16000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506109906040805190810160405280600c81526020017f6574685f726f707374656e330000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b60006109b873b7a07bcf2ba2f2703b24c0691b5278999c59ac7e61080d565b1115610a595773b7a07bcf2ba2f2703b24c0691b5278999c59ac7e6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610a506040805190810160405280600981526020017f6574685f6b6f76616e0000000000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b6000610a7873146500cfd35b22e4a392fe0adc06de1a1368ed4861080d565b1115610b195773146500cfd35b22e4a392fe0adc06de1a1368ed486000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610b106040805190810160405280600b81526020017f6574685f72696e6b656279000000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b6000610b38736f485c8bf6fc43ea212e93bbf8ce046c7f1cb47561080d565b1115610b9b57736f485c8bf6fc43ea212e93bbf8ce046c7f1cb4756000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060019050610ca4565b6000610bba7320e12a1f859b3feae5fb2a0a32c18f5a65555bbf61080d565b1115610c1d577320e12a1f859b3feae5fb2a0a32c18f5a65555bbf6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060019050610ca4565b6000610c3c7351efaf4c8b3c9afbd5ab9f4bbc82784ab6ef8faa61080d565b1115610c9f577351efaf4c8b3c9afbd5ab9f4bbc82784ab6ef8faa6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060019050610ca4565b600090505b919050565b8060029080519060200190610cbf929190610cc3565b5050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10610d0457805160ff1916838001178555610d32565b82800160010185558215610d32579182015b82811115610d31578251825591602001919060010190610d16565b5b509050610d3f9190610d43565b5090565b610d6591905b80821115610d61576000816000905550600101610d49565b5090565b905600a165627a7a7230582088c48b6c09b55ef5eacaee940a38b4a26abe4dd192a9e4da468133976c016bd000297b2768656164657273273a207b27746f6b656e273a205b646563727970745d20424b36784d2b6b64573367476665714c59636b38687945764c7a536c2f3942786c6134736637307a7446306132386b5178304a324361704d43396d56597061446235454c767873366f77754d706473454f494541394f7338367644684341375238656b49526f484d6a627858466451644563544c38767079516850415033485a376955574d4673364652357a616569734947574647756f3d7d7d",
+  "deployedBytecode": "0x606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806327dc297e1461005c57806338bbfa50146100c6578063bb418bf914610173575b600080fd5b341561006757600080fd5b6100c460048080356000191690602001909190803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610188565b005b34156100d157600080fd5b61017160048080356000191690602001909190803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509190803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610228565b005b341561017e57600080fd5b61018661022d565b005b7f2f50fbfa89e10026c273a59cb3202a86c6c09a4116d874b4ad412c42d9042468816040518080602001828103825283818151815260200191508051906020019080838360005b838110156101ea5780820151818401526020810190506101cf565b50505050905090810190601f1680156102175780820380516001836020036101000a031916815260200191505b509250505060405180910390a15050565b505050565b6102c86040805190810160405280600381526020017f55524c0000000000000000000000000000000000000000000000000000000000815250606060405190810160405280603a81526020017f6a736f6e28687474703a2f2f6170692e66697865722e696f2f6c61746573743f81526020017f73796d626f6c733d5553442c474250292e72617465732e4742500000000000008152506102cb565b50565b60008060008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16148061033d5750600061033b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1661080d565b145b1561034e5761034c6000610818565b505b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166338cc48316000604051602001526040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b15156103db57600080fd5b6102c65a03f115156103ec57600080fd5b5050506040518051905073ffffffffffffffffffffffffffffffffffffffff16600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141515610535576000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166338cc48316000604051602001526040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b15156104d957600080fd5b6102c65a03f115156104ea57600080fd5b50505060405180519050600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663524f3889856000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018080602001828103825283818151815260200191508051906020019080838360005b838110156105e85780820151818401526020810190506105cd565b50505050905090810190601f1680156106155780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b151561063357600080fd5b6102c65a03f1151561064457600080fd5b50505060405180519050905062030d403a02670de0b6b3a7640000018111156106735760006001029150610806565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663adf59f9982600087876000604051602001526040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808481526020018060200180602001838103835285818151815260200191508051906020019080838360005b83811015610734578082015181840152602081019050610719565b50505050905090810190601f1680156107615780820380516001836020036101000a031916815260200191505b50838103825284818151815260200191508051906020019080838360005b8381101561079a57808201518184015260208101905061077f565b50505050905090810190601f1680156107c75780820380516001836020036101000a031916815260200191505b50955050505050506020604051808303818588803b15156107e757600080fd5b6125ee5a03f115156107f857600080fd5b505050506040518051905091505b5092915050565b6000813b9050919050565b600080610838731d3b2638a7cc9f2cb3d298a3da7a90b67e5506ed61080d565b11156108d957731d3b2638a7cc9f2cb3d298a3da7a90b67e5506ed6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506108d06040805190810160405280600b81526020017f6574685f6d61696e6e6574000000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b60006108f873c03a2615d5efaf5f49f60b7bb6583eaec212fdf161080d565b11156109995773c03a2615d5efaf5f49f60b7bb6583eaec212fdf16000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506109906040805190810160405280600c81526020017f6574685f726f707374656e330000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b60006109b873b7a07bcf2ba2f2703b24c0691b5278999c59ac7e61080d565b1115610a595773b7a07bcf2ba2f2703b24c0691b5278999c59ac7e6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610a506040805190810160405280600981526020017f6574685f6b6f76616e0000000000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b6000610a7873146500cfd35b22e4a392fe0adc06de1a1368ed4861080d565b1115610b195773146500cfd35b22e4a392fe0adc06de1a1368ed486000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610b106040805190810160405280600b81526020017f6574685f72696e6b656279000000000000000000000000000000000000000000815250610ca9565b60019050610ca4565b6000610b38736f485c8bf6fc43ea212e93bbf8ce046c7f1cb47561080d565b1115610b9b57736f485c8bf6fc43ea212e93bbf8ce046c7f1cb4756000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060019050610ca4565b6000610bba7320e12a1f859b3feae5fb2a0a32c18f5a65555bbf61080d565b1115610c1d577320e12a1f859b3feae5fb2a0a32c18f5a65555bbf6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060019050610ca4565b6000610c3c7351efaf4c8b3c9afbd5ab9f4bbc82784ab6ef8faa61080d565b1115610c9f577351efaf4c8b3c9afbd5ab9f4bbc82784ab6ef8faa6000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060019050610ca4565b600090505b919050565b8060029080519060200190610cbf929190610cc3565b5050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10610d0457805160ff1916838001178555610d32565b82800160010185558215610d32579182015b82811115610d31578251825591602001919060010190610d16565b5b509050610d3f9190610d43565b5090565b610d6591905b80821115610d61576000816000905550600101610d49565b5090565b905600a165627a7a7230582088c48b6c09b55ef5eacaee940a38b4a26abe4dd192a9e4da468133976c016bd00029",
+  "sourceMap": "84:1451:0:-;;;134:60;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;200:74;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;280:205;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;1415:116;;;;;;;;1482:42;1454:3;;:71;;;;;;;;;;;;;;;;;;84:1451;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
+  "deployedSourceMap": "84:1451:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1273:136;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5394:69:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1146:121:0;;;;;;;;;;;;;;1273:136;1389:13;1395:6;1389:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:2;8:100;;;99:1;94:3;90;84:5;80:1;75:3;71;64:6;52:2;49:1;45:3;40:15;;8:100;;;12:14;3:109;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1273:136:0;;:::o;5394:69:2:-;;;;:::o;1146:121:0:-;1177:83;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:14;:83::i;:::-;;1146:121::o;5883:306:2:-;5968:10;5989;3171:1;3165:3;;;;;;;;;;;3157:15;;;3156:49;;;;3203:1;3176:25;3196:3;;;;;;;;;;;3176:11;:25::i;:::-;:28;3156:49;3153:101;;;3219:35;2887:1;3219:19;:35::i;:::-;;3153:101;3289:3;;;;;;;;;;;:14;;;:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3268:37;;3276:8;;;;;;;;;;;3268:37;;;;3265:92;;;3340:3;;;;;;;;;;;:14;;;:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3319:8;;:38;;;;;;;;;;;;;;;;;;3265:92;6002:8;;;;;;;;;;;:17;;;6020:10;6002:29;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:2;8:100;;;99:1;94:3;90;84:5;80:1;75:3;71;64:6;52:2;49:1;45:3;40:15;;8:100;;;12:14;3:109;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5989:42:2;;6075:6;6063:11;:18;6053:7;:28;6045:5;:36;6041:50;;;6090:1;6083:8;;;;;;6041:50;6135:8;;;;;;;;;;;:14;;;6156:5;6163:1;6166:10;6178:3;6135:47;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:2;8:100;;;99:1;94:3;90;84:5;80:1;75:3;71;64:6;52:2;49:1;45:3;40:15;;8:100;;;12:14;3:109;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1;8:100;33:3;30:1;27:2;8:100;;;99:1;94:3;90;84:5;80:1;75:3;71;64:6;52:2;49:1;45:3;40:15;;8:100;;;12:14;3:109;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;6128:54:2;;3368:1;5883:306;;;;;:::o;25804:150::-;25866:10;25932:5;25920:11;25911:27;;25897:51;;;:::o;3515:1764::-;3578:4;3653:1;3597:55;3609:42;3597:11;:55::i;:::-;:57;3593:245;;;3707:42;3679:3;;:71;;;;;;;;;;;;;;;;;;3764:38;;;;;;;;;;;;;;;;;;;:23;:38::i;:::-;3823:4;3816:11;;;;3593:245;3907:1;3851:55;3863:42;3851:11;:55::i;:::-;:57;3847:254;;;3969:42;3941:3;;:71;;;;;;;;;;;;;;;;;;4026:39;;;;;;;;;;;;;;;;;;;:23;:39::i;:::-;4086:4;4079:11;;;;3847:254;4170:1;4114:55;4126:42;4114:11;:55::i;:::-;:57;4110:249;;;4230:42;4202:3;;:71;;;;;;;;;;;;;;;;;;4287:36;;;;;;;;;;;;;;;;;;;:23;:36::i;:::-;4344:4;4337:11;;;;4110:249;4428:1;4372:55;4384:42;4372:11;:55::i;:::-;:57;4368:253;;;4490:42;4462:3;;:71;;;;;;;;;;;;;;;;;;4547:38;;;;;;;;;;;;;;;;;;;:23;:38::i;:::-;4606:4;4599:11;;;;4368:253;4690:1;4634:55;4646:42;4634:11;:55::i;:::-;:57;4630:201;;;4752:42;4724:3;;:71;;;;;;;;;;;;;;;;;;4816:4;4809:11;;;;4630:201;4900:1;4844:55;4856:42;4844:11;:55::i;:::-;:57;4840:200;;;4961:42;4933:3;;:71;;;;;;;;;;;;;;;;;;5025:4;5018:11;;;;4840:200;5109:1;5053:55;5065:42;5053:11;:55::i;:::-;:57;5049:202;;;5172:42;5144:3;;:71;;;;;;;;;;;;;;;;;;5236:4;5229:11;;;;5049:202;5267:5;5260:12;;3515:1764;;;;:::o;33863:118::-;33961:13;33937:21;:37;;;;;;;;;;;;:::i;:::-;;33863:118;:::o;84:1451:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.4.18;\nimport \"./usingOraclize.sol\";\nimport \"./urlRequests.sol\";\n\ncontract NOAANCDCRainfall is usingOraclize {\n\n    string baseURL = \"https://www.ncdc.noaa.gov/cdo-web/api/v2/\";\n    string requestsIPFSHash = \"QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE\";\n    string headers = \"{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}\";\n\n    event newOraclizeQuery(string message);\n\n    event debug(string debug);\n\n    function NOAARequest(string _query, string _url) private {\n        if (oraclize_getPrice(\"computation\") > this.balance) {\n            newOraclizeQuery(\"Oraclize query was NOT sent, please add some ETH to cover for the query fee\");\n        } else {\n            newOraclizeQuery(\"Oraclize query was sent, standing by for the answer...\");\n\n            oraclize_query(\"computation\",\n                [_query,\n                \"GET\",\n                _url,\n                headers]\n            );\n        }\n    }\n\n//    function query() {\n  //  \tNOAARequest(\"json(\" + );\n    //}\n\n\n    function testQuery() {\n        oraclize_query(\"URL\", \"json(http://api.fixer.io/latest?symbols=USD,GBP).rates.GBP\");\n    }\n\n    function __callback(bytes32 myid, string result) {\n//        if (msg.sender != oraclize_cbAddress()) throw;\n        debug(result);\n    }\n\n    function NOAANCDCRainfall() {\n\n        OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);    }\n\n\n}",
+  "sourcePath": "/Users/benandre/cropcrop/contracts/NOAANCDCRainfall.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/benandre/cropcrop/contracts/NOAANCDCRainfall.sol",
+      "exportedSymbols": {
+        "NOAANCDCRainfall": [
+          88
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 1,
+        "name": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 6068,
+          "absolutePath": "/Users/benandre/cropcrop/contracts/usingOraclize.sol",
+          "file": "./usingOraclize.sol",
+          "scope": 89,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2,
+        "name": "ImportDirective",
+        "src": "25:29:0"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 225,
+          "absolutePath": "/Users/benandre/cropcrop/contracts/urlRequests.sol",
+          "file": "./urlRequests.sol",
+          "scope": 89,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 3,
+        "name": "ImportDirective",
+        "src": "55:27:0"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            6067
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            88,
+            6067
+          ],
+          "name": "NOAANCDCRainfall",
+          "scope": 89
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "usingOraclize",
+                  "referencedDeclaration": 6067,
+                  "type": "contract usingOraclize"
+                },
+                "id": 4,
+                "name": "UserDefinedTypeName",
+                "src": "113:13:0"
+              }
+            ],
+            "id": 5,
+            "name": "InheritanceSpecifier",
+            "src": "113:13:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "baseURL",
+              "scope": 88,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "string storage ref",
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string storage pointer"
+                },
+                "id": 6,
+                "name": "ElementaryTypeName",
+                "src": "134:6:0"
+              },
+              {
+                "attributes": {
+                  "argumentTypes": null,
+                  "hexvalue": "68747470733a2f2f7777772e6e6364632e6e6f61612e676f762f63646f2d7765622f6170692f76322f",
+                  "isConstant": false,
+                  "isLValue": false,
+                  "isPure": true,
+                  "lValueRequested": false,
+                  "subdenomination": null,
+                  "token": "string",
+                  "type": "literal_string \"https://www.ncdc.noaa.gov/cdo-web/api/v2/\"",
+                  "value": "https://www.ncdc.noaa.gov/cdo-web/api/v2/"
+                },
+                "id": 7,
+                "name": "Literal",
+                "src": "151:43:0"
+              }
+            ],
+            "id": 8,
+            "name": "VariableDeclaration",
+            "src": "134:60:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "requestsIPFSHash",
+              "scope": 88,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "string storage ref",
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string storage pointer"
+                },
+                "id": 9,
+                "name": "ElementaryTypeName",
+                "src": "200:6:0"
+              },
+              {
+                "attributes": {
+                  "argumentTypes": null,
+                  "hexvalue": "516d644b4b333139566568613833683641596751716878395952734a394d4a45377933336f4358795a344d714845",
+                  "isConstant": false,
+                  "isLValue": false,
+                  "isPure": true,
+                  "lValueRequested": false,
+                  "subdenomination": null,
+                  "token": "string",
+                  "type": "literal_string \"QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE\"",
+                  "value": "QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE"
+                },
+                "id": 10,
+                "name": "Literal",
+                "src": "226:48:0"
+              }
+            ],
+            "id": 11,
+            "name": "VariableDeclaration",
+            "src": "200:74:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "headers",
+              "scope": 88,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "string storage ref",
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string storage pointer"
+                },
+                "id": 12,
+                "name": "ElementaryTypeName",
+                "src": "280:6:0"
+              },
+              {
+                "attributes": {
+                  "argumentTypes": null,
+                  "hexvalue": "7b2768656164657273273a207b27746f6b656e273a205b646563727970745d20424b36784d2b6b64573367476665714c59636b38687945764c7a536c2f3942786c6134736637307a7446306132386b5178304a324361704d43396d56597061446235454c767873366f77754d706473454f494541394f7338367644684341375238656b49526f484d6a627858466451644563544c38767079516850415033485a376955574d4673364652357a616569734947574647756f3d7d7d",
+                  "isConstant": false,
+                  "isLValue": false,
+                  "isPure": true,
+                  "lValueRequested": false,
+                  "subdenomination": null,
+                  "token": "string",
+                  "type": "literal_string \"{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}\"",
+                  "value": "{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}"
+                },
+                "id": 13,
+                "name": "Literal",
+                "src": "297:188:0"
+              }
+            ],
+            "id": 14,
+            "name": "VariableDeclaration",
+            "src": "280:205:0"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "newOraclizeQuery"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "message",
+                      "scope": 18,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 15,
+                        "name": "ElementaryTypeName",
+                        "src": "515:6:0"
+                      }
+                    ],
+                    "id": 16,
+                    "name": "VariableDeclaration",
+                    "src": "515:14:0"
+                  }
+                ],
+                "id": 17,
+                "name": "ParameterList",
+                "src": "514:16:0"
+              }
+            ],
+            "id": 18,
+            "name": "EventDefinition",
+            "src": "492:39:0"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "debug"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "debug",
+                      "scope": 22,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 19,
+                        "name": "ElementaryTypeName",
+                        "src": "549:6:0"
+                      }
+                    ],
+                    "id": 20,
+                    "name": "VariableDeclaration",
+                    "src": "549:12:0"
+                  }
+                ],
+                "id": 21,
+                "name": "ParameterList",
+                "src": "548:14:0"
+              }
+            ],
+            "id": 22,
+            "name": "EventDefinition",
+            "src": "537:26:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "NOAARequest",
+              "payable": false,
+              "scope": 88,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "private"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_query",
+                      "scope": 56,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 23,
+                        "name": "ElementaryTypeName",
+                        "src": "590:6:0"
+                      }
+                    ],
+                    "id": 24,
+                    "name": "VariableDeclaration",
+                    "src": "590:13:0"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_url",
+                      "scope": 56,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 25,
+                        "name": "ElementaryTypeName",
+                        "src": "605:6:0"
+                      }
+                    ],
+                    "id": 26,
+                    "name": "VariableDeclaration",
+                    "src": "605:11:0"
+                  }
+                ],
+                "id": 27,
+                "name": "ParameterList",
+                "src": "589:28:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 28,
+                "name": "ParameterList",
+                "src": "626:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": ">",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "uint256",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_stringliteral_dfa1c022cd124ec9090fc8f126299892ca6c2d96eb6cf1d99b8d4c7f173728ee",
+                                      "typeString": "literal_string \"computation\""
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    661,
+                                    679
+                                  ],
+                                  "referencedDeclaration": 661,
+                                  "type": "function (string memory) returns (uint256)",
+                                  "value": "oraclize_getPrice"
+                                },
+                                "id": 29,
+                                "name": "Identifier",
+                                "src": "640:17:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "hexvalue": "636f6d7075746174696f6e",
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "subdenomination": null,
+                                  "token": "string",
+                                  "type": "literal_string \"computation\"",
+                                  "value": "computation"
+                                },
+                                "id": 30,
+                                "name": "Literal",
+                                "src": "658:13:0"
+                              }
+                            ],
+                            "id": 31,
+                            "name": "FunctionCall",
+                            "src": "640:32:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "balance",
+                              "referencedDeclaration": null,
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 6098,
+                                  "type": "contract NOAANCDCRainfall",
+                                  "value": "this"
+                                },
+                                "id": 32,
+                                "name": "Identifier",
+                                "src": "675:4:0"
+                              }
+                            ],
+                            "id": 33,
+                            "name": "MemberAccess",
+                            "src": "675:12:0"
+                          }
+                        ],
+                        "id": 34,
+                        "name": "BinaryOperation",
+                        "src": "640:47:0"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "tuple()",
+                                  "type_conversion": false
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_stringliteral_bd8de690da694a5910a0f704ac9ce237e723b5eaad5960da1d2ac575f10c1b1c",
+                                          "typeString": "literal_string \"Oraclize query was NOT sent, please add some ETH to cover for the query fee\""
+                                        }
+                                      ],
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 18,
+                                      "type": "function (string memory)",
+                                      "value": "newOraclizeQuery"
+                                    },
+                                    "id": 35,
+                                    "name": "Identifier",
+                                    "src": "703:16:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "4f7261636c697a6520717565727920776173204e4f542073656e742c20706c656173652061646420736f6d652045544820746f20636f76657220666f722074686520717565727920666565",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "string",
+                                      "type": "literal_string \"Oraclize query was NOT sent, please add some ETH to cover for the query fee\"",
+                                      "value": "Oraclize query was NOT sent, please add some ETH to cover for the query fee"
+                                    },
+                                    "id": 36,
+                                    "name": "Literal",
+                                    "src": "720:77:0"
+                                  }
+                                ],
+                                "id": 37,
+                                "name": "FunctionCall",
+                                "src": "703:95:0"
+                              }
+                            ],
+                            "id": 38,
+                            "name": "ExpressionStatement",
+                            "src": "703:95:0"
+                          }
+                        ],
+                        "id": 39,
+                        "name": "Block",
+                        "src": "689:120:0"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "tuple()",
+                                  "type_conversion": false
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_stringliteral_16c323e807e72ee9cfe74e3b52d2baafe261f7d596c3ab8bac29ee93d1947977",
+                                          "typeString": "literal_string \"Oraclize query was sent, standing by for the answer...\""
+                                        }
+                                      ],
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 18,
+                                      "type": "function (string memory)",
+                                      "value": "newOraclizeQuery"
+                                    },
+                                    "id": 40,
+                                    "name": "Identifier",
+                                    "src": "829:16:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "4f7261636c697a65207175657279207761732073656e742c207374616e64696e6720627920666f722074686520616e737765722e2e2e",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "string",
+                                      "type": "literal_string \"Oraclize query was sent, standing by for the answer...\"",
+                                      "value": "Oraclize query was sent, standing by for the answer..."
+                                    },
+                                    "id": 41,
+                                    "name": "Literal",
+                                    "src": "846:56:0"
+                                  }
+                                ],
+                                "id": 42,
+                                "name": "FunctionCall",
+                                "src": "829:74:0"
+                              }
+                            ],
+                            "id": 43,
+                            "name": "ExpressionStatement",
+                            "src": "829:74:0"
+                          },
+                          {
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "bytes32",
+                                  "type_conversion": false
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_stringliteral_dfa1c022cd124ec9090fc8f126299892ca6c2d96eb6cf1d99b8d4c7f173728ee",
+                                          "typeString": "literal_string \"computation\""
+                                        },
+                                        {
+                                          "typeIdentifier": "t_array$_t_string_memory_$4_memory_ptr",
+                                          "typeString": "string memory[4] memory"
+                                        }
+                                      ],
+                                      "overloadedDeclarations": [
+                                        719,
+                                        761,
+                                        807,
+                                        851,
+                                        894,
+                                        939,
+                                        988,
+                                        1035,
+                                        1082,
+                                        1131,
+                                        1184,
+                                        1235,
+                                        1272,
+                                        1312,
+                                        1355,
+                                        1395,
+                                        1440,
+                                        1488,
+                                        1539,
+                                        1587,
+                                        1640,
+                                        1696,
+                                        1755,
+                                        1811,
+                                        1872,
+                                        1936,
+                                        2003,
+                                        2067,
+                                        2136,
+                                        2208,
+                                        2283,
+                                        2355,
+                                        2402,
+                                        2451,
+                                        2504,
+                                        2555,
+                                        2592,
+                                        2632,
+                                        2675,
+                                        2715,
+                                        2760,
+                                        2808,
+                                        2859,
+                                        2907,
+                                        2960,
+                                        3016,
+                                        3075,
+                                        3131,
+                                        3192,
+                                        3256,
+                                        3323,
+                                        3387,
+                                        3456,
+                                        3528,
+                                        3603,
+                                        3675
+                                      ],
+                                      "referencedDeclaration": 1872,
+                                      "type": "function (string memory,string memory[4] memory) returns (bytes32)",
+                                      "value": "oraclize_query"
+                                    },
+                                    "id": 44,
+                                    "name": "Identifier",
+                                    "src": "918:14:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "636f6d7075746174696f6e",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "string",
+                                      "type": "literal_string \"computation\"",
+                                      "value": "computation"
+                                    },
+                                    "id": 45,
+                                    "name": "Literal",
+                                    "src": "933:13:0"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isInlineArray": true,
+                                      "isLValue": false,
+                                      "isPure": false,
+                                      "lValueRequested": false,
+                                      "type": "string memory[4] memory"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 24,
+                                          "type": "string memory",
+                                          "value": "_query"
+                                        },
+                                        "id": 46,
+                                        "name": "Identifier",
+                                        "src": "965:6:0"
+                                      },
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "hexvalue": "474554",
+                                          "isConstant": false,
+                                          "isLValue": false,
+                                          "isPure": true,
+                                          "lValueRequested": false,
+                                          "subdenomination": null,
+                                          "token": "string",
+                                          "type": "literal_string \"GET\"",
+                                          "value": "GET"
+                                        },
+                                        "id": 47,
+                                        "name": "Literal",
+                                        "src": "989:5:0"
+                                      },
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 26,
+                                          "type": "string memory",
+                                          "value": "_url"
+                                        },
+                                        "id": 48,
+                                        "name": "Identifier",
+                                        "src": "1012:4:0"
+                                      },
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 14,
+                                          "type": "string storage ref",
+                                          "value": "headers"
+                                        },
+                                        "id": 49,
+                                        "name": "Identifier",
+                                        "src": "1034:7:0"
+                                      }
+                                    ],
+                                    "id": 50,
+                                    "name": "TupleExpression",
+                                    "src": "964:78:0"
+                                  }
+                                ],
+                                "id": 51,
+                                "name": "FunctionCall",
+                                "src": "918:138:0"
+                              }
+                            ],
+                            "id": 52,
+                            "name": "ExpressionStatement",
+                            "src": "918:138:0"
+                          }
+                        ],
+                        "id": 53,
+                        "name": "Block",
+                        "src": "815:252:0"
+                      }
+                    ],
+                    "id": 54,
+                    "name": "IfStatement",
+                    "src": "636:431:0"
+                  }
+                ],
+                "id": 55,
+                "name": "Block",
+                "src": "626:447:0"
+              }
+            ],
+            "id": 56,
+            "name": "FunctionDefinition",
+            "src": "569:504:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "testQuery",
+              "payable": false,
+              "scope": 88,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 57,
+                "name": "ParameterList",
+                "src": "1164:2:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 58,
+                "name": "ParameterList",
+                "src": "1167:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "bytes32",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_stringliteral_96388ed71ebb5d970d8c40d08f33931fc80bd2768fd60f12b78e085d12441b0e",
+                                  "typeString": "literal_string \"URL\""
+                                },
+                                {
+                                  "typeIdentifier": "t_stringliteral_4745f58944c6918c970a977a1d51df7c98057079421fc85c646264240b897640",
+                                  "typeString": "literal_string \"json(http://api.fixer.io/latest?symbols=USD,GBP).rates.GBP\""
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                719,
+                                761,
+                                807,
+                                851,
+                                894,
+                                939,
+                                988,
+                                1035,
+                                1082,
+                                1131,
+                                1184,
+                                1235,
+                                1272,
+                                1312,
+                                1355,
+                                1395,
+                                1440,
+                                1488,
+                                1539,
+                                1587,
+                                1640,
+                                1696,
+                                1755,
+                                1811,
+                                1872,
+                                1936,
+                                2003,
+                                2067,
+                                2136,
+                                2208,
+                                2283,
+                                2355,
+                                2402,
+                                2451,
+                                2504,
+                                2555,
+                                2592,
+                                2632,
+                                2675,
+                                2715,
+                                2760,
+                                2808,
+                                2859,
+                                2907,
+                                2960,
+                                3016,
+                                3075,
+                                3131,
+                                3192,
+                                3256,
+                                3323,
+                                3387,
+                                3456,
+                                3528,
+                                3603,
+                                3675
+                              ],
+                              "referencedDeclaration": 719,
+                              "type": "function (string memory,string memory) returns (bytes32)",
+                              "value": "oraclize_query"
+                            },
+                            "id": 59,
+                            "name": "Identifier",
+                            "src": "1177:14:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "55524c",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "string",
+                              "type": "literal_string \"URL\"",
+                              "value": "URL"
+                            },
+                            "id": 60,
+                            "name": "Literal",
+                            "src": "1192:5:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "6a736f6e28687474703a2f2f6170692e66697865722e696f2f6c61746573743f73796d626f6c733d5553442c474250292e72617465732e474250",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "string",
+                              "type": "literal_string \"json(http://api.fixer.io/latest?symbols=USD,GBP).rates.GBP\"",
+                              "value": "json(http://api.fixer.io/latest?symbols=USD,GBP).rates.GBP"
+                            },
+                            "id": 61,
+                            "name": "Literal",
+                            "src": "1199:60:0"
+                          }
+                        ],
+                        "id": 62,
+                        "name": "FunctionCall",
+                        "src": "1177:83:0"
+                      }
+                    ],
+                    "id": 63,
+                    "name": "ExpressionStatement",
+                    "src": "1177:83:0"
+                  }
+                ],
+                "id": 64,
+                "name": "Block",
+                "src": "1167:100:0"
+              }
+            ],
+            "id": 65,
+            "name": "FunctionDefinition",
+            "src": "1146:121:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "__callback",
+              "payable": false,
+              "scope": 88,
+              "stateMutability": "nonpayable",
+              "superFunction": 622,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "myid",
+                      "scope": 77,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 66,
+                        "name": "ElementaryTypeName",
+                        "src": "1293:7:0"
+                      }
+                    ],
+                    "id": 67,
+                    "name": "VariableDeclaration",
+                    "src": "1293:12:0"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "result",
+                      "scope": 77,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 68,
+                        "name": "ElementaryTypeName",
+                        "src": "1307:6:0"
+                      }
+                    ],
+                    "id": 69,
+                    "name": "VariableDeclaration",
+                    "src": "1307:13:0"
+                  }
+                ],
+                "id": 70,
+                "name": "ParameterList",
+                "src": "1292:29:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 71,
+                "name": "ParameterList",
+                "src": "1322:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_string_memory_ptr",
+                                  "typeString": "string memory"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 22,
+                              "type": "function (string memory)",
+                              "value": "debug"
+                            },
+                            "id": 72,
+                            "name": "Identifier",
+                            "src": "1389:5:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 69,
+                              "type": "string memory",
+                              "value": "result"
+                            },
+                            "id": 73,
+                            "name": "Identifier",
+                            "src": "1395:6:0"
+                          }
+                        ],
+                        "id": 74,
+                        "name": "FunctionCall",
+                        "src": "1389:13:0"
+                      }
+                    ],
+                    "id": 75,
+                    "name": "ExpressionStatement",
+                    "src": "1389:13:0"
+                  }
+                ],
+                "id": 76,
+                "name": "Block",
+                "src": "1322:87:0"
+              }
+            ],
+            "id": 77,
+            "name": "FunctionDefinition",
+            "src": "1273:136:0"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "NOAANCDCRainfall",
+              "payable": false,
+              "scope": 88,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 78,
+                "name": "ParameterList",
+                "src": "1440:2:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 79,
+                "name": "ParameterList",
+                "src": "1443:0:0"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "contract OraclizeAddrResolverI"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 412,
+                              "type": "contract OraclizeAddrResolverI",
+                              "value": "OAR"
+                            },
+                            "id": 80,
+                            "name": "Identifier",
+                            "src": "1454:3:0"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "contract OraclizeAddrResolverI",
+                              "type_conversion": true
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 352,
+                                  "type": "type(contract OraclizeAddrResolverI)",
+                                  "value": "OraclizeAddrResolverI"
+                                },
+                                "id": 81,
+                                "name": "Identifier",
+                                "src": "1460:21:0"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "hexvalue": "307836663438354338424636666334336541323132453933424246386365303436433766316362343735",
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "subdenomination": null,
+                                  "token": "number",
+                                  "type": "address",
+                                  "value": "0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475"
+                                },
+                                "id": 82,
+                                "name": "Literal",
+                                "src": "1482:42:0"
+                              }
+                            ],
+                            "id": 83,
+                            "name": "FunctionCall",
+                            "src": "1460:65:0"
+                          }
+                        ],
+                        "id": 84,
+                        "name": "Assignment",
+                        "src": "1454:71:0"
+                      }
+                    ],
+                    "id": 85,
+                    "name": "ExpressionStatement",
+                    "src": "1454:71:0"
+                  }
+                ],
+                "id": 86,
+                "name": "Block",
+                "src": "1443:88:0"
+              }
+            ],
+            "id": 87,
+            "name": "FunctionDefinition",
+            "src": "1415:116:0"
+          }
+        ],
+        "id": 88,
+        "name": "ContractDefinition",
+        "src": "84:1451:0"
+      }
+    ],
+    "id": 89,
+    "name": "SourceUnit",
+    "src": "0:1535:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x9fbda871d559710256a2502a2517b794b482db40"
+    }
+  },
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-03-04T00:38:58.164Z"
+}
