@@ -18,7 +18,7 @@ contract('NOAANCDCRainfall', function(accounts) {
         await sleep(10000);
 
         let result = await NOAA.getResult.call();
-        console.log(result);
+        assert(result != "not set", "__callback function was not called. Try restarting ganache-cli and ethereum bridge.")
 
 }); 
 

@@ -8,14 +8,16 @@ contract NOAANCDCRainfall is usingOraclize {
     string requestsIPFSHash = "QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE";
     string headers = "{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}";
     string testResult = "not set";
+    address sender;
+    address cbaddress;
 
-    function getResult() public returns (string) {
-    	return testResult;
+    function getResult() public returns (string, address, address) {
+    	return (testResult, sender, cbaddress);
     }
 
     event newOraclizeQuery(string message);
 
-    event debug(string debug);
+    event debug(address sender, address cbaddress, string result);
 
     function NOAARequest(string _query, string _url) private {
         if (oraclize_getPrice("computation") > this.balance) {
@@ -39,9 +41,11 @@ contract NOAANCDCRainfall is usingOraclize {
     }
 
     function __callback(bytes32 myid, string result) {
-    //    if (msg.sender != oraclize_cbAddress()) throw;
+        require(msg.sender == oraclize_cbAddress());
         testResult = result;
-        debug(testResult);
+        sender = msg.sender;
+        cbaddress = oraclize_cbAddress();
+        debug(msg.sender, oraclize_cbAddress(), result);
     }
 
     function NOAANCDCRainfall() {
