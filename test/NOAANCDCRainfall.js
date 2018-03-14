@@ -13,12 +13,13 @@ contract('NOAANCDCRainfall', function(accounts) {
         await sleep(4000);
 
         let NOAA = await NOAANCDCRainfall.deployed();
-        let result = await NOAA.testQuery();
-        //console.log(result);
-       // let resultt = await NOAA.getResultt();
-        //console.log(resultt);
+        await NOAA.testQuery();
 
-        await sleep(4000);
+        await sleep(10000);
+
+        let result = await NOAA.getResult.call();
+        console.log(result);
+
 }); 
 
 }); 

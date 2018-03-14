@@ -7,10 +7,10 @@ contract NOAANCDCRainfall is usingOraclize {
     string baseURL = "https://www.ncdc.noaa.gov/cdo-web/api/v2/";
     string requestsIPFSHash = "QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE";
     string headers = "{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}";
-    string resultt = "Asdf";
+    string testResult = "not set";
 
-    function getResultt() returns (string) {
-    	return resultt;
+    function getResult() public returns (string) {
+    	return testResult;
     }
 
     event newOraclizeQuery(string message);
@@ -32,19 +32,16 @@ contract NOAANCDCRainfall is usingOraclize {
         }
     }
 
-//    function query() {
-  //  	NOAARequest("json(" + );
-    //}
 
 
     function testQuery() {
-        oraclize_query("URL", "json(http://api.fixer.io/latest?symbols=USD,GBP).rates.GBP");
+        oraclize_query("URL", "json(https://www.therocktrading.com/api/ticker/BTCEUR).result.0.last");
     }
 
     function __callback(bytes32 myid, string result) {
-        if (msg.sender != oraclize_cbAddress()) throw;
-        resultt = result;
-        debug(result);
+    //    if (msg.sender != oraclize_cbAddress()) throw;
+        testResult = result;
+        debug(testResult);
     }
 
     function NOAANCDCRainfall() {
