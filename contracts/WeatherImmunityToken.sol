@@ -45,7 +45,7 @@ contract WeatherImmunityToken is ERC721Token {
     Arbolcoin arbolContract;
 
     // ARBOL fees go to this wallet.
-    address systemFeeWallet = 0x1df62f291b2e969fb0849d99d9ce41e2f137006e;
+    address systemFeeWallet = 0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE;
 
     // All the weatherAPI names
     string[] public weatherAPIs;

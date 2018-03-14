@@ -47,7 +47,7 @@ contract('WeatherImmunityToken', function(accounts) {
        // utils.assertEvent(WIT, {event: "ProposalOffered", logIndex: 1, args: {tokenID: new BigNumber(1)}});
     
         var arbolBalance = await ARBOL.balanceOf(systemFeeWallet);
-        assert.equal(arbolBalance.toNumber(), ARBOLFee, "ARBOL wasn't properly transferred to system wallet");
+        assert.equal(arbolBalance.toNumber(), ARBOLFee.toNumber(), "ARBOL wasn't properly transferred to system wallet");
     
         var afterBalance = await web3.eth.getBalance(WIT.address);
         assert(afterBalance - ethPropose == beforeBalance, 'ETH was not taken from proposer properly');
@@ -107,7 +107,7 @@ contract('WeatherImmunityToken', function(accounts) {
  		assert(approval, "ARBOL approval failed");
     
         var afterAllowance = await ARBOL.allowance(accepterAccount, WIT.address);
-        assert.equal(afterAllowance.toNumber(), ARBOLFee, "allowance of 10000 ARBOL failed");
+        assert.equal(afterAllowance.toNumber(), ARBOLFee.toNumber(), "allowance of 10000 ARBOL failed");
 
         beforeBalance = await web3.eth.getBalance(WIT.address);
 
@@ -123,7 +123,7 @@ contract('WeatherImmunityToken', function(accounts) {
         assert.equal(accepterAccount, owner, "Second WIT was not transferred to accepter");        
 
         var arbolBalance = await ARBOL.balanceOf(systemFeeWallet);
-        assert.equal(arbolBalance.toNumber(), ARBOLFee, "ARBOL wasn't properly transferred to system wallet");
+        assert.equal(arbolBalance.toNumber(), ARBOLFee.toNumber(), "ARBOL wasn't properly transferred to system wallet");
 
     }); 
 }); 
