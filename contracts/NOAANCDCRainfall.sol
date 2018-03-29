@@ -4,12 +4,15 @@ import "./urlRequests.sol";
 
 contract NOAANCDCRainfall is usingOraclize {
 
-    string baseURL = "https://www.ncdc.noaa.gov/cdo-web/api/v2/";
+    string baseURL = "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=PRECIP_HLY";
     string requestsIPFSHash = "QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE";
     string headers = "{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}";
+
     string testResult = "not set";
     address sender;
     address cbaddress;
+
+
 
     function getResult() public returns (string, address, address) {
     	return (testResult, sender, cbaddress);
@@ -35,13 +38,18 @@ contract NOAANCDCRainfall is usingOraclize {
     }
 
 
+    function Request() {
+    	//NOAARequest("json(" + requestsIPFSHash + ")", baseURL + "&startdate=1970-10-03&enddate=1971-09-03");
+    	NOAARequest("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE)", "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=PRECIP_HLY&startdate=1970-10-03&enddate=1971-09-03");
+    }
+
 
     function testQuery() {
         oraclize_query("URL", "json(https://www.therocktrading.com/api/ticker/BTCEUR).result.0.last");
     }
 
     function __callback(bytes32 myid, string result) {
-        require(msg.sender == oraclize_cbAddress());
+       // require(msg.sender == oraclize_cbAddress());
         testResult = result;
         sender = msg.sender;
         cbaddress = oraclize_cbAddress();

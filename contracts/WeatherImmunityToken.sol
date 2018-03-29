@@ -1,8 +1,10 @@
 pragma solidity ^0.4.18;
 
-import 'zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
+import './DecoupledERC721Token.sol';
 import './Arbolcoin.sol';
+import './EternalDonut.sol';
+import './WITEvaluator.sol';
 
 /**
  * @title Weather Immunity Token for ARBOL and weather protection agreements.
@@ -11,85 +13,125 @@ import './Arbolcoin.sol';
  * @dev WITs are a representation of a protection agreement between two parties.
  * @dev Various terms can be set by the "proposer." The proposal is represented as one WIT.
  * @dev The proposal can be accepted. If it is accepted, a new WIT is created according to the terms specified in the first one.
- * @dev WITs can be transferred after they have been created. They are a nonfungible ERC721 tokens.
+ * @dev WITs can be transferred after they have been created. They are nonfungible ERC721 tokens.
  */
-contract WeatherImmunityToken is ERC721Token {
+contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
   using SafeMath for uint;
 
     // A struct which represents all the values in a WIT.
     struct WIT {
-      uint weiEscrow;
-      uint weiPartnerEscrow;
-      string index;
-      string threshold;
-      string location;
-      uint partnerID;
+      uint WITID;
+      uint aboveEscrow;
+      uint belowEscrow;
+      uint aboveID;
+      uint belowID; 
+      address evaluator;
+      bytes32 threshold;
+      bytes32 location;
       uint start;
       uint end;
       bool makeStale;
     }
 
-    // WIT IDs => WIT structs
-    mapping (uint => WIT) public WITs;  
-
-    // Name of weather API => address of contract that will hit it.
-    mapping (string => address) private weatherAPIAddresses;
-
-    // Trusted address to add new weatherAPI contracts.
-    address weatherAPIAdder = 0x6330A553Fc93768F612722BB8c2eC78aC90B3bbc;
-
-    // Trusted address to update the system fee rate.
-    address systemFeeSetter = 0x0F4F2Ac550A1b4e2280d04c21cEa7EBD822934b5;
-
     // Arbolcoin smart contract (contains address). 
-    Arbolcoin arbolContract;
+    Arbolcoin private arbol;
 
-    // ARBOL fees go to this wallet.
-    address systemFeeWallet = 0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE;
+    // ARBOL fees go to this wallet. TODO make this owner, or implement revenue token.
+    address private systemFeeWallet = 0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE;
 
-    // All the weatherAPI names
-    string[] public weatherAPIs;
+    EternalDonut private storageContract;
 
     // The ARBOL system fee in parts per million. (of wei.) 100% for now.
-    uint public systemFeePPM = 1000000;
-
-    // Use a simple counter to create new token IDs.
-    uint private tokenIDCounter = 0;
+    uint public systemFeePPM;
 
     // These are to facilitate queries related to getting open proposals.
-    event Redemption(uint indexed tokenID, uint  amount, address indexed user);
-    event ProposalAccepted(uint indexed tokenIDProposer, uint indexed tokenIDAccepter);
-    event ProposalOffered(uint indexed tokenID, uint indexed weiContributing, uint indexed weiAsking, string index, string threshold, string location, uint start, uint end);
+    event Redemption(uint indexed WITID, uint amount, address indexed user);
+    event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
+    event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, string threshold, string location, uint start, uint end, bool makeStale);
 
 
    /**
     * @dev Constructor which sets the Arbolcoin address.
     * @param _arbolAddress The address of the Arbolcoin contract.
    */    
-    function WeatherImmunityToken(address _arbolAddress) public {
-      arbolContract = Arbolcoin(_arbolAddress);
+    function WeatherImmunityToken(address _arbolAddress, address storageAddress) DecoupledERC721Token(storageAddress) public {
+
+      arbol = Arbolcoin(_arbolAddress);
+      storageContract = EternalDonut(storageAddress);
+      systemFeePPM = 1000000;
+
+
+      storageContract.setUIntValue(keccak256("WITIDCounter"), 1); //start at 1
     }
 
+
+  /**
+  * @dev Guarantees msg.sender is owner of the given token
+  * @param _tokenId uint256 ID of the token to validate its ownership belongs to msg.sender
+  */
+  modifier onlyOwnerOfSubWITOf(uint256 _tokenId) {
+    WIT memory the_wit = getWIT(_tokenId);
+    bool is_above_owner = ownerOf(the_wit.aboveID) == msg.sender;
+    bool is_below_owner = ownerOf(the_wit.belowID) == msg.sender;
+    require(is_above_owner || is_below_owner);
+    _;
+  }
+
+
+   function getTokenCounter() private view returns (uint) {
+    return storageContract.getUIntValue(keccak256("WITIDCounter"));
+   }
+
+   function incrementTokenCounter() private {
+     storageContract.setUIntValue(keccak256("WITIDCounter"), getTokenCounter().add(2)); // Yes, 2.
+   }
+
+    function getWIT(uint tokenID) private returns (WIT) {
+    uint aboveEscrow = storageContract.getUIntValue(keccak256("WIT", tokenID, "aboveEscrow"));
+    uint belowEscrow = storageContract.getUIntValue(keccak256("WIT", tokenID, "belowEscrow"));
+    uint aboveID = storageContract.getUIntValue(keccak256("WIT", tokenID, "aboveID"));
+    uint belowID = storageContract.getUIntValue(keccak256("WIT", tokenID, "belowID"));    
+    address evaluator = storageContract.getAddressValue(keccak256("WIT", tokenID, "evaluator"));
+    bytes32 threshold = storageContract.getBytes32Value(keccak256("WIT", tokenID, "threshold"));
+    bytes32 location = storageContract.getBytes32Value(keccak256("WIT", tokenID, "location"));
+    uint start = storageContract.getUIntValue(keccak256("WIT", tokenID, "start"));
+    uint end = storageContract.getUIntValue(keccak256("WIT", tokenID, "end"));
+    bool makeStale = storageContract.getBooleanValue(keccak256("WIT", tokenID, "makeStale"));
+    return WIT(tokenID, aboveEscrow, belowEscrow, aboveID, belowID, evaluator, threshold, location, start, end, makeStale);
+        
+    }
+
+    function saveWIT(WIT the_wit) private {
+        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "aboveEscrow"), the_wit.aboveEscrow);
+        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "belowEscrow"), the_wit.belowEscrow);
+        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "aboveID"), the_wit.aboveID);
+        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "belowID"), the_wit.belowID);        
+        storageContract.setAddressValue(keccak256("WIT", the_wit.WITID, "evaluator"), the_wit.evaluator);
+        storageContract.setBytes32Value(keccak256("WIT", the_wit.WITID, "threshold"), the_wit.threshold);
+        storageContract.setBytes32Value(keccak256("WIT", the_wit.WITID, "location"), the_wit.location);
+        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "start"), the_wit.start);
+        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "end"), the_wit.end);
+        storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "makeStale"), the_wit.makeStale);
+    }
 
    /**
     * @dev Create a WIT without a partner. (A proposal.)
     * @param weiContributing Amount of wei user proposes to contribute
     * @param weiAsking Amount of wei user proposes the partner contribute.
-    * @param index The weather API index by which payout will be determined.
+    * @param evaluator The address of the contract that will evaluate the WIT (for example one that integrates with a specific weather API).
     * @param threshold The threshold by which the payout will be determined.
     * @param start The start date of the WIT.
     * @param end The end date of the WIT.
     * @param makeStale If set to true, the WIT will be taken off the open market after its start date passes. That is, no one will be able to accept it.
     */
-    function createWITProposal(uint weiContributing, uint weiAsking, string index, string threshold, string location, uint start, uint end, bool makeStale) public payable {
+    function createWITProposal(uint weiContributing, uint weiAsking, bool aboveOrBelow, address evaluator, string threshold, string location, uint start, uint end, bool makeStale) public payable {
 
       require(weiContributing > 0);
       require(weiAsking > 0);
+      weiAsking.add(weiContributing); // this expression will throw if the escrow amounts are too big.
 
       require(now < start); // Don't let people create WITs that start in the past. Opens the door for abuse.
       require(start < end);
-
-      // validate index, threshold and location TODO
   
       // Validate amount of wei sent.
       require(msg.value == weiContributing);
@@ -98,15 +140,26 @@ contract WeatherImmunityToken is ERC721Token {
       uint fee = calculateFee(weiContributing, weiAsking);
 
       if (fee != 0) {
-          require(arbolContract.transferFrom(msg.sender, systemFeeWallet, fee));
+          require(arbol.transferFrom(msg.sender, systemFeeWallet, fee));
+          //TODO accept ether
       }
 
-      uint ID = tokenIDCounter.add(1);
-      WITs[ID] = WIT(weiContributing, weiAsking, index, threshold, location, 0, start, end, makeStale);
-      _mint(msg.sender, ID);
-      tokenIDCounter = ID;
+      uint ID = getTokenCounter();
 
-      ProposalOffered(ID, weiContributing, weiAsking, index, threshold, location, start, end);
+      _mint(msg.sender, ID);
+
+      WIT memory new_WIT;
+      if (aboveOrBelow) {
+        new_WIT = WIT(ID, weiContributing, weiAsking, ID, 0, evaluator, keccak256(threshold), keccak256(location), start, end, makeStale);
+        ProposalOffered(ID, ID, 0, weiContributing, weiAsking, evaluator, threshold, location, start, end, makeStale);
+      }
+      else {
+        new_WIT = WIT(ID, weiAsking, weiContributing, 0, ID, evaluator, keccak256(threshold), keccak256(location), start, end, makeStale);
+        ProposalOffered(ID, 0, ID, weiContributing, weiAsking, evaluator, threshold, location, start, end, makeStale);        
+      }
+
+      saveWIT(new_WIT);
+      incrementTokenCounter();
     }
 
 
@@ -119,40 +172,66 @@ contract WeatherImmunityToken is ERC721Token {
       // Specified partner token must exist
       require(ownerOf(proposalID) != address(0));
   
-      // Specified partner must not already have a partner.
-      require(WITs[proposalID].partnerID == 0);
+      WIT memory proposalWIT = getWIT(proposalID);
 
-      if (WITs[proposalID].makeStale) {
-        require(now < WITs[proposalID].start);
+      uint new_ID = proposalWIT.WITID.add(1);
+      uint fee;
+
+      if (proposalWIT.makeStale) {
+        require(now < proposalWIT.start);
       }
 
-      // Validate amount of wei sent.
-      require(msg.value == WITs[proposalID].weiPartnerEscrow);
+      // Figure out whether we are adding an "above" or "below" WIT receipt.
+      if (proposalWIT.aboveID == 0) {
+        // Validate the amount of wei sent.
+        require(msg.value == proposalWIT.aboveEscrow);
 
-      // Calculate and take ARBOL fee.
-      uint fee = calculateFee(WITs[proposalID].weiPartnerEscrow, WITs[proposalID].weiEscrow);
-      if (fee != 0) {
-          require(arbolContract.transferFrom(msg.sender, systemFeeWallet, fee));
+        fee = calculateFee(proposalWIT.aboveEscrow, proposalWIT.belowEscrow);
+        if (fee != 0) {
+
+        // TODO accept fee in ether
+        require(arbol.transferFrom(msg.sender, systemFeeWallet, fee));
+        }
+        storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "aboveID"), new_ID);        
+        ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
+
+      }
+      else {
+        require(proposalWIT.belowID == 0);
+
+        // Validate the amount of wei sent.
+        require(msg.value == proposalWIT.belowEscrow);
+  
+        fee = calculateFee(proposalWIT.belowEscrow, proposalWIT.aboveEscrow);
+        if (fee != 0) {
+
+          // TODO accept fee in ether
+          require(arbol.transferFrom(msg.sender, systemFeeWallet, fee));
+
+
+        }
+        storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "belowID"), new_ID);     
+        ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID);
+
+
       }
 
-      // Create the token and set the "proposal" as "accepted."
-      uint ID = tokenIDCounter.add(1);
-      WITs[ID] = WIT(WITs[proposalID].weiEscrow, WITs[proposalID].weiPartnerEscrow, WITs[proposalID].index, WITs[proposalID].threshold, WITs[proposalID].location, proposalID, WITs[proposalID].start, WITs[proposalID].end, false);
-      _mint(msg.sender, ID);
-      tokenIDCounter = ID;
-      WITs[proposalID].partnerID = ID;
-      ProposalAccepted(proposalID, ID);
+      _mint(msg.sender, new_ID);
+
     }
 
-
     /**
-    * @dev Burns a specific token.
+    * @dev Burns a specific token.  
     * @param tokenID uint ID of the token being burned by the msg.sender
     */
-    function burnWIT(uint tokenID) private onlyOwnerOf (tokenID){
-      WITs[WITs[tokenID].partnerID] = WITs[0]; // fix later TODO
-      WITs[tokenID] = WITs[0];
-      _burn(tokenID);
+    function burnWIT(uint tokenID) private onlyOwnerOfSubWITOf(tokenID) { // gets called in cancelAndRedeem and evaluate
+      WIT memory the_wit = getWIT(tokenID);
+      
+      _burn(the_wit.belowID);
+      _burn(the_wit.aboveID);
+
+      saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, "", "", 0, 0, false));
+
     }
 
 
@@ -168,7 +247,7 @@ contract WeatherImmunityToken is ERC721Token {
       if (weiContributing > weiAsking) {         // If user is contributing more than asking, they are the seller and they pay the fee.
         return totalEscrow.mul(systemFeePPM).div(1000000);
       } else if (weiContributing < weiAsking) {
-        return 0; // Buyer role pays no feel
+        return 0; // Buyer role pays no fee
       } else {
         return totalEscrow.mul(systemFeePPM).div(1000000).div(2);  // If this is a 50-50 thing, split the fee.
       }
@@ -176,20 +255,10 @@ contract WeatherImmunityToken is ERC721Token {
 
 
     /**
-    * @dev Add a new weather API to the roster.
-    */    
-    function addWeatherAPI(string name, address contractAddress) public {
-      require(msg.sender == weatherAPIAdder);
-      require(weatherAPIAddresses[name] == 0);
-      weatherAPIAddresses[name] = contractAddress;
-    }
-
-
-    /**
     * @dev Set the system fee to a new value. This doesn't affect existing WITs.
     */ 
-    function setSystemFee(uint fee) public {
-      require(msg.sender == systemFeeSetter);
+    function setSystemFee(uint fee) public 
+    onlyContractOwner {
       require(0 <= fee);
       systemFeePPM = fee;
     }
@@ -200,13 +269,50 @@ contract WeatherImmunityToken is ERC721Token {
     * @param tokenID The ID of your token that you want to cancel.
     TODO ARBOL redemption
     */ 
-    function cancelAndRedeem(uint tokenID) onlyOwnerOf(tokenID) public {
-      uint redemptionAmount = WITs[tokenID].weiEscrow;
-      require(WITs[tokenID].partnerID == 0); 
+    function cancelAndRedeem(uint tokenID) onlyOwnerOfSubWITOf(tokenID) public {
+      WIT memory the_wit = getWIT(tokenID);
+      uint redemptionAmount = the_wit.belowEscrow;
+      require((the_wit.aboveID == 0) || (the_wit.belowID == 0)); 
       burnWIT(tokenID);
       msg.sender.transfer(redemptionAmount);
       Redemption(tokenID, redemptionAmount, msg.sender);
       
+    }
+
+    event EvaluatorResponse(uint WITID, bytes32 evaluationResult);
+
+    function evaluate(uint tokenID, string runtimeParams) onlyOwnerOfSubWITOf(tokenID) public {
+      WIT memory the_wit = getWIT(tokenID);
+      require(the_wit.end < now);
+      require(the_wit.aboveID != 0);
+      require(the_wit.belowID != 0);
+
+      WITEvaluator evaluator = WITEvaluator(the_wit.evaluator);
+      bytes32 outcome = evaluator.evaluateWIT(tokenID, runtimeParams, the_wit.start, the_wit.end, the_wit.threshold, the_wit.location);
+
+      EvaluatorResponse(tokenID, outcome);
+
+      uint totalEscrow = the_wit.aboveEscrow.add(the_wit.belowEscrow);
+
+      if (outcome == keccak256("above")) { // use keccak because == doesn't work for strings.
+        burnWIT(tokenID);
+        Redemption(tokenID, totalEscrow, ownerOf(the_wit.aboveID));
+        ownerOf(the_wit.aboveID).transfer(totalEscrow);
+      }
+
+      if (outcome == keccak256("below")) {
+        burnWIT(tokenID);
+        Redemption(tokenID, totalEscrow, ownerOf(the_wit.belowID));
+        ownerOf(the_wit.belowID).transfer(totalEscrow);
+      }
+
+
+    }
+
+
+
+    function kill() onlyContractOwner public {
+      //
     }
 
 

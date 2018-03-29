@@ -1,8 +1,9 @@
-var NOAANCDCRainfall = artifacts.require("./NOAANCDCRainfall.sol");
+/*var NOAANCDCRainfall = artifacts.require("./NOAANCDCRainfall.sol");
 
 
 module.exports = function(deployer) {
-  deployer.deploy(NOAANCDCRainfall);
+  deployer.deploy(NOAANCDCPrecipitation);
 
 
 }
+*/

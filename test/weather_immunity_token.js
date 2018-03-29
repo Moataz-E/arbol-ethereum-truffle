@@ -34,7 +34,8 @@ contract('WeatherImmunityToken', function(accounts) {
         var ARBOLFee = await WIT.calculateFee(ethPropose, ethAsk);
 
  		var approval = await ARBOL.approve(WIT.address, ARBOLFee, {from: proposerAccount});
- 		assert(approval, "ARBOL approval failed");
+ //       console.log("APPROVAL: " , approval);
+// 		assert(approval, "ARBOL approval failed");
             
         var afterAllowance = await ARBOL.allowance(proposerAccount, WIT.address);
         assert.equal(afterAllowance.toNumber(), ARBOLFee, "allowance of 10000 ARBOL failed");

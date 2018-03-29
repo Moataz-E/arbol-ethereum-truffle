@@ -13,13 +13,13 @@ contract('NOAANCDCRainfall', function(accounts) {
         await sleep(4000);
 
         let NOAA = await NOAANCDCRainfall.deployed();
-        await NOAA.testQuery();
+        await NOAA.Request();
 
-        await sleep(10000);
+        await sleep(60000);
 
         let result = await NOAA.getResult.call();
-        console.log(result[0]);
-        assert(result[0] != "not set", "__callback function was not called. Try restarting ganache-cli and ethereum bridge.")
+        console.log(result); 
+//        assert(result[0] != "not set", "__callback function was not called. Try restarting ganache-cli and ethereum bridge.")
 
 }); 
 
