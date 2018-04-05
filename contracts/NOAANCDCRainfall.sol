@@ -4,7 +4,7 @@ import "./urlRequests.sol";
 
 contract NOAANCDCRainfall is usingOraclize {
 
-    string baseURL = "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=PRECIP_HLY";
+    string baseURL = "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND";
     string requestsIPFSHash = "QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE";
     string headers = "{'headers': {'token': [decrypt] BK6xM+kdW3gGfeqLYck8hyEvLzSl/9Bxla4sf70ztF0a28kQx0J2CapMC9mVYpaDb5ELvxs6owuMpdsEOIEA9Os86vDhCA7R8ekIRoHMjbxXFdQdEcTL8vpyQhPAP3HZ7iUWMFs6FR5zaeisIGWFGuo=}}";
 

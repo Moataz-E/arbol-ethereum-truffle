@@ -8,5 +8,4 @@ contract WITEvaluator is Ownable
 
 	function getNameAndDescription() public pure returns(string name, string description);
 
-
 }

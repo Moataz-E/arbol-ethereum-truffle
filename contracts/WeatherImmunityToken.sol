@@ -58,9 +58,13 @@ contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
 
       arbol = Arbolcoin(_arbolAddress);
       storageContract = EternalDonut(storageAddress);
-      systemFeePPM = 1000000;
+      uint systemFeePPM = 1000000;
 
 
+    }
+
+    function initialize()  public {
+      require(storageContract.getUIntValue(keccak256("WITIDCounter")) == 0);
       storageContract.setUIntValue(keccak256("WITIDCounter"), 1); //start at 1
     }
 
@@ -76,6 +80,7 @@ contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
     require(is_above_owner || is_below_owner);
     _;
   }
+
 
 
    function getTokenCounter() private view returns (uint) {
@@ -114,6 +119,8 @@ contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
         storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "makeStale"), the_wit.makeStale);
     }
 
+event witdebug(uint one);
+
    /**
     * @dev Create a WIT without a partner. (A proposal.)
     * @param weiContributing Amount of wei user proposes to contribute
@@ -125,6 +132,7 @@ contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
     * @param makeStale If set to true, the WIT will be taken off the open market after its start date passes. That is, no one will be able to accept it.
     */
     function createWITProposal(uint weiContributing, uint weiAsking, bool aboveOrBelow, address evaluator, string threshold, string location, uint start, uint end, bool makeStale) public payable {
+
 
       require(weiContributing > 0);
       require(weiAsking > 0);
@@ -145,6 +153,7 @@ contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
       }
 
       uint ID = getTokenCounter();
+      witdebug(ID);
 
       _mint(msg.sender, ID);
 
@@ -310,10 +319,9 @@ contract WeatherImmunityToken is Ownable, DecoupledERC721Token {
     }
 
 
-
-    function kill() onlyContractOwner public {
+   // function kill() onlyContractOwner public {
       //
-    }
+ //   }
 
 
 }

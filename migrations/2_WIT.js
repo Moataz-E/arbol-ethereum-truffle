@@ -5,8 +5,8 @@ var Arbolcoin = artifacts.require("./Arbolcoin.sol");
 
 module.exports = function(deployer) {
 deployer.deploy(Arbolcoin).then(function() {
-  deployer.deploy(EternalDonut).then(function() {
-    return deployer.deploy(WeatherImmunityToken, Arbolcoin.address);
+  return deployer.deploy(EternalDonut).then(function() {
+    return deployer.deploy(WeatherImmunityToken, Arbolcoin.address, EternalDonut.address);
   })
 });
 

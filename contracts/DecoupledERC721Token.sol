@@ -19,17 +19,19 @@ contract DecoupledERC721Token is ERC721 {
     storageContract = EternalDonut(storage_address);
   }
 
-  function getTotalTokens() private constant returns (uint) {
+  function totalSupply() public returns (uint) {
     return storageContract.getUIntValue(keccak256("TotalSupply"));
   }
 
   function ownerOf(uint tokenID) public view returns (address) {
         address owner = storageContract.getAddressValue(keccak256("OwnerOf", tokenID));
-        require(owner != address(0));
+      //  require(owner != address(0));
         return owner;
   }
 
-  function setOwnerOf(uint tokenID, address owner) private {
+  event debug(uint one);
+
+  function setOwnerOf(uint tokenID, address owner) private {    
     storageContract.setAddressValue(keccak256("OwnerOf", tokenID), owner);
   }
 
@@ -171,6 +173,7 @@ contract DecoupledERC721Token is ERC721 {
     Approval(_owner, 0, _tokenId);
   }
 
+
   /**
   * @dev Internal function to add a token ID to the list of a given address
   * @param _to address representing the new owner of the given token ID
@@ -180,14 +183,10 @@ contract DecoupledERC721Token is ERC721 {
     require(ownerOf(_tokenId) == address(0));
     setOwnerOf(_tokenId, _to);
 
-    
-    uint balance = balanceOf(_to);
-
-
-    storageContract.setUIntValue(keccak256("BalanceOf", _to), balance.add(1));
+    storageContract.setUIntValue(keccak256("BalanceOf", _to), balanceOf(_to).add(1));
 //    storageContract.setUIntValue(keccak256("TokensOf", _to, balance.add(1)), _tokenId);
 
-    storageContract.setUIntValue("TotalSupply", getTotalTokens().add(1));
+    storageContract.setUIntValue(keccak256("TotalSupply"), totalSupply().add(1));
 
   }
 
@@ -216,6 +215,6 @@ contract DecoupledERC721Token is ERC721 {
     // decrement token balance of user.
     storageContract.setUIntValue(keccak256("BalanceOf", _from), balance.sub(1));
 
-    storageContract.setUIntValue("TotalSupply", getTotalTokens().sub(1));
+    storageContract.setUIntValue("TotalSupply", totalSupply().sub(1));
   }
 }
