@@ -1,5 +1,9 @@
 FROM frolvlad/alpine-python3
+MAINTAINER Ben "bandre@gmail.com"
 
-COPY test.py /
+COPY NOAAPrecipAggregate.py /
 
-CMD python ./test.py
+RUN pip3 install requests
+RUN pip3 install bs4
+RUN pip3 install cbor2
+CMD python ./NOAAPrecipAggregate.py

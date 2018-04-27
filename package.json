@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "bn": "^1.0.1",
     "lodash": "^4.17.5",
     "zeppelin-solidity": "^1.6.0"
   },

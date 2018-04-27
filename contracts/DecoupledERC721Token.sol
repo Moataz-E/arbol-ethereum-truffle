@@ -13,11 +13,8 @@ contract DecoupledERC721Token is ERC721 {
   using SafeMath for uint256;
 
   // The storage contract
-  EternalDonut private storageContract;
+  EternalDonut internal storageContract;
 
-  function DecoupledERC721Token(address storage_address) {
-    storageContract = EternalDonut(storage_address);
-  }
 
   function totalSupply() public returns (uint) {
     return storageContract.getUIntValue(keccak256("TotalSupply"));
@@ -122,6 +119,12 @@ contract DecoupledERC721Token is ERC721 {
     addToken(_to, _tokenId);
     Transfer(0x0, _to, _tokenId);
   }
+
+  function _secondmint(address _to, uint256 _tokenId) internal {
+  /*  require(_to != address(0));
+    addToken(_to, _tokenId);
+    Transfer(0x0, _to, _tokenId);
+ */ }
 
   /**
   * @dev Burns a specific token
