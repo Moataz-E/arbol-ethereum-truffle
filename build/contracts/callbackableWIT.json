@@ -1,0 +1,179 @@
+{
+  "contractName": "callbackableWIT",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "WITID",
+          "type": "uint256"
+        },
+        {
+          "name": "outcome",
+          "type": "string"
+        }
+      ],
+      "name": "evaluatorCallback",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.18;\n\ncontract callbackableWIT\n{\n\tfunction evaluatorCallback(uint WITID, string outcome) public;\n}",
+  "sourcePath": "/Users/benandre/cropcrop/contracts/callbackableWIT.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/benandre/cropcrop/contracts/callbackableWIT.sol",
+      "exportedSymbols": {
+        "callbackableWIT": [
+          914
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 906,
+        "name": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            914
+          ],
+          "name": "callbackableWIT",
+          "scope": 915
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "evaluatorCallback",
+              "payable": false,
+              "scope": 914,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "WITID",
+                      "scope": 913,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 907,
+                        "name": "ElementaryTypeName",
+                        "src": "81:4:4"
+                      }
+                    ],
+                    "id": 908,
+                    "name": "VariableDeclaration",
+                    "src": "81:10:4"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "outcome",
+                      "scope": 913,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 909,
+                        "name": "ElementaryTypeName",
+                        "src": "93:6:4"
+                      }
+                    ],
+                    "id": 910,
+                    "name": "VariableDeclaration",
+                    "src": "93:14:4"
+                  }
+                ],
+                "id": 911,
+                "name": "ParameterList",
+                "src": "80:28:4"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 912,
+                "name": "ParameterList",
+                "src": "115:0:4"
+              }
+            ],
+            "id": 913,
+            "name": "FunctionDefinition",
+            "src": "54:62:4"
+          }
+        ],
+        "id": 914,
+        "name": "ContractDefinition",
+        "src": "26:92:4"
+      }
+    ],
+    "id": 915,
+    "name": "SourceUnit",
+    "src": "0:118:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-04-26T20:16:00.850Z"
+}

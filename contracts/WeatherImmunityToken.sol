@@ -108,6 +108,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         
     }
 
+
     function saveWIT(WIT the_wit) private {
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "aboveEscrow"), the_wit.aboveEscrow);
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "belowEscrow"), the_wit.belowEscrow);
@@ -248,9 +249,9 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       address belowOwner = ownerOf(the_wit.belowID);
       _burn(belowOwner, the_wit.belowID);
       address aboveOwner = ownerOf(the_wit.aboveID);
-      _alsoburn(aboveOwner, the_wit.aboveID);
+      _burn(aboveOwner, the_wit.aboveID);
 
-//      saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, "", 0, 0, false, false));
+     // saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false)); //TODO why doesnt this work? gas?
     }
 
 
@@ -319,17 +320,17 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       revert();
     }
 
+    event debug(uint, uint);
+    
     event debug(string);
-
     function evaluatorCallback(uint WITID, string outcome) public {
         WIT memory the_wit = getWIT(WITID);
     //    require(msg.sender == the_wit.evaluator);
 
         uint totalEscrow = the_wit.aboveEscrow.add(the_wit.belowEscrow);
-        debug("WORKS");
         address owner;
         if (keccak256(outcome) == keccak256("above")) { // use keccak because == doesn't work for strings.
-            owner = ownerOf(the_wit.belowID);
+            owner = ownerOf(the_wit.aboveID);
         }
         else {
             if (keccak256(outcome) == keccak256("below")) {
@@ -339,9 +340,10 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         }
 
         burnWIT(WITID);
-     //   Redemption(WITID, totalEscrow, owner);
-     //   owner.transfer(totalEscrow);
-     //   WITEvaluated(WITID, outcome, totalEscrow);
+        Redemption(WITID, totalEscrow, owner);
+        debug(address(this).balance, totalEscrow);
+     //   owner.transfer(totalEscrow); Why isnt this working?
+        WITEvaluated(WITID, outcome, totalEscrow);
       }
 
 

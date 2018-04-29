@@ -99,7 +99,7 @@ console.log("after supply:" + afterSupply)
 
         await sleep(180000);
 
-       // await WIT.evaluatorCallback(parseInt(afterSupply), "below")
+//        await WIT.evaluatorCallback(parseInt(afterSupply), "above")
 
         WIT.asdf();
 

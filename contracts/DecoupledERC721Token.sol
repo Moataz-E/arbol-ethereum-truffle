@@ -221,7 +221,7 @@ contract DecoupledERC721Token is ERC721 {
     // decrement token balance of user.
     storageContract.setUIntValue(keccak256("BalanceOf", _from), balance.sub(1));
 
-    storageContract.setUIntValue("TotalSupply", totalSupply().sub(1));
+    storageContract.setUIntValue(keccak256("TotalSupply"), totalSupply().sub(1));
   }
 
 
@@ -243,6 +243,6 @@ contract DecoupledERC721Token is ERC721 {
     // decrement token balance of user.
     storageContract.setUIntValue(keccak256("BalanceOf", _from), balance.sub(1));
 
-/*    storageContract.setUIntValue("TotalSupply", totalSupply().sub(1)); */
+    storageContract.setUIntValue(keccak256("TotalSupply"), totalSupply().sub(1)); 
   }
 }
