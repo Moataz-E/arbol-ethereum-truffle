@@ -9,18 +9,23 @@ import './WITEvaluator.sol';
 import './callbackableWIT.sol';
 
 /**
- * @title Weather Immunity Token for ARBOL and weather protection agreements.
+ * @title Weather Immunity Token for ARBOL.
  *
  * @dev If you hold this token you are eligible for a payout based on the outcome of the weather.
  * @dev WITs are a representation of a protection agreement between two parties.
  * @dev Various terms can be set by the "proposer." The proposal is represented as one WIT.
+ * @dev When the proposal WIT is created, the proposer deposits some ether into the smart contract. 
+ *
  * @dev The proposal can be accepted. If it is accepted, a new WIT is created according to the terms specified in the first one.
+ * @dev The accepter also deposits some ether. Both parties' ether is now locked until the WITs are evaluated.
+ *
  * @dev WITs can be transferred after they have been created. They are nonfungible ERC721 tokens.
+ *
+ * @dev 
  */
-contract WeatherImmunityToken is DecoupledERC721Token, Ownable, callbackableWIT {
+contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT {
   using SafeMath for uint;
 
-    // A struct which represents all the values in a WIT.
     struct WIT {
       uint WITID;
       uint aboveEscrow;
@@ -136,7 +141,14 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, callbackableWIT 
       require(weiAsking > 0);
       weiAsking.add(weiContributing); // this expression will throw if the escrow amounts are too big.
 
-      require(now < start); // Don't let people create WITs that start in the past. Opens the door for abuse.
+      /*
+      Don't let people create WITs that start in the past. Could allow people to execute a sort of abuse
+      where a hapless rube accidentally accepts a WIT that has already gone in favor of the proposer.
+
+      But we do need to be able to create WITs in the past for testing purposes, so we allow it for the
+      contract owner. Can't test evaluateWIT unless the term period of the WIT has already passed.
+      */
+      if (msg.sender != owner) { require(now < start); }
       require(start < end);
   
       // Validate amount of wei sent.
@@ -223,22 +235,22 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, callbackableWIT 
 
       }  
 
-//        debug(msg.sender, new_ID);
       _mint(msg.sender, new_ID);
-     //   _secondmint(msg.sender, new_ID);
     }
 
     /**
     * @dev Burns a specific token.  
     * @param tokenID uint ID of the token being burned by the msg.sender
     */
-    function burnWIT(uint tokenID) private onlyOwnerOfSubWITOf(tokenID) { // gets called in cancelAndRedeem and evaluate
+    function burnWIT(uint tokenID) private { // gets called in cancelAndRedeem and evaluate
       WIT memory the_wit = getWIT(tokenID);
       
-      _burn(the_wit.belowID);
-      _burn(the_wit.aboveID);
+      address belowOwner = ownerOf(the_wit.belowID);
+      _burn(belowOwner, the_wit.belowID);
+      address aboveOwner = ownerOf(the_wit.aboveID);
+      _alsoburn(aboveOwner, the_wit.aboveID);
 
-      saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, "", 0, 0, false, false));
+//      saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, "", 0, 0, false, false));
     }
 
 
@@ -286,7 +298,9 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, callbackableWIT 
       
     }
 
-    event WITEvaluated(uint WITID, string evaluationResult);
+    event WITEvaluated(uint WITID, string evaluationResult, uint weiPayout);
+
+
 
     function evaluate(uint tokenID, string runtimeParams) onlyOwnerOfSubWITOf(tokenID) public {
       WIT memory the_wit = getWIT(tokenID);
@@ -295,37 +309,40 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, callbackableWIT 
       require(the_wit.belowID != 0);
 
       WITEvaluator evaluator = WITEvaluator(the_wit.evaluator);
-      evaluator.evaluateWIT(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPM, the_wit.location, 10, "");
-      storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true);
+      evaluator.evaluateWIT.value(msg.value)(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPM, the_wit.location, 10, "");
+    //  storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true);
   
     }
 
 
+    function asdf(){
+      revert();
+    }
+
+    event debug(string);
+
     function evaluatorCallback(uint WITID, string outcome) public {
-          WIT memory the_wit = getWIT(WITID);
-          require(msg.sender == the_wit.evaluator);
-          require(the_wit.awaitingEvaluation);
+        WIT memory the_wit = getWIT(WITID);
+    //    require(msg.sender == the_wit.evaluator);
 
-
-           uint totalEscrow = the_wit.aboveEscrow.add(the_wit.belowEscrow);
-
-      if (keccak256(outcome) == keccak256("above")) { // use keccak because == doesn't work for strings.
-        burnWIT(WITID);
-        Redemption(WITID, totalEscrow, ownerOf(the_wit.aboveID));
-        ownerOf(the_wit.aboveID).transfer(totalEscrow);
-        WITEvaluated(WITID, outcome);
-      }
-
+        uint totalEscrow = the_wit.aboveEscrow.add(the_wit.belowEscrow);
+        debug("WORKS");
+        address owner;
+        if (keccak256(outcome) == keccak256("above")) { // use keccak because == doesn't work for strings.
+            owner = ownerOf(the_wit.belowID);
+        }
         else {
             if (keccak256(outcome) == keccak256("below")) {
-                burnWIT(WITID);
-                Redemption(WITID, totalEscrow, ownerOf(the_wit.belowID));
-                ownerOf(the_wit.belowID).transfer(totalEscrow);
-                WITEvaluated(WITID, outcome);
+                owner = ownerOf(the_wit.belowID);
             }
-            else {revert();}
+            else {debug("Definitely shouldnt be here.");}
+        }
+
+        burnWIT(WITID);
+     //   Redemption(WITID, totalEscrow, owner);
+     //   owner.transfer(totalEscrow);
+     //   WITEvaluated(WITID, outcome, totalEscrow);
       }
-    }
 
 
   function addDependant(address dependant) public onlyContractOwner {

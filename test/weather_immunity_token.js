@@ -9,10 +9,11 @@ let BN = require('bn.js');
 
 // Dates are in unix timestamp format
 let now = Math.round((new Date()).getTime() / 1000);  
-let one_month = 2629746000;
+let one_month = 2592000;
+let one_year = 31622400;
 let one_month_from_now = now + one_month;
 let two_months_from_now = now + (2 * one_month);
-
+let one_year_ago = now - one_year;
 
 
 function numStringToBytes32(num) { 
@@ -53,7 +54,7 @@ async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk
     let beforeSupply = await WIT.totalSupply.call();
    // console.log("before supply: " + beforeSupply)
 
-    await WIT.createWITProposal(ethContribute, ethAsk, true, NOAAPrecipAggregate.address, 900000, numStringToBytes32(261), one_month_from_now, two_months_from_now, true, {value: ethContribute, from: proposerAccount});
+    await WIT.createWITProposal(ethContribute, ethAsk, true, NOAAPrecipAggregate.address, 30000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
 
     let proposalID
     let offeredEvent = WIT.ProposalOffered({}, {fromBlock: 'latest', toBlock: 'latest'}).watch(async function(error, result) {
@@ -92,6 +93,16 @@ console.log("after supply:" + afterSupply)
         console.log("proposal id:" + proposalID)
 
         await WIT.createWITAcceptance(parseInt(afterSupply), {from: accepterAccount, value: ethAsk});
+
+
+        await WIT.evaluate(parseInt(afterSupply), "", {from: accepterAccount});
+
+        await sleep(180000);
+
+       // await WIT.evaluatorCallback(parseInt(afterSupply), "below")
+
+        WIT.asdf();
+
 /*
         afterSupply = await WIT.totalSupply.call();
         assert.equal(afterSupply.toNumber() - beforeSupply.toNumber(), 1, "WIT creation failed");
@@ -128,16 +139,17 @@ contract('WeatherImmunityToken', function(accounts) {
 
         await DONUT.transferOwnership(WIT.address, {from:accounts[1]});
         await WIT.initialize(ARBOL.address, DONUT.address, NOAA.address, {from:accounts[1]});
+        await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
 
-        await createWIT(accounts[0], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 5001, 5000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
-        await createWIT(accounts[0], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
-        await createWIT(accounts[0], accounts[3], 9000, 1000, WIT, ARBOL, accounts);        
+        await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 5001, 5000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
+        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts);        
 
     });
 });
@@ -146,5 +158,7 @@ contract('WeatherImmunityToken', function(accounts) {
 
 
 
-
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 	

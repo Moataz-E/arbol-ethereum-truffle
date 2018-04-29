@@ -120,23 +120,28 @@ contract DecoupledERC721Token is ERC721 {
     Transfer(0x0, _to, _tokenId);
   }
 
-  function _secondmint(address _to, uint256 _tokenId) internal {
-  /*  require(_to != address(0));
-    addToken(_to, _tokenId);
-    Transfer(0x0, _to, _tokenId);
- */ }
 
   /**
   * @dev Burns a specific token
   * @param _tokenId uint256 ID of the token being burned by the msg.sender
   */
-  function _burn(uint256 _tokenId) internal {
+  function _burn(address owner, uint256 _tokenId) internal {
     if (approvedFor(_tokenId) != 0) {
-      clearApproval(msg.sender, _tokenId);
+      clearApproval(owner, _tokenId);
     }
-    removeToken(msg.sender, _tokenId);
-    Transfer(msg.sender, 0x0, _tokenId);
+    removeToken(owner, _tokenId);
+    Transfer(owner, 0x0, _tokenId);
   }
+
+
+  function _alsoburn(address owner, uint256 _tokenId) internal {
+    if (approvedFor(_tokenId) != 0) {
+      clearApproval(owner, _tokenId);
+    }
+    alsoremoveToken(owner, _tokenId);
+   // Transfer(owner, 0x0, _tokenId);
+  }
+
 
   /**
    * @dev Tells whether the msg.sender is approved for the given token ID or not
@@ -199,12 +204,10 @@ contract DecoupledERC721Token is ERC721 {
   * @param _tokenId uint256 ID of the token to be removed from the tokens list of the given address
   */
   function removeToken(address _from, uint256 _tokenId) private {
-    require(ownerOf(_tokenId) == _from);
+  //  require(ownerOf(_tokenId) == _from);
 
     setOwnerOf(_tokenId, address(0));
 
-    // change value in "TokensOf" mapping.
-    // Yes, this does work for a balance of 1.
     uint balance = balanceOf(_from);
   //  uint[] tokensOf = tokensOf(_from);
  //   uint lastToken = storageContract.getUIntValue(keccak256("TokensOf", _from, balance.sub(1)));
@@ -219,5 +222,27 @@ contract DecoupledERC721Token is ERC721 {
     storageContract.setUIntValue(keccak256("BalanceOf", _from), balance.sub(1));
 
     storageContract.setUIntValue("TotalSupply", totalSupply().sub(1));
+  }
+
+
+    function alsoremoveToken(address _from, uint256 _tokenId) private {
+  //  require(ownerOf(_tokenId) == _from);
+
+    setOwnerOf(_tokenId, address(0));
+
+    uint balance = balanceOf(_from);
+  //  uint[] tokensOf = tokensOf(_from);
+ //   uint lastToken = storageContract.getUIntValue(keccak256("TokensOf", _from, balance.sub(1)));
+   // for (uint balanceItr = 0; balanceItr < balance; balanceItr.add(1)) {
+     // if (storageContract.getUIntValue(keccak256("TokensOf", _from, balanceItr)) == _tokenId) { // if we're on the right "index"
+       // storageContract.setUIntValue(keccak256("TokensOf", _from, balanceItr), lastToken);      // move the value at the last "index" to the current "index"
+       // storageContract.setUIntValue(keccak256("TokensOf", _from, balance.sub(1)), 0);           // set the value at the last "index" to 0
+   //   }
+   // }
+
+    // decrement token balance of user.
+    storageContract.setUIntValue(keccak256("BalanceOf", _from), balance.sub(1));
+
+/*    storageContract.setUIntValue("TotalSupply", totalSupply().sub(1)); */
   }
 }
