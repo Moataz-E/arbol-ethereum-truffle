@@ -43,7 +43,7 @@ function sleep(ms) {
 
 
 async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk, WIT, ARBOL, accounts) {
-    await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 30000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
+    await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 11000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
     supply = await WIT.totalSupply.call();
     await WIT.createWITAcceptance(parseInt(supply), {from: accepterAccount, value: ethAsk});
     await WIT.evaluate(parseInt(supply), "", {from: accepterAccount});
@@ -67,7 +67,6 @@ contract('WeatherImmunityToken', function(accounts) {
         await WIT.initialize(ARBOL.address, DONUT.address, NOAA.address, {from:accounts[1]});
         await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
         await web3.eth.sendTransaction({from:accounts[0],to:NOAA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
-
 
         await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);

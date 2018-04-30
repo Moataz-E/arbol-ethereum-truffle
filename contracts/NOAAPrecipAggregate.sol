@@ -25,7 +25,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
         require(gasEstimate < this.balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
         require(1 < thresholdFactorPPTTH);
-        require(thresholdFactorPPTTH < 3000000);
+        require(thresholdFactorPPTTH < 30000);
         string memory avgedyearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
         oraclize_query("computation", [precipScript, uint2str(WITID), avgedyearsStartEnd, uint2str(thresholdFactorPPTTH), uint2str(uint(area))], gasEstimate);
     }
