@@ -3,7 +3,7 @@ import "installed_contracts/oraclize-api/contracts/usingOraclize.sol";
 import "./CBOR.sol";
 import "./WITEvaluator.sol";
 import "./Ownable.sol";
-import "./callbackableWIT.sol";
+import "./CallbackableWIT.sol";
 import "./strings.sol";
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 

@@ -6,7 +6,7 @@ import './Arbolcoin.sol';
 import './EternalDonut.sol';
 import './Ownable.sol';
 import './WITEvaluator.sol';
-import './callbackableWIT.sol';
+import './CallbackableWIT.sol';
 
 /**
  * @title Weather Immunity Token for ARBOL.
