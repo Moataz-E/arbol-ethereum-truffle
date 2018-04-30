@@ -54,22 +54,24 @@ async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk
     let beforeSupply = await WIT.totalSupply.call();
    // console.log("before supply: " + beforeSupply)
 
-    await WIT.createWITProposal(ethContribute, ethAsk, true, NOAAPrecipAggregate.address, 30000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
+    console.log(numStringToBytes32(261));
 
-    let proposalID
-    let offeredEvent = WIT.ProposalOffered({}, {fromBlock: 'latest', toBlock: 'latest'}).watch(async function(error, result) {
-
+    await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 30000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
 
 
-         proposalID = result.args.WITID;
-    });
+  //  let offeredEvent = WIT.ProposalOffered({}, {fromBlock: 'latest', toBlock: 'latest'}).watch(async function(error, result) {
 
-    offeredEvent.stopWatching();
+
+
+    //     proposalID = result.args.WITID;
+   // });
+
+//    offeredEvent.stopWatching();
 
 
     
         let afterSupply = await WIT.totalSupply.call();
-console.log("after supply:" + afterSupply)
+//console.log("after supply:" + afterSupply)
 
   //      assert.equal(afterSupply.toNumber() - beforeSupply.toNumber(), 1, "WIT creation failed");
     
@@ -90,7 +92,7 @@ console.log("after supply:" + afterSupply)
 
         beforeSupply = await WIT.totalSupply.call();
 
-        console.log("proposal id:" + proposalID)
+     //   console.log("proposal id:" + proposalID)
 
         await WIT.createWITAcceptance(parseInt(afterSupply), {from: accepterAccount, value: ethAsk});
 
@@ -101,7 +103,9 @@ console.log("after supply:" + afterSupply)
 
 //        await WIT.evaluatorCallback(parseInt(afterSupply), "above")
 
-        WIT.asdf();
+        await WIT.asdf();
+
+     //}
 
 /*
         afterSupply = await WIT.totalSupply.call();
@@ -135,21 +139,30 @@ contract('WeatherImmunityToken', function(accounts) {
         let DONUT = await EternalDonut.deployed();
         let NOAA = await NOAAPrecipAggregate.deployed();
 
+        await web3.eth.sendTransaction({from:accounts[0],to:NOAA.address, value:web3.toWei(0.5, "ether")});
+
+//        await NOAA.send({from: accounts[0], value: web3.toWei(0.05, "ether")});
+    //    await WIT.send({from: accounts[0], value: 10000000});
+
+
         console.log(await NOAA.getNameAndDescription());
 
         await DONUT.transferOwnership(WIT.address, {from:accounts[1]});
         await WIT.initialize(ARBOL.address, DONUT.address, NOAA.address, {from:accounts[1]});
         await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
 
+
+
+
         await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
+ /*       await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 5001, 5000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
-        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts);        
+        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts);        */
 
     });
 });

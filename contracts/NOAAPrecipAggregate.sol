@@ -35,7 +35,7 @@ event buffer(bytes);
 
         string memory avgedyearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
 
-        oraclize_query("computation", [precipScript, uint2str(WITID), avgedyearsStartEnd, uint2str(thresholdFactorPPM), uint2str(uint(area))]);
+        oraclize_query("computation", [precipScript, uint2str(WITID), avgedyearsStartEnd, uint2str(thresholdFactorPPM), uint2str(uint(area))], 500000);
     }
 
 
@@ -71,6 +71,9 @@ event buffer(bytes);
 
     function getNameAndDescription() public pure returns(string name, string description) {
         return("NOAA Precipitation Aggregate WIT Evaluator", "This contract makes a call to the NOAA aggregate endpoint and evaluates a WIT based on the result.");
+    }
+
+    function () external payable {
     }
 
 }

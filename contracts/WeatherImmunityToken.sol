@@ -250,8 +250,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       _burn(belowOwner, the_wit.belowID);
       address aboveOwner = ownerOf(the_wit.aboveID);
       _burn(aboveOwner, the_wit.aboveID);
-
-     // saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false)); //TODO why doesnt this work? gas?
+      saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false)); //TODO why doesnt this work? gas?
     }
 
 
@@ -301,7 +300,9 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
     event WITEvaluated(uint WITID, string evaluationResult, uint weiPayout);
 
+    event debug(uint);
 
+    event testdebut(uint);
 
     function evaluate(uint tokenID, string runtimeParams) onlyOwnerOfSubWITOf(tokenID) public {
       WIT memory the_wit = getWIT(tokenID);
@@ -311,8 +312,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
       WITEvaluator evaluator = WITEvaluator(the_wit.evaluator);
       evaluator.evaluateWIT.value(msg.value)(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPM, the_wit.location, 10, "");
-    //  storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true);
-  
+      storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true);
     }
 
 
@@ -320,12 +320,12 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       revert();
     }
 
-    event debug(uint, uint);
+    event debug(string, uint, uint, address, uint);
     
     event debug(string);
     function evaluatorCallback(uint WITID, string outcome) public {
         WIT memory the_wit = getWIT(WITID);
-    //    require(msg.sender == the_wit.evaluator);
+        require(msg.sender == the_wit.evaluator);
 
         uint totalEscrow = the_wit.aboveEscrow.add(the_wit.belowEscrow);
         address owner;
@@ -341,8 +341,9 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
         burnWIT(WITID);
         Redemption(WITID, totalEscrow, owner);
-        debug(address(this).balance, totalEscrow);
-     //   owner.transfer(totalEscrow); Why isnt this working?
+        debug("before", address(this).balance, totalEscrow, owner, msg.gas);
+        owner.transfer(totalEscrow);
+        debug("after", address(this).balance, totalEscrow, owner, msg.gas);
         WITEvaluated(WITID, outcome, totalEscrow);
       }
 

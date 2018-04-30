@@ -37,11 +37,12 @@ Make sure the latest version of node is installed.
 Start ganache-cli with latest node version (9.x as of this writing).
 
     $ nvm use node
-    $ ganache-cli --unlock 0 --unlock 1 --deterministic --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
+    $ ganache-cli --unlock 0 --unlock 1 --unlock 3 --deterministic --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
 
 Open a new terminal window, move to your ethereum bridge directory, and start ethereum bridge with node 6.9.1. It takes a while to finish starting.
 
-    $ cd etherem-bridge
+    $ nvm install 6.9.1
+    $ cd ethereum-bridge
     $ nvm use 6.9.1
     $ node bridge -H 127.0.0.1:8545 -a 1 --dev
 
