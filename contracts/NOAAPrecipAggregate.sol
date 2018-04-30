@@ -12,7 +12,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     using SafeMath for uint;
     using CBOR for Buffer.buffer;
     using strings for *;
-    string precipScript = "QmP7tY7oF1auzpv5Tmcnv2SXq5Qc5aKUsmfVKAdD5Xsskq";
+    string precipScript = "QmRNQhKRThYCQe38Lycj7dTNVCFQ7bFnpQdF8NxqF9jPi4";
     event gotNOAAPrecipAggregateCallback(string key, string result);
     event sendingNOAAPrecipOraclizeComputation(bytes precipScript, uint WITID, uint timescale, bytes32 area, uint month, uint term_year, uint average_basis);
 

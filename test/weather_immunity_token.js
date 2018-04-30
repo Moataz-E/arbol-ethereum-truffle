@@ -43,12 +43,10 @@ function sleep(ms) {
 
 
 async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk, WIT, ARBOL, accounts) {
-
     await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 30000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
-    await WIT.createWITAcceptance(parseInt(afterSupply), {from: accepterAccount, value: ethAsk});
     supply = await WIT.totalSupply.call();
+    await WIT.createWITAcceptance(parseInt(supply), {from: accepterAccount, value: ethAsk});
     await WIT.evaluate(parseInt(supply), "", {from: accepterAccount});
-
 }
 
 
