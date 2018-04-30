@@ -20,14 +20,14 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     /*
     Assumes "num_averaged_years" to be 10.  start and end must be = within 12 months of each other.
     */
-    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPM, bytes32 area, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
+    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, bytes32 area, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
         uint gasEstimate = 500000;
         require(gasEstimate < this.balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
-        require(1 < thresholdFactorPPM);
-        require(thresholdFactorPPM < 3000000);
+        require(1 < thresholdFactorPPTTH);
+        require(thresholdFactorPPTTH < 3000000);
         string memory avgedyearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
-        oraclize_query("computation", [precipScript, uint2str(WITID), avgedyearsStartEnd, uint2str(thresholdFactorPPM), uint2str(uint(area))], gasEstimate);
+        oraclize_query("computation", [precipScript, uint2str(WITID), avgedyearsStartEnd, uint2str(thresholdFactorPPTTH), uint2str(uint(area))], gasEstimate);
     }
 
 
