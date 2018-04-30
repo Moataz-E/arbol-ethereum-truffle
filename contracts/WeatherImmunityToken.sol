@@ -33,7 +33,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       uint aboveID;
       uint belowID; 
       address evaluator;
-      uint thresholdPPTH;
+      uint thresholdPPTTH;
       bytes32 location;
       uint start;
       uint end;

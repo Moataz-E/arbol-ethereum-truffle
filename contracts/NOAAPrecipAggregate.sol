@@ -44,6 +44,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
 
 
     function NOAAPrecipAggregate() public {
+        //This is only needed when using a local deployment on bridge.
         OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
     }
 

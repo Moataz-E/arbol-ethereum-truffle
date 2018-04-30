@@ -17,7 +17,7 @@ let one_year_ago = now - one_year;
 
 
 function numStringToBytes32(num) { 
-   var bn = new BN(num).toTwos(256);
+    var bn = new BN(num).toTwos(256);
    return padToBytes32(bn.toString(16));
 }
 
@@ -68,6 +68,7 @@ contract('WeatherImmunityToken', function(accounts) {
         await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
         await web3.eth.sendTransaction({from:accounts[0],to:NOAA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
 
+
         await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
@@ -76,9 +77,12 @@ contract('WeatherImmunityToken', function(accounts) {
         await createWIT(accounts[1], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
-        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts);
-        await sleep(180000);
+        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts); 
+        await sleep(180000); 
+
+        WIT.transferOwnershipOfDependants(accounts[0]);
         await WIT.revert();
+
 
     });
 });
