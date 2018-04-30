@@ -21,11 +21,13 @@ function numStringToBytes32(num) {
    return padToBytes32(bn.toString(16));
 }
 
+
 function bytes32ToNumString(bytes32str) {
     bytes32str = bytes32str.replace(/^0x/, '');
     var bn = new BN(bytes32str, 16).fromTwos(256);
     return bn.toString();
 }
+
 
 function padToBytes32(n) {
     while (n.length < 64) {
@@ -35,6 +37,59 @@ function padToBytes32(n) {
 }
 
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk, WIT, ARBOL, accounts) {
+
+    await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 30000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
+    await WIT.createWITAcceptance(parseInt(afterSupply), {from: accepterAccount, value: ethAsk});
+    supply = await WIT.totalSupply.call();
+    await WIT.evaluate(parseInt(supply), "", {from: accepterAccount});
+
+}
+
+
+contract('WeatherImmunityToken', function(accounts) {
+    it("should test various WIT creations and acceptances", async function() {
+
+        let ethContribute = 9000
+        let ethAsk = 1000        
+        let proposerAccount = accounts[0];
+        let accepterAccount = accounts[3];
+        let systemFeeWallet = accounts[9];
+        let WIT = await WeatherImmunityToken.deployed();
+        let ARBOL = await Arbolcoin.deployed();
+        let DONUT = await EternalDonut.deployed();
+        let NOAA = await NOAAPrecipAggregate.deployed();
+
+        await DONUT.transferOwnership(WIT.address, {from:accounts[1]});
+        await WIT.initialize(ARBOL.address, DONUT.address, NOAA.address, {from:accounts[1]});
+        await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
+        await web3.eth.sendTransaction({from:accounts[0],to:NOAA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
+
+        await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 5000, 5000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
+        await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
+        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts);
+        await sleep(180000);
+        await WIT.revert();
+
+    });
+});
+
+
+
+
+
+/*
 async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk, WIT, ARBOL, accounts) {
 
     let systemFeeWallet = accounts[9];
@@ -99,7 +154,6 @@ async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk
 
         await WIT.evaluate(parseInt(afterSupply), "", {from: accepterAccount});
 
-        await sleep(180000);
 
 //        await WIT.evaluatorCallback(parseInt(afterSupply), "above")
 
@@ -107,7 +161,7 @@ async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk
 
      //}
 
-/*
+
         afterSupply = await WIT.totalSupply.call();
         assert.equal(afterSupply.toNumber() - beforeSupply.toNumber(), 1, "WIT creation failed");
 
@@ -119,59 +173,14 @@ async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk
 
         owner = await WIT.ownerOf(2);
         assert.equal(accepterAccount, owner, "Second WIT was not transferred to accepter");
+
+
+}
+
 */
 
-}
-
-
-contract('WeatherImmunityToken', function(accounts) {
-    it("should test various WIT creations and acceptances", async function() {
-
-
-
-        let ethContribute = 9000
-        let ethAsk = 1000        
-        let proposerAccount = accounts[0];
-        let accepterAccount = accounts[3];
-        let systemFeeWallet = accounts[9];
-        let WIT = await	WeatherImmunityToken.deployed();
-        let ARBOL = await Arbolcoin.deployed();
-        let DONUT = await EternalDonut.deployed();
-        let NOAA = await NOAAPrecipAggregate.deployed();
-
-        await web3.eth.sendTransaction({from:accounts[0],to:NOAA.address, value:web3.toWei(0.5, "ether")});
-
-//        await NOAA.send({from: accounts[0], value: web3.toWei(0.05, "ether")});
-    //    await WIT.send({from: accounts[0], value: 10000000});
-
-
-        console.log(await NOAA.getNameAndDescription());
-
-        await DONUT.transferOwnership(WIT.address, {from:accounts[1]});
-        await WIT.initialize(ARBOL.address, DONUT.address, NOAA.address, {from:accounts[1]});
-        await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
 
 
 
 
-        await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
- /*       await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 5001, 5000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
-        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts);        */
-
-    });
-});
-
-
-
-
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 	
