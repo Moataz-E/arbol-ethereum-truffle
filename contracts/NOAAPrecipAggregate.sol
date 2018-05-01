@@ -1,5 +1,5 @@
 pragma solidity ^0.4.18;
-import "installed_contracts/oraclize-api/contracts/usingOraclize.sol";
+import "./usingOraclize.sol";
 import "./CBOR.sol";
 import "./WITEvaluator.sol";
 import "./Ownable.sol";
