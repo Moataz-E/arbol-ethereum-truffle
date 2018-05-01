@@ -63,11 +63,6 @@ contract('WeatherImmunityToken', function(accounts) {
         let DONUT = await EternalDonut.deployed();
         let NOAA = await NOAAPrecipAggregate.deployed();
 
-        await DONUT.transferOwnership(WIT.address, {from:accounts[1]});
-        await WIT.initialize(ARBOL.address, DONUT.address, NOAA.address, {from:accounts[1]});
-        await NOAA.transferOwnership(WIT.address, {from:accounts[1]});
-        await web3.eth.sendTransaction({from:accounts[0],to:NOAA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
-
         await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
@@ -81,7 +76,6 @@ contract('WeatherImmunityToken', function(accounts) {
 
         WIT.transferOwnershipOfDependants(accounts[0]);
         await WIT.revert();
-
 
     });
 });
