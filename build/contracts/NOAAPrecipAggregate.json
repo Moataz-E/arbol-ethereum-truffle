@@ -4059,6 +4059,100 @@
     "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x26956f1c9af36b4c4e60afbeb89a799742a9c6eea4960c8a5a509647f2414dbd": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "key",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "result",
+              "type": "string"
+            }
+          ],
+          "name": "gotNOAAPrecipAggregateCallback",
+          "type": "event"
+        },
+        "0x811ea45f4b97ac67f2fecfe84b48fe29f1601119f05eadaf8af297f4f6d2ddb2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "precipScript",
+              "type": "bytes"
+            },
+            {
+              "indexed": false,
+              "name": "WITID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "timescale",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "area",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "month",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "term_year",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "average_basis",
+              "type": "uint256"
+            }
+          ],
+          "name": "sendingNOAAPrecipOraclizeComputation",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        },
+        "0x2f50fbfa89e10026c273a59cb3202a86c6c09a4116d874b4ad412c42d9042468": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "name": "debug",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x1ff5b606f10e15afef9f4e76ca03533bd2aa8217"
+    },
     "1525121065892": {
       "events": {},
       "links": {},
@@ -4073,8 +4167,28 @@
       "events": {},
       "links": {},
       "address": "0x0706c32a81e75b80fc7032e6502e02f15d300a76"
+    },
+    "1525141328045": {
+      "events": {},
+      "links": {},
+      "address": "0xc8c03647d39a96f02f6ce8999bc22493c290e734"
+    },
+    "1525537090016": {
+      "events": {},
+      "links": {},
+      "address": "0x044b6015cd54c166c01c0cef38ebd137dcccb73a"
+    },
+    "1525540863285": {
+      "events": {},
+      "links": {},
+      "address": "0xf3e57da939e3c3173c987e72f3bcb925fee69cc9"
+    },
+    "1525560863584": {
+      "events": {},
+      "links": {},
+      "address": "0x35afb3c0d77217f4527b3aca2832a9bb0d3153bf"
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-05-01T01:30:41.691Z"
+  "updatedAt": "2018-05-05T22:55:09.871Z"
 }

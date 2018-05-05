@@ -75,7 +75,7 @@ contract('WeatherImmunityToken', function(accounts) {
         await sleep(180000); 
 
         WIT.transferOwnershipOfDependants(accounts[0]);
-        await WIT.revert();
+        await WIT.revert(); 
 
     });
 });

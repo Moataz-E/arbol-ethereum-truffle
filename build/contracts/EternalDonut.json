@@ -3155,6 +3155,29 @@
     "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x0f62664bef64ef8a9503b419af078aa9c87c881a"
+    },
     "1525121065892": {
       "events": {},
       "links": {},
@@ -3199,8 +3222,28 @@
       "events": {},
       "links": {},
       "address": "0x559fb86531df1bb8377338ee5ab29d9b8fd453a1"
+    },
+    "1525141328045": {
+      "events": {},
+      "links": {},
+      "address": "0x446e083592d2dfa6661e20097f6898990c3cace5"
+    },
+    "1525537090016": {
+      "events": {},
+      "links": {},
+      "address": "0x77833b8a64b292c624aed41b07c75eeda2512f10"
+    },
+    "1525540863285": {
+      "events": {},
+      "links": {},
+      "address": "0xc507017cea16855fa518924116408cca239006b1"
+    },
+    "1525560863584": {
+      "events": {},
+      "links": {},
+      "address": "0x3536ca51d15f6fc0a76c1f42693f7949b5165f0d"
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-05-01T00:59:44.300Z"
+  "updatedAt": "2018-05-05T22:55:09.868Z"
 }
