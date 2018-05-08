@@ -1,6 +1,6 @@
 Weather Immunity ÐApp
 ============================
--------------------------
+
 Quick Start
 -------------------------
 
@@ -57,3 +57,32 @@ Interact with the application via Truffle console or via a front end application
     $ cd crop-dapp
     $ nvm use node
     $ truffle deploy
+
+Deploying to Rinkeby
+-------------------------
+
+We currently use Rinkeby as a public testnet, as Ropsten has a prohibitive gas limit. 
+
+Create a Rinkeby account in Metamask or elsewhere.
+
+Follow the instructions on this page to get Ether: https://faucet.rinkeby.io/ (post your new wallet address to Google plus, then past the URL of the post into the faucet and select 18.75 Ether).
+
+Install geth. See: https://github.com/ethereum/go-ethereum/wiki/Installing-Geth
+
+Download the entire Rinkeby blockchain:
+
+    $ geth --rinkeby --fast --cache=1024 --rpc --rpcapi db,eth,net,web3,personal
+
+This will take about an hour, depending on your connection speed. If you use the --fast flag, then if you exit before it completes, you will not save any progress and will have to start fresh on your next attempt.
+
+Once this has completed, start the geth console:
+
+    $ geth attach http://127.0.0.1:8545
+
+Unlock your account for an hour. You will be prompted for your password:
+
+    $ personal.unlockAccount(eth.accounts[0], 3600)
+    
+Deploy to rinkeby:
+
+    $ truffle migrate --network rinkeby
