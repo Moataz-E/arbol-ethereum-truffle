@@ -14,7 +14,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     using strings for *;
     string precipScript = "QmRNQhKRThYCQe38Lycj7dTNVCFQ7bFnpQdF8NxqF9jPi4";
     event gotNOAAPrecipAggregateCallback(string key, string result);
-    event sendingNOAAPrecipOraclizeComputation(bytes precipScript, uint WITID, uint timescale, bytes32 area, uint month, uint term_year, uint average_basis);
+    event sentNOAAPrecipOraclizeComputation(bytes precipScript, uint WITID, uint timescale, bytes32 area, uint month, uint term_year, uint average_basis);
 
 
     /*
@@ -28,6 +28,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
         require(thresholdFactorPPTTH < 30000);
         string memory avgedyearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
         oraclize_query("computation", [precipScript, uint2str(WITID), avgedyearsStartEnd, uint2str(thresholdFactorPPTTH), uint2str(uint(area))], gasEstimate);
+       // sentNOAAPrecipOraclizeComputation(bytes precipScript, uint WITID, uint timescale, bytes32 area, uint month, uint term_year, uint average_basis) TODO
     }
 
 

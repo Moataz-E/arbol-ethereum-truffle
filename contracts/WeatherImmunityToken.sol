@@ -292,7 +292,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
         WITEvaluator evaluator = WITEvaluator(the_wit.evaluator);
         evaluator.evaluateWIT.value(msg.value)(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPTTH, the_wit.location, 10, "");
-        storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true);
+        storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true); 
     }
 
     function revert(){ revert(); }

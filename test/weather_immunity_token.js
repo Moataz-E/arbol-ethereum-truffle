@@ -63,8 +63,8 @@ contract('WeatherImmunityToken', function(accounts) {
         let DONUT = await EternalDonut.deployed();
         let NOAA = await NOAAPrecipAggregate.deployed();
 
-        await createWIT(accounts[1], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
+   /*     await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 5000, 5000, WIT, ARBOL, accounts);
@@ -72,9 +72,9 @@ contract('WeatherImmunityToken', function(accounts) {
         await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
         await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
         await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts); 
-        await sleep(180000); 
+    */    await sleep(180000); 
 
-        WIT.transferOwnershipOfDependants(accounts[0]);
+ //       WIT.transferOwnershipOfDependants(accounts[0]);
         await WIT.revert(); 
 
     });

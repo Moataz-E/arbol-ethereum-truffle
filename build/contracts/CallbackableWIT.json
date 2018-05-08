@@ -31,7 +31,7 @@
       "absolutePath": "/Users/benandre/cropcrop/contracts/CallbackableWIT.sol",
       "exportedSymbols": {
         "CallbackableWIT": [
-          554
+          601
         ]
       }
     },
@@ -45,9 +45,9 @@
             ".18"
           ]
         },
-        "id": 546,
+        "id": 593,
         "name": "PragmaDirective",
-        "src": "0:24:1"
+        "src": "0:24:2"
       },
       {
         "attributes": {
@@ -61,10 +61,10 @@
           "documentation": null,
           "fullyImplemented": false,
           "linearizedBaseContracts": [
-            554
+            601
           ],
           "name": "CallbackableWIT",
-          "scope": 555
+          "scope": 602
         },
         "children": [
           {
@@ -78,7 +78,7 @@
               ],
               "name": "evaluatorCallback",
               "payable": false,
-              "scope": 554,
+              "scope": 601,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -90,7 +90,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "WITID",
-                      "scope": 553,
+                      "scope": 600,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -103,20 +103,20 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 547,
+                        "id": 594,
                         "name": "ElementaryTypeName",
-                        "src": "81:4:1"
+                        "src": "81:4:2"
                       }
                     ],
-                    "id": 548,
+                    "id": 595,
                     "name": "VariableDeclaration",
-                    "src": "81:10:1"
+                    "src": "81:10:2"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "outcome",
-                      "scope": 553,
+                      "scope": 600,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "string memory",
@@ -129,19 +129,19 @@
                           "name": "string",
                           "type": "string storage pointer"
                         },
-                        "id": 549,
+                        "id": 596,
                         "name": "ElementaryTypeName",
-                        "src": "93:6:1"
+                        "src": "93:6:2"
                       }
                     ],
-                    "id": 550,
+                    "id": 597,
                     "name": "VariableDeclaration",
-                    "src": "93:14:1"
+                    "src": "93:14:2"
                   }
                 ],
-                "id": 551,
+                "id": 598,
                 "name": "ParameterList",
-                "src": "80:28:1"
+                "src": "80:28:2"
               },
               {
                 "attributes": {
@@ -150,24 +150,24 @@
                   ]
                 },
                 "children": [],
-                "id": 552,
+                "id": 599,
                 "name": "ParameterList",
-                "src": "115:0:1"
+                "src": "115:0:2"
               }
             ],
-            "id": 553,
+            "id": 600,
             "name": "FunctionDefinition",
-            "src": "54:62:1"
+            "src": "54:62:2"
           }
         ],
-        "id": 554,
+        "id": 601,
         "name": "ContractDefinition",
-        "src": "26:92:1"
+        "src": "26:92:2"
       }
     ],
-    "id": 555,
+    "id": 602,
     "name": "SourceUnit",
-    "src": "0:118:1"
+    "src": "0:118:2"
   },
   "compiler": {
     "name": "solc",
@@ -175,5 +175,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-05-01T01:30:41.688Z"
+  "updatedAt": "2018-05-06T17:45:58.558Z"
 }

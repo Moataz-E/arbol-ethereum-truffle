@@ -9,7 +9,7 @@ module.exports = function(deployer, network, accounts) {
     	var deployer_account = accounts[1]
     } else {
         if (network == "rinkeby") {
-            var deployer_account = accounts[2]
+            var deployer_account = "0x2b8d009b7b256d82a5d3ea679631b69e0d1babeb"
         }	
     }
 
@@ -21,7 +21,7 @@ module.exports = function(deployer, network, accounts) {
 							A_DONUT.transferOwnership(A_WIT.address, {from: deployer_account});
 							A_WIT.initialize(AN_ARBOL.address, A_DONUT.address, A_NOAA.address, {from: deployer_account});
 							A_NOAA.transferOwnership(A_WIT.address, {from: deployer_account});
-							web3.eth.sendTransaction({from: deployer_account, to: A_NOAA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
+						//	web3.eth.sendTransaction({from: deployer_account, to: A_NOAA.address, value:web3.toWei(1, "ether")}); // for oraclize callback.
 						})
 					})
 				})
