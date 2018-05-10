@@ -38,7 +38,6 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       uint start;
       uint end;
       bool makeStale;
-      bool awaitingEvaluation;  //TODO get rid of this as oraclize callbacks can be executed before the query sometimes.
     }
 
     // Arbolcoin smart contract (contains address). 
@@ -98,8 +97,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       uint start = storageContract.getUIntValue(keccak256("WIT", tokenID, "start"));
       uint end = storageContract.getUIntValue(keccak256("WIT", tokenID, "end"));
       bool makeStale = storageContract.getBooleanValue(keccak256("WIT", tokenID, "makeStale"));
-      bool awaitingEvaluation = storageContract.getBooleanValue(keccak256("WIT", tokenID, "awaitingEvaluation"));
-      return WIT(tokenID, aboveEscrow, belowEscrow, aboveID, belowID, evaluator, thresholdPPTTH, location, start, end, makeStale, awaitingEvaluation);        
+      return WIT(tokenID, aboveEscrow, belowEscrow, aboveID, belowID, evaluator, thresholdPPTTH, location, start, end, makeStale);        
     }
 
     function saveWIT(WIT the_wit) private {
@@ -113,7 +111,6 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "start"), the_wit.start);
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "end"), the_wit.end);
         storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "makeStale"), the_wit.makeStale);
-        storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), the_wit.awaitingEvaluation);
     }
 
    /**
@@ -284,15 +281,17 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         Redemption(tokenID, redemptionAmount, msg.sender);
     }
 
+    event debug(string);
     function evaluate(uint tokenID, string runtimeParams) onlyOwnerOfSubWITOf(tokenID) public {
         WIT memory the_wit = getWIT(tokenID);
         require(the_wit.end < now);
         require(the_wit.aboveID != 0);
         require(the_wit.belowID != 0);
 
+        debug("evaluatin");
+
         WITEvaluator evaluator = WITEvaluator(the_wit.evaluator);
         evaluator.evaluateWIT.value(msg.value)(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPTTH, the_wit.location, 10, "");
-        storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "awaitingEvaluation"), true); 
     }
 
     function revert(){ revert(); }

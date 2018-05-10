@@ -46,6 +46,7 @@ function sleep(ms) {
 
 async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk, WIT, ARBOL, accounts) {
     response = await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 11000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
+    console.log(response.logs)
     ID = response.logs[1].args.WITID.toNumber()
     await WIT.createWITAcceptance(ID, {from: accepterAccount, value: ethAsk});
     await WIT.evaluate(ID, "", {from: accepterAccount});
@@ -66,17 +67,17 @@ contract('WeatherImmunityToken', function(accounts) {
         let NOAA = await NOAAPrecipAggregate.deployed();
 
         await createWIT(accounts[2], accounts[3], 1000, 9000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 5000, 5000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
-        await createWIT(accounts[1], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
-        await createWIT(accounts[1], accounts[3], 9000, 1000, WIT, ARBOL, accounts); 
-        await sleep(180000); 
+   /*     await createWIT(accounts[2], accounts[3], 2000, 8000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 3000, 7000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 4000, 6000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 5000, 5000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 6000, 4000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 7000, 3000, WIT, ARBOL, accounts);
+        await createWIT(accounts[2], accounts[3], 8000, 2000, WIT, ARBOL, accounts);        
+        await createWIT(accounts[2], accounts[3], 9000, 1000, WIT, ARBOL, accounts); */
+       // await sleep(180000); 
 
-        WIT.transferOwnershipOfDependants(accounts[0]);
+     //   WIT.transferOwnershipOfDependants(accounts[0]); 
         await WIT.revert(); 
 
 
