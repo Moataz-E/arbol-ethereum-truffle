@@ -79,9 +79,13 @@ Once this has completed, start the geth console:
 
     $ geth attach http://127.0.0.1:8545
 
-Unlock your account for an hour. You will be prompted for your password:
+Check your account balance:
 
-    $ personal.unlockAccount(eth.accounts[0], 3600)
+    $ web3.fromWei(eth.getBalance(eth.accounts[2]), "ether")
+
+Unlock your account for an hour. :
+
+    $ personal.unlockAccount(eth.accounts[2], "password", 3600)
     
 Deploy to rinkeby:
 
