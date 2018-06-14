@@ -83,7 +83,7 @@ Check your account balance:
 
     $ web3.fromWei(eth.getBalance(eth.accounts[2]), "ether")
 
-Unlock your account for an hour. :
+Unlock your account for an hour:
 
     $ personal.unlockAccount(eth.accounts[2], "password", 3600)
     
