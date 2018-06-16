@@ -47,9 +47,10 @@ function sleep(ms) {
 async function createWIT(proposerAccount, accepterAccount, ethContribute, ethAsk, WIT, ARBOL, accounts) {
     response = await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, 11000, numStringToBytes32(261), one_year_ago, one_year_ago + one_month, false, {value: ethContribute, from: proposerAccount});
     //console.log(response.logs)
-    ID = response.logs[1].args.WITID.toNumber()
-    await WIT.createWITAcceptance(ID, {from: accepterAccount, value: ethAsk});
-    await WIT.evaluate(ID, "", {from: accepterAccount});
+  //  await sleep(5000);
+    //ID = response.logs[1].args.WITID.toNumber()
+    await WIT.createWITAcceptance(1, {from: accepterAccount, value: ethAsk});
+    await WIT.evaluate(1, "", {from: accepterAccount});
  //   WIT.ProposalOffered({},{fromBlock:0, toBlock: 'latest'}).watch(function(error, result){
  //       console.log(result);
  //   });
