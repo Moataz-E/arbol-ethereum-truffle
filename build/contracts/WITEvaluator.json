@@ -1,0 +1,454 @@
+{
+  "contractName": "WITEvaluator",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "WITID",
+          "type": "uint256"
+        },
+        {
+          "name": "start",
+          "type": "uint256"
+        },
+        {
+          "name": "end",
+          "type": "uint256"
+        },
+        {
+          "name": "thresholdFactorPPM",
+          "type": "uint256"
+        },
+        {
+          "name": "area",
+          "type": "bytes32"
+        },
+        {
+          "name": "num_averaged_years",
+          "type": "uint256"
+        },
+        {
+          "name": "runtimeParams",
+          "type": "string"
+        }
+      ],
+      "name": "evaluateWIT",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getNameAndDescription",
+      "outputs": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.18;\n\nimport \"./Ownable.sol\";\n\ncontract WITEvaluator\n{\n    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPM, bytes32 area, uint num_averaged_years, string runtimeParams) payable public;\n\tfunction getNameAndDescription() public pure returns(string name, string description);\n}",
+  "sourcePath": "/Users/benandre/cropcrop/contracts/WITEvaluator.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/benandre/cropcrop/contracts/WITEvaluator.sol",
+      "exportedSymbols": {
+        "WITEvaluator": [
+          1671
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 1645,
+        "name": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 1644,
+          "absolutePath": "/Users/benandre/cropcrop/contracts/Ownable.sol",
+          "file": "./Ownable.sol",
+          "scope": 1672,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 1646,
+        "name": "ImportDirective",
+        "src": "26:23:7"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            1671
+          ],
+          "name": "WITEvaluator",
+          "scope": 1672
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "evaluateWIT",
+              "payable": true,
+              "scope": 1671,
+              "stateMutability": "payable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "WITID",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1647,
+                        "name": "ElementaryTypeName",
+                        "src": "100:4:7"
+                      }
+                    ],
+                    "id": 1648,
+                    "name": "VariableDeclaration",
+                    "src": "100:10:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "start",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1649,
+                        "name": "ElementaryTypeName",
+                        "src": "112:4:7"
+                      }
+                    ],
+                    "id": 1650,
+                    "name": "VariableDeclaration",
+                    "src": "112:10:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "end",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1651,
+                        "name": "ElementaryTypeName",
+                        "src": "124:4:7"
+                      }
+                    ],
+                    "id": 1652,
+                    "name": "VariableDeclaration",
+                    "src": "124:8:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "thresholdFactorPPM",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1653,
+                        "name": "ElementaryTypeName",
+                        "src": "134:4:7"
+                      }
+                    ],
+                    "id": 1654,
+                    "name": "VariableDeclaration",
+                    "src": "134:23:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "area",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 1655,
+                        "name": "ElementaryTypeName",
+                        "src": "159:7:7"
+                      }
+                    ],
+                    "id": 1656,
+                    "name": "VariableDeclaration",
+                    "src": "159:12:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "num_averaged_years",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1657,
+                        "name": "ElementaryTypeName",
+                        "src": "173:4:7"
+                      }
+                    ],
+                    "id": 1658,
+                    "name": "VariableDeclaration",
+                    "src": "173:23:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "runtimeParams",
+                      "scope": 1663,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 1659,
+                        "name": "ElementaryTypeName",
+                        "src": "198:6:7"
+                      }
+                    ],
+                    "id": 1660,
+                    "name": "VariableDeclaration",
+                    "src": "198:20:7"
+                  }
+                ],
+                "id": 1661,
+                "name": "ParameterList",
+                "src": "99:120:7"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1662,
+                "name": "ParameterList",
+                "src": "234:0:7"
+              }
+            ],
+            "id": 1663,
+            "name": "FunctionDefinition",
+            "src": "79:156:7"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": true,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "getNameAndDescription",
+              "payable": false,
+              "scope": 1671,
+              "stateMutability": "pure",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1664,
+                "name": "ParameterList",
+                "src": "267:2:7"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "name",
+                      "scope": 1670,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 1665,
+                        "name": "ElementaryTypeName",
+                        "src": "290:6:7"
+                      }
+                    ],
+                    "id": 1666,
+                    "name": "VariableDeclaration",
+                    "src": "290:11:7"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "description",
+                      "scope": 1670,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "string memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string storage pointer"
+                        },
+                        "id": 1667,
+                        "name": "ElementaryTypeName",
+                        "src": "303:6:7"
+                      }
+                    ],
+                    "id": 1668,
+                    "name": "VariableDeclaration",
+                    "src": "303:18:7"
+                  }
+                ],
+                "id": 1669,
+                "name": "ParameterList",
+                "src": "289:33:7"
+              }
+            ],
+            "id": 1670,
+            "name": "FunctionDefinition",
+            "src": "237:86:7"
+          }
+        ],
+        "id": 1671,
+        "name": "ContractDefinition",
+        "src": "51:274:7"
+      }
+    ],
+    "id": 1672,
+    "name": "SourceUnit",
+    "src": "0:325:7"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-06-16T05:42:22.642Z"
+}
