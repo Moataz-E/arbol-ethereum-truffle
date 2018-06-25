@@ -1,6 +1,5 @@
 pragma solidity ^0.4.18;
 import "./usingOraclize.sol";
-import "./CBOR.sol";
 import "./WITEvaluator.sol";
 import "./Ownable.sol";
 import "./CallbackableWIT.sol";
@@ -10,14 +9,12 @@ import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 
 contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     using SafeMath for uint;
-    using CBOR for Buffer.buffer;
     using strings for *;
 
     string precipScript = "QmRNQhKRThYCQe38Lycj7dTNVCFQ7bFnpQdF8NxqF9jPi4";
 
     event gotNOAAPrecipAggregateCallback(string key, string result, uint remainingGas);
     event sentNOAAPrecipAggregateOraclizeComputation(string precipScript, uint WITID, string avgedYearsStartEnd, uint thresholdFactorPPTTH, bytes32 area);
-
 
     /**
     * @dev 
@@ -61,7 +58,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     /**
     * @dev We set an OAR when using ganache + bridge.
     */
-    function NOAAPrecipAggregate() public {
+    function setLocalOAR() public onlyContractOwner {
         //This is only needed when using a local deployment on bridge.
         OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
     }

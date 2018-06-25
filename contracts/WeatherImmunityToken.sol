@@ -57,7 +57,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale);
     event WITEvaluated(uint WITID, string evaluationResult, uint weiPayout);
     event ContractDecomissioned(uint numDependants, uint balance, address recepientOfEscrow);
-    event GotAReallyWeirdOutcome(string outcome);
+    event WeirdThingHappened(string thingThatHappened);
 
 
     /**
@@ -136,11 +136,23 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         
         // Figure out whether we are adding an "above" or "below" WIT.
         uint expectedEscrow;
-        if (proposalWIT.aboveID == 0) { expectedEscrow = proposalWIT.aboveEscrow; }
-        else { expectedEscrow = proposalWIT.belowEscrow; }
+        if (proposalWIT.aboveID == 0) { 
+            expectedEscrow = proposalWIT.aboveEscrow; 
+            storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "aboveID"), new_ID);
+            ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
+        }
+        else { 
+            if (proposalWIT.belowID == 0) {
+                expectedEscrow = proposalWIT.belowEscrow; 
+                storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "belowID"), new_ID);
+                ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID);        
+            }
+            else {
+                WeirdThingHappened("Someone is trying to accept a really weird WIT.");
+                return;
+            }
+        }
         require(msg.value == expectedEscrow); 
-        storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "aboveID"), new_ID);        
-        ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
         _mint(msg.sender, new_ID);
     }
 
@@ -150,7 +162,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param tokenID The WIT to be evaluated
     * @param runtimeParams any additional parameters that are required at evaluation runtime.
     */
-    function evaluate(uint tokenID, string runtimeParams) public {
+   function evaluate(uint tokenID, string runtimeParams) public {
         WIT memory the_wit = getWIT(tokenID);
         require(the_wit.end < now);
         require(the_wit.aboveID != 0);
@@ -179,7 +191,8 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
                 beneficiary = ownerOf(the_wit.belowID);
             }
             else { 
-                GotAReallyWeirdOutcome(outcome); 
+                WeirdThingHappened("Got an unexpected evaluation outcome of...");
+                WeirdThingHappened(outcome); 
                 return;
             }
         }

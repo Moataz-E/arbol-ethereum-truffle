@@ -18,6 +18,9 @@ module.exports = function(deployer, network, accounts) {
 				WIT.deployed().then(function(A_WIT) {
 					NOAA.deployed().then(function(A_NOAA) {
 						ARBOL.deployed().then(function(AN_ARBOL) {
+							if (network == "development") {
+							    A_NOAA.setLocalOAR();
+						    }
 							A_DONUT.transferOwnership(A_WIT.address, {from: deployer_account});
 							A_WIT.initialize(AN_ARBOL.address, A_DONUT.address, A_NOAA.address, {from: deployer_account});
 							A_NOAA.transferOwnership(A_WIT.address, {from: deployer_account});
