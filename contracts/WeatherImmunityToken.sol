@@ -1,6 +1,5 @@
 pragma solidity ^0.4.18;
 
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 import './DecoupledERC721Token.sol';
 import './Arbolcoin.sol';
 import './EternalDonut.sol';
@@ -66,7 +65,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param storageAddress The address of the decoupled storage contract.
     * @param NOAAPrecipAggregate The address of a particular evaluator contract.
     */
-    function initialize(address arbolAddress, address storageAddress, address NOAAPrecipAggregate) public onlyContractOwner {
+    function initialize(address arbolAddress, address storageAddress, address NOAAPrecipAggregate) public onlyOwner {
         arbol = Arbolcoin(arbolAddress);
         storageContract = EternalDonut(storageAddress);
         require(storageContract.getUIntValue(keccak256("WITIDCounter")) == 0);
@@ -296,7 +295,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @dev Add a contract to be owned by this contract.
     * @param dependant Address of the contract. 
     */
-    function addDependant(address dependant) public onlyContractOwner {
+    function addDependant(address dependant) public onlyOwner {
         uint counter = storageContract.getUIntValue(keccak256("DependantsCounter"));
         storageContract.setAddressValue(keccak256("Dependants", counter.add(1)), dependant);
         storageContract.setUIntValue(keccak256("DependantsCounter"), counter.add(1));
@@ -307,7 +306,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @dev Shut down this contract.
     * @dev Transfer all owned contracts and transfer all ether.
     */
-    function decomission(address newOwner) onlyContractOwner public {
+/*    function decomission(address newOwner) onlyOwner public {
         uint numDependants = storageContract.getUIntValue(keccak256("DependantsCounter")); 
         for (uint counter = numDependants; counter > 0; counter--) {
             address dependant = storageContract.getAddressValue(keccak256("Dependants", counter));
@@ -317,5 +316,6 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         owner.transfer(this.balance);
         //TODO get ether out of NOAAPrecipAggregate contract
     }
+    */
 
 }

@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
-import 'zeppelin-solidity/contracts/token/ERC721/ERC721.sol';
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
+import './ERC721.sol';
+import './SafeMath.sol';
 import './EternalDonut.sol';
 
 /**

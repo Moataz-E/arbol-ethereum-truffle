@@ -4,7 +4,7 @@ import "./WITEvaluator.sol";
 import "./Ownable.sol";
 import "./CallbackableWIT.sol";
 import "./strings.sol";
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
+import './SafeMath.sol';
 
 
 contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
@@ -26,7 +26,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     * @param num_averaged_years Ignores whatever is input and uses 10 years for the number of years to be averaged
     * @param runtimeParams Not used but required by the WITEvaluator interface.
     */
-    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, bytes32 area, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
+    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, bytes32 area, uint num_averaged_years, string runtimeParams) payable public onlyOwner {
         uint gasEstimate = 500000;
         require(gasEstimate < this.balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
@@ -58,7 +58,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     /**
     * @dev We set an OAR when using ganache + bridge.
     */
-    function setLocalOAR() public onlyContractOwner {
+    function setLocalOAR() public onlyOwner {
         //This is only needed when using a local deployment on bridge.
         OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
     }
@@ -68,7 +68,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     * @dev Allows contract owner to update the docker image and python script in IPFS.
     * @param scriptHash IPFS multihash of the docker image + python script archive.
     */
-    function updateIPFSMultihash(string scriptHash) public onlyContractOwner {
+    function updateIPFSMultihash(string scriptHash) public onlyOwner {
         precipScript = scriptHash;
     }
 

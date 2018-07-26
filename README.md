@@ -58,14 +58,14 @@ Interact with the application via Truffle console or via a front end application
     $ nvm use node
     $ truffle deploy
 
-Deploying to Rinkeby
+Deploying to testnets
 -------------------------
 
-We currently use Rinkeby as a public testnet, as Ropsten has a prohibitive gas limit. 
+Create a Rinkeby or Ropsten account in Metamask or elsewhere.
 
-Create a Rinkeby account in Metamask or elsewhere.
+Follow the instructions on this page to get Ether for Rinkeby: https://faucet.rinkeby.io/ (post your new wallet address to Google plus, then past the URL of the post into the faucet and select 18.75 Ether).
 
-Follow the instructions on this page to get Ether: https://faucet.rinkeby.io/ (post your new wallet address to Google plus, then past the URL of the post into the faucet and select 18.75 Ether).
+Faucet for Ropsten: http://faucet.ropsten.be:3001/
 
 Install geth. See: https://github.com/ethereum/go-ethereum/wiki/Installing-Geth
 
@@ -73,7 +73,11 @@ Download the entire Rinkeby blockchain:
 
     $ geth --rinkeby --fast --cache=1024 --rpc --rpcapi db,eth,net,web3,personal
 
-This will take about an hour, depending on your connection speed. If you use the --fast flag, then if you exit before it completes, you will not save any progress and will have to start fresh on your next attempt.
+or Ropsten::
+
+    $ geth --testnet --rpc --rpcaddr "localhost" --rpcport "8545" --rpcapi "web3,eth,net,personal" --rpccorsdomain "*" --datadir "./data" --identity "localnode" --fast  --cache=1024
+
+This will take about an hour, depending on your connection speed.
 
 Once this has completed, start the geth console:
 

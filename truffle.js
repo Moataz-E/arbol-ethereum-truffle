@@ -13,6 +13,13 @@ module.exports = {
    network_id: "4",
    gas: 6400000,
    from: "0x2b8d009b7b256d82a5d3ea679631b69e0d1babeb"
+  },
+   ropsten: {
+   host: "127.0.0.1",
+   port: 8545,
+   network_id: "3",
+   gas: 4700000,
+   from: "0x2485be30c6091a7a3f715e53a1cd071db33cf20c"
   }
  }
 };
