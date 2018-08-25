@@ -14,17 +14,15 @@ module.exports = function(deployer, network, accounts) {
         }
     }
 
+// must deploy all contracts in one statement due to truffle bug with tests. beware.
 
-    deployer.deploy(DONUT, {from: deployer_account}).then(function() {
+    deployer.deploy([DONUT, ARBOL], {from: deployer_account}).then(function() { 
     	DONUT.deployed().then(function(A_DONUT) {
-        	deployer.deploy(ARBOL, A_DONUT.address, {from:deployer_account}).then(function() {
-				ARBOL.deployed().then(function(AN_ARBOL) {
-					A_DONUT.grantAuthorization(AN_ARBOL.address, {from: deployer_account});
-				})
+			ARBOL.deployed().then(function(AN_ARBOL) {
+				A_DONUT.grantAuthorization(AN_ARBOL.address, {from: deployer_account}).then(function() {
+ 					AN_ARBOL.initialize(A_DONUT.address, {from: deployer_account})
+ 				})
 			})
-//            console.log("A_DONUT.address: ", A_DONUT.address);
 		})
-    })
+	})
 }
-
-

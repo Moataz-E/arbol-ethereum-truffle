@@ -3,7 +3,6 @@ pragma solidity ^0.4.18;
 import "./BasicToken.sol";
 import "./ERC20.sol";
 import "./EternalDonut.sol";
-import './Ownable.sol';
 import './SafeMath.sol';
 
 /**
@@ -15,7 +14,7 @@ import './SafeMath.sol';
  */
 contract StandardToken is ERC20, BasicToken {
 
-  string private constant contractName = "StandardToken";
+  string private constant CONTRACT_NAME = "StandardToken";
 
   /**
    * @dev Function to check the amount of tokens that an owner allowed to a spender.
@@ -24,11 +23,11 @@ contract StandardToken is ERC20, BasicToken {
    * @return A uint256 specifying the amount of tokens still available for the spender.
    */
   function allowance(address _owner, address _spender) public view returns (uint256) {
-      return storageContract.getUIntValue(keccak256(contractName, "allowed", _owner, _spender));
+      return storageContract.getUIntValue(keccak256(CONTRACT_NAME, "allowed", _owner, _spender));
   }
 
   function setAllowance(address _owner, address _spender, uint amount) private {
-      storageContract.setUIntValue(keccak256(contractName, "allowed", _owner, _spender), amount);
+      storageContract.setUIntValue(keccak256(CONTRACT_NAME, "allowed", _owner, _spender), amount);
   }
 
 
@@ -115,7 +114,7 @@ contract StandardToken is ERC20, BasicToken {
   {
     uint256 oldValue = allowance(msg.sender, _spender);
     if (_subtractedValue >= oldValue) {
-      setAllowance(msg.sender, _spender, 0);
+      setAllowance(msg.sender, _spender, 0) ;
     } else {
       setAllowance(msg.sender, _spender, oldValue.sub(_subtractedValue));
     }

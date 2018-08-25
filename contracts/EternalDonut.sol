@@ -6,7 +6,7 @@ contract EternalDonut is AccessControlled {
 
     mapping(bytes32 => uint) UIntStorage;
 
-    function getUIntValue(bytes32 record) public constant returns (uint) {
+    function getUIntValue(bytes32 record) public view returns (uint) {
         return UIntStorage[record];
     }
 
@@ -17,7 +17,7 @@ contract EternalDonut is AccessControlled {
 
     mapping(bytes32 => string) StringStorage;
 
-    function getStringValue(bytes32 record) public constant returns (string) {
+    function getStringValue(bytes32 record) public view returns (string) {
         return StringStorage[record];
     }
 
@@ -28,7 +28,7 @@ contract EternalDonut is AccessControlled {
 
     mapping(bytes32 => address) AddressStorage;
 
-    function getAddressValue(bytes32 record) public constant returns (address) {
+    function getAddressValue(bytes32 record) public view returns (address) {
         return AddressStorage[record];
     }
 
@@ -39,7 +39,7 @@ contract EternalDonut is AccessControlled {
 
     mapping(bytes32 => bytes32) Bytes32Storage;
 
-    function getBytes32Value(bytes32 record) public constant returns (bytes32) {
+    function getBytes32Value(bytes32 record) public view returns (bytes32) {
         return Bytes32Storage[record];
     }
 
@@ -50,7 +50,7 @@ contract EternalDonut is AccessControlled {
 
     mapping(bytes32 => bytes) BytesStorage;
 
-    function getBytesValue(bytes32 record) public constant returns (bytes) {
+    function getBytesValue(bytes32 record) public view returns (bytes) {
         return BytesStorage[record];
     }
 
@@ -61,7 +61,7 @@ contract EternalDonut is AccessControlled {
 
     mapping(bytes32 => bool) BooleanStorage;
 
-    function getBooleanValue(bytes32 record) public constant returns (bool) {
+    function getBooleanValue(bytes32 record) public view returns (bool) {
         return BooleanStorage[record];
     }
 
@@ -72,7 +72,7 @@ contract EternalDonut is AccessControlled {
     
     mapping(bytes32 => int) IntStorage;
 
-    function getIntValue(bytes32 record) public constant returns (int) {
+    function getIntValue(bytes32 record) public view returns (int) {
         return IntStorage[record];
     }
 

@@ -51,6 +51,8 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
     bool private testmode = false;
 
+    string private constant CONTRACT_NAME = "WeatherImmunityToken";
+
     event Redemption(uint indexed WITID, uint amount, address indexed user);
     event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
     event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale);
@@ -68,12 +70,12 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     function initialize(address arbolAddress, address storageAddress, address NOAAPrecipAggregate) public onlyOwner {
         arbol = Arbolcoin(arbolAddress);
         storageContract = EternalDonut(storageAddress);
-        require(storageContract.getUIntValue(keccak256("WITIDCounter")) == 0);
+        require(storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WITIDCounter")) == 0);
         systemFeePPM = 1000000;
-        storageContract.setUIntValue(keccak256("WITIDCounter"), uint(1)); //start at 1
-        storageContract.setAddressValue(keccak256("Dependants", uint(1)), address(storageContract));
-        storageContract.setAddressValue(keccak256("Dependants", uint(2)), address(NOAAPrecipAggregate));
-        storageContract.setUIntValue(keccak256("DependantsCounter"), uint(2)); 
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WITIDCounter"), uint(1)); //start at 1
+        storageContract.setAddressValue(keccak256(CONTRACT_NAME, "Dependants", uint(1)), address(storageContract));
+        storageContract.setAddressValue(keccak256(CONTRACT_NAME, "Dependants", uint(2)), address(NOAAPrecipAggregate));
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "DependantsCounter"), uint(2)); 
         testmode = true;
       }
 
@@ -137,13 +139,13 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         uint expectedEscrow;
         if (proposalWIT.aboveID == 0) { 
             expectedEscrow = proposalWIT.aboveEscrow; 
-            storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "aboveID"), new_ID);
+            storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", proposalWIT.WITID, "aboveID"), new_ID);
             ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
         }
         else { 
             if (proposalWIT.belowID == 0) {
                 expectedEscrow = proposalWIT.belowEscrow; 
-                storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "belowID"), new_ID);
+                storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", proposalWIT.WITID, "belowID"), new_ID);
                 ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID);        
             }
             else {
@@ -227,16 +229,16 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param tokenID The ID of the desired WIT.
     */
     function getWIT(uint tokenID) private returns (WIT) {
-        uint aboveEscrow = storageContract.getUIntValue(keccak256("WIT", tokenID, "aboveEscrow"));
-        uint belowEscrow = storageContract.getUIntValue(keccak256("WIT", tokenID, "belowEscrow"));
-        uint aboveID = storageContract.getUIntValue(keccak256("WIT", tokenID, "aboveID"));
-        uint belowID = storageContract.getUIntValue(keccak256("WIT", tokenID, "belowID"));    
-        address evaluator = storageContract.getAddressValue(keccak256("WIT", tokenID, "evaluator"));
-        uint thresholdPPTTH = storageContract.getUIntValue(keccak256("WIT", tokenID, "thresholdPPTTH"));
-        bytes32 location = storageContract.getBytes32Value(keccak256("WIT", tokenID, "location"));
-        uint start = storageContract.getUIntValue(keccak256("WIT", tokenID, "start"));
-        uint end = storageContract.getUIntValue(keccak256("WIT", tokenID, "end"));
-        bool makeStale = storageContract.getBooleanValue(keccak256("WIT", tokenID, "makeStale"));
+        uint aboveEscrow = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "aboveEscrow"));
+        uint belowEscrow = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "belowEscrow"));
+        uint aboveID = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "aboveID"));
+        uint belowID = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "belowID"));    
+        address evaluator = storageContract.getAddressValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "evaluator"));
+        uint thresholdPPTTH = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "thresholdPPTTH"));
+        bytes32 location = storageContract.getBytes32Value(keccak256(CONTRACT_NAME, "WIT", tokenID, "location"));
+        uint start = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "start"));
+        uint end = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "end"));
+        bool makeStale = storageContract.getBooleanValue(keccak256(CONTRACT_NAME, "WIT", tokenID, "makeStale"));
         return WIT(tokenID, aboveEscrow, belowEscrow, aboveID, belowID, evaluator, thresholdPPTTH, location, start, end, makeStale);        
     }
 
@@ -246,16 +248,16 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param the_wit The WIT to be saved.
     */
     function saveWIT(WIT the_wit) private {
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "aboveEscrow"), the_wit.aboveEscrow);
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "belowEscrow"), the_wit.belowEscrow);
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "aboveID"), the_wit.aboveID);
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "belowID"), the_wit.belowID);        
-        storageContract.setAddressValue(keccak256("WIT", the_wit.WITID, "evaluator"), the_wit.evaluator);
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "thresholdPPTTH"), the_wit.thresholdPPTTH);
-        storageContract.setBytes32Value(keccak256("WIT", the_wit.WITID, "location"), the_wit.location);
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "start"), the_wit.start);
-        storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "end"), the_wit.end);
-        storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "makeStale"), the_wit.makeStale);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "aboveEscrow"), the_wit.aboveEscrow);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "belowEscrow"), the_wit.belowEscrow);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "aboveID"), the_wit.aboveID);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "belowID"), the_wit.belowID);        
+        storageContract.setAddressValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "evaluator"), the_wit.evaluator);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "thresholdPPTTH"), the_wit.thresholdPPTTH);
+        storageContract.setBytes32Value(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "location"), the_wit.location);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "start"), the_wit.start);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "end"), the_wit.end);
+        storageContract.setBooleanValue(keccak256(CONTRACT_NAME, "WIT", the_wit.WITID, "makeStale"), the_wit.makeStale);
     }
 
 
@@ -277,7 +279,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @dev Get the ID for the next token to be created.
     */
     function getTokenCounter() private view returns (uint) {
-       return storageContract.getUIntValue(keccak256("WITIDCounter"));
+       return storageContract.getUIntValue(keccak256(CONTRACT_NAME, "WITIDCounter"));
     }
 
 
@@ -287,7 +289,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @dev The first will have the same ID as the WIT, and the second will have the ID of the WIT + 1.
     */
     function incrementTokenCounter() private {
-        storageContract.setUIntValue(keccak256("WITIDCounter"), getTokenCounter().add(2)); // Yes, 2.
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "WITIDCounter"), getTokenCounter().add(2)); // Yes, 2.
     }
 
 
@@ -296,9 +298,9 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param dependant Address of the contract. 
     */
     function addDependant(address dependant) public onlyOwner {
-        uint counter = storageContract.getUIntValue(keccak256("DependantsCounter"));
-        storageContract.setAddressValue(keccak256("Dependants", counter.add(1)), dependant);
-        storageContract.setUIntValue(keccak256("DependantsCounter"), counter.add(1));
+        uint counter = storageContract.getUIntValue(keccak256(CONTRACT_NAME, "DependantsCounter"));
+        storageContract.setAddressValue(keccak256(CONTRACT_NAME, "Dependants", counter.add(1)), dependant);
+        storageContract.setUIntValue(keccak256(CONTRACT_NAME, "DependantsCounter"), counter.add(1));
     }
 
 

@@ -1,6 +1,5 @@
 pragma solidity ^0.4.18;
 
-
 import "./ERC20Basic.sol";
 import "./SafeMath.sol";
 import "./EternalDonut.sol";
@@ -13,22 +12,22 @@ contract BasicToken is ERC20Basic {
   using SafeMath for uint256;
 
   EternalDonut internal storageContract;
-  string private constant contractName = "BasicToken";
+  string private constant CONTRACT_NAME = "BasicToken";
 
   function initialize(address storageAddress, uint256 totalSupply) internal {
     storageContract = EternalDonut(storageAddress);
-    storageContract.setUIntValue(keccak256(contractName, "totalSupply"), totalSupply);
+    storageContract.setUIntValue(keccak256(CONTRACT_NAME, "totalSupply"), totalSupply);
   }
 
   function setBalance(address _owner, uint balance) internal {
-    storageContract.setUIntValue(keccak256(contractName, "balances", _owner), balance);
+    storageContract.setUIntValue(keccak256(CONTRACT_NAME, "balances", _owner), balance);
   } 
 
   /**
   * @dev Total number of tokens in existence
   */
   function totalSupply() public view returns (uint256) {
-    return storageContract.getUIntValue(keccak256(contractName, "totalSupply"));
+    return storageContract.getUIntValue(keccak256(CONTRACT_NAME, "totalSupply"));
   }
 
   /**
@@ -54,7 +53,7 @@ contract BasicToken is ERC20Basic {
   * @return An uint256 representing the amount owned by the passed address.
   */
   function balanceOf(address _owner) public view returns (uint256) {
-    return storageContract.getUIntValue(keccak256(contractName, "balances", _owner));
+    return storageContract.getUIntValue(keccak256(CONTRACT_NAME, "balances", _owner));
   }
 
 }

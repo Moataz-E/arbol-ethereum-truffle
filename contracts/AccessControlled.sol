@@ -6,25 +6,28 @@ contract AccessControlled is Ownable {
 
     mapping(address => bool) private authorizationList;
 
-    event ClientAuthorizationGranted(address indexed newClient);
-    event ClientAuthorizationRevoked(address indexed formerClient);
+    event ClientAuthorizationGranted(address indexed clientToBe);
+    event ClientAuthorizationRevoked(address indexed clientToNoLongerBe);
 
     modifier requiresAuthorization {
       require(authorizationList[msg.sender] == true);
       _;
     }
 
-    function grantAuthorization(address client) onlyOwner public {
-        require(authorizationList[client] == false);
-        authorizationList[client] = true;
-        ClientAuthorizationGranted(client);
-    }    
-  
+    function grantAuthorization(address clientToBe) onlyOwner public {
+        require(authorizationList[clientToBe] == false);
+        authorizationList[clientToBe] = true;
+        ClientAuthorizationGranted(clientToBe);
+    }
 
-    function revokeAuthorization(address client) onlyOwner public {
-        require(authorizationList[client] == true);
-        authorizationList[client] = false;
-        ClientAuthorizationRevoked(client);
+    function revokeAuthorization(address clientToNoLongerBe) onlyOwner public {
+        require(authorizationList[clientToNoLongerBe] == true);
+        authorizationList[clientToNoLongerBe] = false;
+        ClientAuthorizationRevoked(clientToNoLongerBe);
+    }
+
+    function isAuthorized(address client) public view returns (bool) {
+        return authorizationList[client];
     }
 
 }
