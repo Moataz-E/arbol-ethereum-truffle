@@ -13,6 +13,8 @@ module.exports = function(deployer, network, accounts) {
         }	
     }
 
+    deployer.deploy(ARBOL)
+/*
     deployer.deploy([WIT,ARBOL,NOAA,DONUT], {from: deployer_account}).then(function() {
 			DONUT.deployed().then(function(A_DONUT) {
 				WIT.deployed().then(function(A_WIT) {
@@ -30,6 +32,8 @@ module.exports = function(deployer, network, accounts) {
 				})
 			})
 		});
+*/
+
 }
 
 
