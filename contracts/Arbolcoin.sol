@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 
 import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
@@ -10,7 +10,7 @@ contract Arbolcoin is StandardToken {
   
   uint256 public constant INITIAL_SUPPLY = 100000000 * (10 ** uint256(decimals));
 
-  /**
+  /*
    * @dev Constructor that gives msg.sender all of existing tokens.
    */
   function Arbolcoin() public {
