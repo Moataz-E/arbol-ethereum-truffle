@@ -20,7 +20,7 @@ Clone this repo (if you haven't already) and install node packages.
 
 We need to install ethereum bridge, which lets us make calls to Oraclize from our testing environment.
 
-Install etherem bridge. Don't do this inside the crop-dapp directory.
+Install etherem bridge. Don't do this inside the arbol-ethereum-truffle directory.
 
     $ git clone https://github.com/oraclize/ethereum-bridge.git
     $ cd ethereum-bridge
