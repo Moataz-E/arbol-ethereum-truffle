@@ -1,22 +1,26 @@
-pragma solidity 0.4.18;
+pragma solidity ^0.4.24;
 
-import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
+import "./ERC20.sol";
 
-contract Arbolcoin is StandardToken {
+/**
+ * @title OpenZeppelin ERC20
+ * @dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.
+ * Note they can later distribute these tokens as they wish using `transfer` and other
+ * `ERC20` functions.
+ */
+contract Arbolcoin is ERC20 {
 
-  string public constant name = "Arbolcoin"; // solium-disable-line uppercase
-  string public constant symbol = "ARBOL"; // solium-disable-line uppercase
-  uint8 public constant decimals = 18; // solium-disable-line uppercase
-  
+  string public constant name = "Arbolcoin";
+  string public constant symbol = "ARBOL";
+  uint8 public constant decimals = 18;
+
   uint256 public constant INITIAL_SUPPLY = 100000000 * (10 ** uint256(decimals));
 
-  /*
+  /**
    * @dev Constructor that gives msg.sender all of existing tokens.
    */
-  function Arbolcoin() public {
-    totalSupply_ = INITIAL_SUPPLY;
-    balances[msg.sender] = INITIAL_SUPPLY;
-    Transfer(0x0, msg.sender, INITIAL_SUPPLY);
+  constructor() public {
+    _mint(msg.sender, INITIAL_SUPPLY);
   }
 
 }

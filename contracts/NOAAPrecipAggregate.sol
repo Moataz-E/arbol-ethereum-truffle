@@ -1,10 +1,10 @@
-pragma solidity 0.4.18;
+pragma solidity 0.4.24;
 import "./usingOraclize.sol";
 import "./WITEvaluator.sol";
 import "./Ownable.sol";
 import "./CallbackableWIT.sol";
 import "./strings.sol";
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
+import './SafeMath.sol';
 
 
 contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {

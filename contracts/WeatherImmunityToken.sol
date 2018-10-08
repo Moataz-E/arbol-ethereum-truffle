@@ -1,6 +1,6 @@
-pragma solidity 0.4.18;
+pragma solidity 0.4.24;
 
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
+import './SafeMath.sol';
 import './DecoupledERC721Token.sol';
 import './Arbolcoin.sol';
 import './EternalDonut.sol';

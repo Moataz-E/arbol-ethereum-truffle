@@ -24,28 +24,27 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.18;\n\ncontract CallbackableWIT\n{\n\tfunction evaluatorCallback(uint WITID, string outcome) public;\n}",
+  "source": "pragma solidity 0.4.24;\n\ncontract CallbackableWIT\n{\n\tfunction evaluatorCallback(uint WITID, string outcome) public;\n}",
   "sourcePath": "/Users/benandre/cropcrop/contracts/CallbackableWIT.sol",
   "ast": {
     "absolutePath": "/Users/benandre/cropcrop/contracts/CallbackableWIT.sol",
     "exportedSymbols": {
       "CallbackableWIT": [
-        56
+        44
       ]
     },
-    "id": 57,
+    "id": 45,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 48,
+        "id": 36,
         "literals": [
           "solidity",
-          "^",
           "0.4",
-          ".18"
+          ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:1"
+        "src": "0:23:1"
       },
       {
         "baseContracts": [],
@@ -53,9 +52,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 56,
+        "id": 44,
         "linearizedBaseContracts": [
-          56
+          44
         ],
         "name": "CallbackableWIT",
         "nodeType": "ContractDefinition",
@@ -63,7 +62,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 55,
+            "id": 43,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -71,16 +70,16 @@
             "name": "evaluatorCallback",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 53,
+              "id": 41,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 50,
+                  "id": 38,
                   "name": "WITID",
                   "nodeType": "VariableDeclaration",
-                  "scope": 55,
-                  "src": "81:10:1",
+                  "scope": 43,
+                  "src": "80:10:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -88,10 +87,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 49,
+                    "id": 37,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "81:4:1",
+                    "src": "80:4:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -102,11 +101,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 52,
+                  "id": 40,
                   "name": "outcome",
                   "nodeType": "VariableDeclaration",
-                  "scope": 55,
-                  "src": "93:14:1",
+                  "scope": 43,
+                  "src": "92:14:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -114,10 +113,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 51,
+                    "id": 39,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "93:6:1",
+                    "src": "92:6:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -127,48 +126,47 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "80:28:1"
+              "src": "79:28:1"
             },
             "payable": false,
             "returnParameters": {
-              "id": 54,
+              "id": 42,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "115:0:1"
+              "src": "114:0:1"
             },
-            "scope": 56,
-            "src": "54:62:1",
+            "scope": 44,
+            "src": "53:62:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 57,
-        "src": "26:92:1"
+        "scope": 45,
+        "src": "25:92:1"
       }
     ],
-    "src": "0:118:1"
+    "src": "0:117:1"
   },
   "legacyAST": {
     "absolutePath": "/Users/benandre/cropcrop/contracts/CallbackableWIT.sol",
     "exportedSymbols": {
       "CallbackableWIT": [
-        56
+        44
       ]
     },
-    "id": 57,
+    "id": 45,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 48,
+        "id": 36,
         "literals": [
           "solidity",
-          "^",
           "0.4",
-          ".18"
+          ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:1"
+        "src": "0:23:1"
       },
       {
         "baseContracts": [],
@@ -176,9 +174,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 56,
+        "id": 44,
         "linearizedBaseContracts": [
-          56
+          44
         ],
         "name": "CallbackableWIT",
         "nodeType": "ContractDefinition",
@@ -186,7 +184,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 55,
+            "id": 43,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -194,16 +192,16 @@
             "name": "evaluatorCallback",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 53,
+              "id": 41,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 50,
+                  "id": 38,
                   "name": "WITID",
                   "nodeType": "VariableDeclaration",
-                  "scope": 55,
-                  "src": "81:10:1",
+                  "scope": 43,
+                  "src": "80:10:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -211,10 +209,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 49,
+                    "id": 37,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "81:4:1",
+                    "src": "80:4:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -225,11 +223,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 52,
+                  "id": 40,
                   "name": "outcome",
                   "nodeType": "VariableDeclaration",
-                  "scope": 55,
-                  "src": "93:14:1",
+                  "scope": 43,
+                  "src": "92:14:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -237,10 +235,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 51,
+                    "id": 39,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "93:6:1",
+                    "src": "92:6:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -250,27 +248,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "80:28:1"
+              "src": "79:28:1"
             },
             "payable": false,
             "returnParameters": {
-              "id": 54,
+              "id": 42,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "115:0:1"
+              "src": "114:0:1"
             },
-            "scope": 56,
-            "src": "54:62:1",
+            "scope": 44,
+            "src": "53:62:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 57,
-        "src": "26:92:1"
+        "scope": 45,
+        "src": "25:92:1"
       }
     ],
-    "src": "0:118:1"
+    "src": "0:117:1"
   },
   "compiler": {
     "name": "solc",
@@ -278,5 +276,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-25T08:02:47.219Z"
+  "updatedAt": "2018-10-06T17:25:12.252Z"
 }
