@@ -42,7 +42,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     }
 
     // Arbolcoin smart contract (contains address). 
-    Arbolcoin private arbol;
+    Arbolcoin private arbolcoin;
 
     // ARBOL fees go to this wallet. TODO make this owner, or implement revenue token.
     address private systemFeeWallet = 0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE;
@@ -52,10 +52,10 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
     bool private testmode = false;
 
-    event Redemption(uint indexed WITID, uint amount, address indexed user);
     event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
     event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale);
-    event WITEvaluated(uint WITID, string evaluationResult, uint weiPayout);
+    event WITEvaluated(uint indexed WITID, address indexed aboveOwner, address indexed belowOwner, address beneficiary, uint weiPayout);
+    event WITCancelled(uint indexed WITID, uint indexed owner, uint indexed amountRedeemed);
     event ContractDecomissioned(uint numDependants, uint balance, address recepientOfEscrow);
     event WeirdThingHappened(string thingThatHappened);
 
@@ -67,7 +67,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param NOAAPrecipAggregate The address of a particular evaluator contract.
     */
     function initialize(address arbolAddress, address storageAddress, address NOAAPrecipAggregate) public onlyContractOwner {
-        arbol = Arbolcoin(arbolAddress);
+        arbolcoin = Arbolcoin(arbolAddress);
         storageContract = EternalDonut(storageAddress);
         require(storageContract.getUIntValue(keccak256("WITIDCounter")) == 0);
         systemFeePPM = 1000000;
@@ -167,7 +167,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         require(the_wit.end < now);
         require(the_wit.aboveID != 0);
         require(the_wit.belowID != 0);
-        WITEvaluator evaluator = WITEvaluator(the_wit.evaluator);
+        WITEvaluator evaluator = WITEvaluator(the_wit.evaluator); 
         evaluator.evaluateWIT.value(msg.value)(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPTTH, the_wit.location, 10, "");
     }
 
@@ -197,9 +197,8 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
             }
         }
         burnWIT(WITID);
-        Redemption(WITID, totalEscrow, beneficiary);
-        WITEvaluated(WITID, outcome, totalEscrow);
-        beneficiary.transfer(totalEscrow);
+        WITEvaluated(WITID, the_wit.aboveID, the_wit.belowID, beneficiary, totalEscrow);
+        beneficiary.transfer(totalEscrow); //TODO can this function be repeatedly called by a malicious contract??
     }
 
 
@@ -219,7 +218,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         if (is_above_owner) { redemptionAmount = the_wit.aboveEscrow; }
         else { redemptionAmount = the_wit.belowEscrow; }
         msg.sender.transfer(redemptionAmount);
-        Redemption(tokenID, redemptionAmount, msg.sender);
+        WITCancelled(tokenID, msg.sender, redemptionAmount);
     }    
 
 
