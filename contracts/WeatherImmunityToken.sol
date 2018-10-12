@@ -24,7 +24,7 @@ import './CallbackableWIT.sol';
  * @dev WITs can be transferred after they have been created. They are nonfungible ERC721 tokens.
  *
  */
-contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT {
+contract WeatherImmunityToken is ERC721, Ownable, CallbackableWIT {
   using SafeMath for uint;
 
     struct WIT {
@@ -34,7 +34,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       uint aboveID;         // The address of the party betting on an "above threshold" outcome (the token holder).
       uint belowID;         // The address of the party betting on a "below threshold" outcome (the token holder).
       address evaluator;    // The address of the contract that shall provide the outcome (above or below threshold).
-      uint thresholdPPTTH;  // The threshold in "parts per ten thousand." 9000 equals 10% belowaverage, 11000 equals 10% above average
+      uint thresholdPPTTH;  // The threshold in "parts per ten thousand." 9000 equals 10% below average, 11000 equals 10% above average
       bytes32 location;     // The geographic location or locations for which the weather outcome shall be relevant.
       uint start;           // Unix timestamp representing the start time of the relevant time period.
       uint end;             // Unix timestamp representing the end time of the relevant time period.
@@ -50,7 +50,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     // The ARBOL system fee in parts per million. (of wei.) 100% for now.
     uint public systemFeePPM;
 
-    bool private testmode = false;
+    bool private testmode = true;
 
     event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
     event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale);

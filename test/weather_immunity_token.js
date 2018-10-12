@@ -72,7 +72,7 @@ contract('WeatherImmunityToken', function(accounts) {
 
 
         await createWIT(accounts[2], accounts[3], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
-        await createWIT(accounts[2], accounts[3], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
+    /*    await createWIT(accounts[2], accounts[3], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[3], accounts[2], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[3], accounts[2], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[2], accounts[3], accounts[2], false, 10000, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
@@ -162,7 +162,7 @@ contract('WeatherImmunityToken', function(accounts) {
         await createWIT(accounts[2], accounts[3], accounts[3], true, 12500, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[3], accounts[2], accounts[2], true, 12500, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[3], accounts[2], accounts[3], true, 12500, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
-
+*/
 
         await sleep(600000);  
 
