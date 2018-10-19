@@ -34,7 +34,7 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
         require(thresholdFactorPPTTH < 100000);
         string memory avgedYearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
         oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), uint2str(uint(area))], gasEstimate);
-        sentNOAAPrecipAggregateOraclizeComputation(precipScript, WITID, avgedYearsStartEnd, thresholdFactorPPTTH, area);
+        sentNASACHIRPSOraclizeComputation(precipScript, WITID, avgedYearsStartEnd, thresholdFactorPPTTH, area);
     }
 
 
@@ -45,7 +45,7 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     */
     function __callback(bytes32 myid, string result) {
         require(msg.sender == oraclize_cbAddress());
-        gotNOAAPrecipAggregateCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
+        gotNASACHIRPSCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
         var sliceResult = result.toSlice();
         var status = sliceResult.split("&".toSlice());
         if (!strings.equals(status, "200".toSlice())) { return; }
@@ -71,13 +71,13 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     function updateIPFSMultihash(string scriptHash) public onlyContractOwner {
         precipScript = scriptHash;
     }
-    
+
 
     /**
     * @dev Get the name and description of this WIT evaluator.
     */
     function getNameAndDescription() public pure returns(string name, string description) {
-        return("NOAA Precipitation Aggregate WIT Evaluator", "This contract makes a call to the NOAA aggregate endpoint and evaluates a WIT based on the result.");
+        return("NASA CHIRPS WIT Evaluator", "This contract makes a call to the NASA climateSERV CHIRPS API and evaluates a WIT based on the result.");
     }
 
 
