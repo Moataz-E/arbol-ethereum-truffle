@@ -1,5 +1,5 @@
 FROM frolvlad/alpine-python3
-MAINTAINER Ben "bandre@gmail.com"
+MAINTAINER Ben "bandre@arbolmarket.com"
 
 COPY NOAAPrecipAggregate.py /
 
