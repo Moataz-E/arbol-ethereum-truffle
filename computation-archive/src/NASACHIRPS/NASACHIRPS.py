@@ -44,14 +44,48 @@ from dateutil.relativedelta import relativedelta
 
 
 
-def sum_precip(data):
     #TODO use bigfloat for decimals
-    precipitation = 0
-    days = 0
-    for day in data['data']:
-        precipitation += day["value"]["avg"]
-        days += 1
-    return precipitation / days
+    #TODO make work for periods longer than a year
+    #TODO write some tests
+    #TODO better validation
+    #TODO fuzzing?
+
+
+def compute_avg(data, num_averaged_years, start_date, end_date):
+    '''
+    Takes some NASA CHIRPS API JSON data, and performs some calculations on it.
+
+    We want to find the average to
+    '''
+    avg_table = {}
+    for year in range(0, num_averaged_years + 1): 
+        avg_table[start_date - relativedelta(years=year), end_date - relativedelta(years=year)] = (0,0)
+
+  #  print(avg_table)
+
+    for day in data:
+        for a_range in avg_table.keys():
+            date = datetime.datetime.strptime(day['date'], '%m/%d/%Y')
+            if a_range[0] <= date <= a_range[1]:
+                avg_table[a_range] = (avg_table[a_range][0] + 1, avg_table[a_range][1] + day['value']['avg']) #TODO test for cross-year ranges
+                break
+
+
+
+#  print(avg_table)
+
+    historical_total = (0,0)
+    latest_total = (0,0)
+    for year in avg_table.keys():
+        if year != (start_date, end_date):
+            historical_total= (historical_total[0] + 1, historical_total[1] + avg_table[year][1])
+        else:  
+            latest_total = (latest_total[0] + 1, latest_total[1] + avg_table[year][1])
+
+  #  print("historical: ", historical_total)
+ #   print("latest: ", latest_total)
+
+    return {"historical": historical_total, "latest": latest_total}
 
 
 def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top_left, bottom_left, bottom_right, top_right):
@@ -95,22 +129,25 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
         print(percent_complete)
 
     result = requests.get('http://climateserv.servirglobal.net/chirps/getDataFromRequest/?id=%s' % job_id)
-    print(result.text)
+   # print(result.text)
 
-    total = sum_precip(json.loads(result.text))
-    print(total)
+ #   total = sum_precip(json.loads(result.text))
+   # print(total)
 
-    avg_table = {}
-    for year in range(1, num_averaged_years + 1):
-        avg_table[start_date - relativedelta(years=year), end_date - relativedelta(years=year)] = (0,0)
+    avgs = compute_avg(json.loads(result.text)['data'], num_averaged_years, start_date, end_date)
+    print(avgs)
 
-    for day in json.loads(result.text)['data']:
-        for a_range in avg_table.keys():
-            date = datetime.datetime.strptime(day['date'], '%m/%d/%Y')
-            if  a_range[0] <= date <= a_range[1]:
-                avg_table[a_range] = (avg_table[a_range][0] + 1, avg_table[a_range][1] + day['value']['avg'])
+    avg_of_avgs = avgs["historical"][1] / avgs["historical"][0]
+    deviation = avgs['latest'][1] / avg_of_avgs
 
-    print(avg_table)
+    print("threshold / deviation", threshold_factor, deviation)
+
+    if(deviation > threshold_factor):
+        print("above")
+    else:
+        print("below")
+
+    print(avgs['latest'][1] / avg_of_avgs)
 
 
 
@@ -157,7 +194,7 @@ def loadArgs(args):
          top_right)
 
 
-loadArgs(['1', '10&1493344692&1495936692', '30000', '21.5331234,-3.1621234', '0.14255'])
+loadArgs(['1', '10&1493344692&1495936692', '8000', '21.5331234,-3.1621234', '0.14255'])
 
 '''
 if __name__ == "__main__":
