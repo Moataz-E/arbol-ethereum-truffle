@@ -42,9 +42,6 @@ import json
 from dateutil.relativedelta import relativedelta
 import logging
 
-
-
-
     #TODO use bigfloat for decimals
     #TODO make work for periods longer than a year
     #TODO write some tests
@@ -52,7 +49,7 @@ import logging
     #TODO fuzzing?
 
 
-def compute_avg(data, num_averaged_years, start_date, end_date):
+def compute_avg(data, num_averaged_years, start_date, end_date, log):
     '''
     Takes some NASA CHIRPS API JSON data, and performs some calculations on it.
 
@@ -82,7 +79,7 @@ def compute_avg(data, num_averaged_years, start_date, end_date):
     return {"historical": historical_total, "latest": latest_total}
 
 
-def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top_left, bottom_left, bottom_right, top_right):
+def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top_left, bottom_left, bottom_right, top_right, log):
     
 
     square = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[0], top_left[1], \
@@ -128,7 +125,7 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
     result = requests.get('http://climateserv.servirglobal.net/chirps/getDataFromRequest/?id=%s' % job_id)
     log.debug(str(result.text))
 
-    avgs = compute_avg(json.loads(result.text)['data'], num_averaged_years, start_date, end_date)
+    avgs = compute_avg(json.loads(result.text)['data'], num_averaged_years, start_date, end_date, log)
     log.info(str(avgs))
 
     avg_of_avgs = avgs["historical"][1] / avgs["historical"][0]
@@ -143,7 +140,7 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
         print("below")
     quit()
 
-def loadArgs(args):  
+def loadArgs(args, enableLogging=False):  
     '''
     Schema for args is ['<WITID>', '<average_years>&<start>&<end>', 'threshold', 'topleft', 'edgelength']
     WITID is the ID of the WIT in question. Needed for callback.
@@ -157,6 +154,11 @@ def loadArgs(args):
     for example:
     args = ['1', '10&1493344692&1495936692', '30000', '21.5331234,-3.1621234', '0.14255']
     '''
+
+    log = logging.getLogger(__name__)
+
+    if not enableLogging:
+        log.disabled = True
 
     WIT_ID = args[0]
     arg_trio = args[1].split("&")
@@ -182,17 +184,11 @@ def loadArgs(args):
          top_left,
          bottom_left,
          bottom_right,
-         top_right)
+         top_right,
+         log)
 
 
 
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger(__name__)
-
-    
-loadArgs(['1', '10&1493344692&1495936692', '8000', '21.5331234,-3.1621234', '0.14255'])
-
-'''
 if __name__ == "__main__":
     try:
         args = []
@@ -205,7 +201,4 @@ if __name__ == "__main__":
         print("failed to load args. Exception: &s" % ex)
         quit()
     loadArgs(args)
-'''    
-
-
 
