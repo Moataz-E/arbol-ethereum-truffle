@@ -1,46 +1,10 @@
-#CHIRPS dataset via climateSERV
-
-#API documentation  https://climateserv.readthedocs.io/en/latest/api.html
-
-#query format {{ base api url }}/[MethodName]/?param1=value1&param2=value2&...paramN=valueN
-
-
-
-#https://climateserv.servirglobal.net/chirps/submitDataRequest/?datatype=0&begintime=04/01/2018&endtime=04/30/2018&intervaltype=0&operationtype=5&callback=successCallback&dateType_Category=default&isZip_CurrentDataType=false&geometry={"type":"Polygon","coordinates":[[[21.533203124999996,-3.1624555302378496],[21.533203124999996,-6.489983332670647],[26.279296874999986,-5.441022303717986],[26.10351562499999,-2.635788574166625],[21.533203124999996,-3.1624555302378496]]]}
-#returns "503dfe8e-8292-4ce7-9441-040c90e28187"
-# https://climateserv.servirglobal.net/chirps/getDataRequestProgress?id=503dfe8e-8292-4ce7-9441-040c90e28187
-#returns 100%
-
-
-#https://climateserv.servirglobal.net/chirps/submitDataRequest/?datatype=0&begintime=04/01/2018&endtime=04/30/2018&intervaltype=0&operationtype=5&callback=successCallback&dateType_Category=default&isZip_CurrentDataType=false&geometry={"type":"Polygon","coordinates":[[[21.533203124999996,-3.1624555302378496],[21.533203124999996,-6.489983332670647],[26.279296874999986,-5.441022303717986],[26.10351562499999,-2.635788574166625],[21.533203124999996,-3.1624555302378496]]]}
-
-
-
-INTERVAL_TYPE = '0' #0 = daily, 1 = monthly?
-OPERATION_TYPE =  '5' #[[0, "max", "Max"], [1, "min", "Min"], [2, "median", "Median"], [3, "range", "Range"], [4, "sum", "Sum"], [5, "avg", "Average"]]
-ZIP = 'false' # whether or not to zip up the response "and return a full dataset" (?).
-
-
-'''
-'datatype'      // (int), the unique datatype number for the dataset which this request operates on
-'begintime'     // (string), startDate for processing interval, format ("MM/DD/YYYY")
-'endtime'       // (string), endDate for processing interval, format ("MM/DD/YYYY")
-'intervaltype'  // (int), enumerated value that represents which type of time interval to process (daily, monthly, etc) (This enumeration is currently hardcoded in the mark up language of the current client).
-'operationtype'         // (int), enumerated value that represents which type of statistical operation to perform on the dataset, see api call 'getParameterTypes/' for the list of currently available types.
-// Either 'geometry' by itself or these other two params together, 'layerid' and 'featureids' are required
-'geometry'(optional)// (object), the geometry that is defined by the user on the current client
-'layerid'(optional) // the layerid that is selected by the by the user on the current client
-'featureids'(optional)  // the featureids as selected by the user on the current client
-'isZip_CurrentDataType'(optional) // (string), Leaving this blank converts to 'False' on the server.  Sending anything through equates to a 'True' value on the server.  This lets the server know that this is a job to zip up and return a full dataset.
-'''
-#URL = 'https://climateserv.servirglobal.net/chirps/submitDataRequest/?datatype=0&begintime=%s&endtime=%s&intervaltype=%s&operationtype=%s&dateType_Category=default&isZip_CurrentDataType=%s&geometry={"type":"Polygon","coordinates":[[[21.533203124999996,-3.1624555302378496],[21.533203124999996,-6.489983332670647],[26.279296874999986,-5.441022303717986],[26.10351562499999,-2.635788574166625],[21.533203124999996,-3.1624555302378496]]]}
-
 import requests
 import datetime
 import time
 import json
 from dateutil.relativedelta import relativedelta
 import logging
+
 
     #TODO use bigfloat for decimals
     #TODO make work for periods longer than a year
@@ -49,38 +13,14 @@ import logging
     #TODO fuzzing?
 
 
-def compute_avg(data, num_averaged_years, start_date, end_date, log):
-    '''
-    Takes some NASA CHIRPS API JSON data, and performs some calculations on it.
-
-    We want to find the average to
-    '''
-    avg_table = {}
-    for year in range(0, num_averaged_years + 1): 
-        avg_table[start_date - relativedelta(years=year), end_date - relativedelta(years=year)] = (0,0)
-
-    for day in data:
-        for a_range in avg_table.keys():
-            date = datetime.datetime.strptime(day['date'], '%m/%d/%Y')
-            if a_range[0] <= date <= a_range[1]:
-                avg_table[a_range] = (avg_table[a_range][0] + 1, avg_table[a_range][1] + day['value']['avg']) #TODO test for cross-year ranges
-                break
-
-    log.debug(avg_table)
-
-    historical_total = (0,0)
-    latest_total = (0,0)
-    for year in avg_table.keys():
-        if year != (start_date, end_date):
-            historical_total= (historical_total[0] + 1, historical_total[1] + avg_table[year][1])
-        else:  
-            latest_total = (latest_total[0] + 1, latest_total[1] + avg_table[year][1])
-
-    return {"historical": historical_total, "latest": latest_total}
-
-
 def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top_left, bottom_left, bottom_right, top_right, log):
-    
+    '''
+    Make a call to the NASA climateSERV API, access CHIRPS data, etc
+
+    Full climateserv documentation: https://climateserv.readthedocs.io/en/latest/api.html
+
+    '''
+
 
     square = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[0], top_left[1], \
     		 									    bottom_left[0], bottom_left[1], 
@@ -89,23 +29,20 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
 
     request_url = (
         'https://climateserv.servirglobal.net/chirps/submitDataRequest/?'
-        'datatype=0'
-        '&begintime=%s'
-        '&endtime=%s'
-        '&intervaltype=%s'
-        '&operationtype=%s'
-        '&dateType_Category=default'
-        '&isZip_CurrentDataType=%s'
-        '&geometry='
+        'datatype=0'                  # (int), the unique datatype number for the dataset which this request operates on
+        '&begintime=%s'               # (string), startDate for processing interval, format ("MM/DD/YYYY")
+        '&endtime=%s'                 # (string), endDate for processing interval, format ("MM/DD/YYYY")
+        '&intervaltype=0'            # (int), enumerated value that represents which type of time interval to process (daily, monthly, etc). 0 = daily
+        '&operationtype=5'           # (int), enumerated value that represents which type of statistical operation to perform on the dataset ...
+                                      # ... [[0, "max", "Max"], [1, "min", "Min"], [2, "median", "Median"], [3, "range", "Range"], [4, "sum", "Sum"], [5, "avg", "Average"]]
+        '&dateType_Category=default'  
+        '&geometry='                  # (object), the geometry that is defined by the user on the current client
             '{"type":"Polygon",'
             '"coordinates":[%s]}' 
         %
         (
             (start_date - relativedelta(years=num_averaged_years)).strftime("%m/%d/%Y"), 
             end_date.strftime("%m/%d/%Y"), 
-            INTERVAL_TYPE, 
-            OPERATION_TYPE, 
-            ZIP, 
             square
         )
     )
@@ -139,6 +76,37 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
     else:
         print("below")
     quit()
+
+
+def compute_avg(data, num_averaged_years, start_date, end_date, log):
+    '''
+    Takes some NASA CHIRPS API JSON data, and performs some calculations on it.
+
+    We want to find the average to
+    '''
+    avg_table = {}
+    for year in range(0, num_averaged_years + 1): 
+        avg_table[start_date - relativedelta(years=year), end_date - relativedelta(years=year)] = (0,0)
+
+    for day in data:
+        for a_range in avg_table.keys():
+            date = datetime.datetime.strptime(day['date'], '%m/%d/%Y')
+            if a_range[0] <= date <= a_range[1]:
+                avg_table[a_range] = (avg_table[a_range][0] + 1, avg_table[a_range][1] + day['value']['avg']) #TODO test for cross-year ranges
+                break
+
+    log.debug(avg_table)
+
+    historical_total = (0,0)
+    latest_total = (0,0)
+    for year in avg_table.keys():
+        if year != (start_date, end_date):
+            historical_total= (historical_total[0] + 1, historical_total[1] + avg_table[year][1])
+        else:  
+            latest_total = (latest_total[0] + 1, latest_total[1] + avg_table[year][1])
+
+    return {"historical": historical_total, "latest": latest_total}
+
 
 def loadArgs(args, enableLogging=False):  
     '''
@@ -186,7 +154,6 @@ def loadArgs(args, enableLogging=False):
          bottom_right,
          top_right,
          log)
-
 
 
 if __name__ == "__main__":
