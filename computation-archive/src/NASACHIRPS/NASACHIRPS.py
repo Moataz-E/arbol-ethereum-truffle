@@ -42,6 +42,8 @@ import json
 from dateutil.relativedelta import relativedelta
 
 
+
+
 def sum_precip(data):
     #TODO use bigfloat for decimals
     precipitation = 0
@@ -97,6 +99,20 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
 
     total = sum_precip(json.loads(result.text))
     print(total)
+
+    avg_table = {}
+    for year in range(1, num_averaged_years + 1):
+        avg_table[start_date - relativedelta(years=year), end_date - relativedelta(years=year)] = (0,0)
+
+    for day in json.loads(result.text)['data']:
+        for a_range in avg_table.keys():
+            date = datetime.datetime.strptime(day['date'], '%m/%d/%Y')
+            if  a_range[0] <= date <= a_range[1]:
+                avg_table[a_range] = (avg_table[a_range][0] + 1, avg_table[a_range][1] + day['value']['avg'])
+
+    print(avg_table)
+
+
 
 
 def loadArgs(args):  
