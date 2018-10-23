@@ -3,3 +3,4 @@ test/.placeholder
 node_modules
 jail
 *.pyc
+.DS_Store
