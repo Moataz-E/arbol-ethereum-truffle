@@ -66,15 +66,16 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
     log.info(str(avgs))
 
     avg_of_avgs = avgs["historical"][1] / avgs["historical"][0]
-    deviation = avgs['latest'][1] / avg_of_avgs
+    absolute_threshold = avg_of_avgs * threshold_factor
+    term_avg = avgs['latest'][1]
 
-    log.info("threshold: " + str(threshold_factor))
-    log.info("deviation: " +  str(deviation))
 
-    if(deviation > threshold_factor):
-        print("above")
+    if(term_avg > absolute_threshold):
+        outcome = "above"
     else:
-        print("below")
+        outcome = "below"
+
+    print("%i&%s&%s&%s&%s&%s" % (200, WIT_ID, outcome, format(avg_of_avgs, '.5f'), format(term_avg, '.5f'), format(absolute_threshold, '.5f')))
     quit()
 
 
