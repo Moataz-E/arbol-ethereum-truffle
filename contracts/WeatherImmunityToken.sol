@@ -24,7 +24,7 @@ import './CallbackableWIT.sol';
  * @dev WITs can be transferred after they have been created. They are nonfungible ERC721 tokens.
  *
  */
-contract WeatherImmunityToken is ERC721, Ownable, CallbackableWIT {
+contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT {
   using SafeMath for uint;
 
     struct WIT {
@@ -54,8 +54,8 @@ contract WeatherImmunityToken is ERC721, Ownable, CallbackableWIT {
 
     event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
     event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale);
-    event WITEvaluated(uint indexed WITID, address indexed aboveOwner, address indexed belowOwner, address beneficiary, uint weiPayout);
-    event WITCancelled(uint indexed WITID, uint indexed owner, uint indexed amountRedeemed);
+    event WITEvaluated(uint indexed WITID, address indexed aboveOwner, address indexed belowOwner, address beneficiary, uint weiPayout, uint aboveID, uint belowID);
+    event WITCancelled(uint indexed WITID, address indexed owner, uint indexed amountRedeemed);
     event ContractDecomissioned(uint numDependants, uint balance, address recepientOfEscrow);
     event WeirdThingHappened(string thingThatHappened);
 
@@ -197,7 +197,7 @@ contract WeatherImmunityToken is ERC721, Ownable, CallbackableWIT {
             }
         }
         burnWIT(WITID);
-        WITEvaluated(WITID, the_wit.aboveID, the_wit.belowID, beneficiary, totalEscrow);
+        WITEvaluated(WITID, ownerOf(the_wit.aboveID), ownerOf(the_wit.belowID), beneficiary, totalEscrow, the_wit.aboveID, the_wit.belowID);
         beneficiary.transfer(totalEscrow); //TODO can this function be repeatedly called by a malicious contract??
     }
 
