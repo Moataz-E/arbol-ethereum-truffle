@@ -35,7 +35,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
       uint belowID;         // The address of the party betting on a "below threshold" outcome (the token holder).
       address evaluator;    // The address of the contract that shall provide the outcome (above or below threshold).
       uint thresholdPPTTH;  // The threshold in "parts per ten thousand." 9000 equals 10% below average, 11000 equals 10% above average
-      bytes32 location;     // The geographic location or locations for which the weather outcome shall be relevant.
+      string location;     // The geographic location or locations for which the weather outcome shall be relevant.
       uint start;           // Unix timestamp representing the start time of the relevant time period.
       uint end;             // Unix timestamp representing the end time of the relevant time period.
       bool makeStale;       // Whether or not to allow the proposal to be accepted after "start" is in the past. Defaults to "no."
@@ -53,7 +53,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     bool private testmode = true;
 
     event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
-    event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale);
+    event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, string location, uint start, uint end, bool makeStale);
     event WITEvaluated(uint indexed WITID, address indexed aboveOwner, address indexed belowOwner, address beneficiary, uint weiPayout, uint aboveID, uint belowID);
     event WITCancelled(uint indexed WITID, address indexed owner, uint indexed amountRedeemed);
     event ContractDecomissioned(uint numDependants, uint balance, address recepientOfEscrow);
@@ -66,7 +66,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param storageAddress The address of the decoupled storage contract.
     * @param NOAAPrecipAggregate The address of a particular evaluator contract.
     */
-    function initialize(address arbolAddress, address storageAddress, address NOAAPrecipAggregate) public onlyContractOwner {
+    function initialize(address arbolAddress, address storageAddress, address NOAAPrecipAggregate, address NASA) public onlyContractOwner {
         arbolcoin = Arbolcoin(arbolAddress);
         storageContract = EternalDonut(storageAddress);
         require(storageContract.getUIntValue(keccak256("WITIDCounter")) == 0);
@@ -74,10 +74,12 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         storageContract.setUIntValue(keccak256("WITIDCounter"), uint(1)); //start at 1
         storageContract.setAddressValue(keccak256("Dependants", uint(1)), address(storageContract));
         storageContract.setAddressValue(keccak256("Dependants", uint(2)), address(NOAAPrecipAggregate));
-        storageContract.setUIntValue(keccak256("DependantsCounter"), uint(2)); 
+        storageContract.setAddressValue(keccak256("Dependants", uint(3)), address(NASA));
+        storageContract.setUIntValue(keccak256("DependantsCounter"), uint(3)); 
         testmode = true;
       }
 
+    event debug(bytes asdf);
 
     /**
     * @dev Create a WIT without a partner. (A proposal.)
@@ -91,7 +93,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param end The end date of the WIT.
     * @param makeStale If set to true, the WIT will be taken off the open market after its start date passes. That is, no one will be able to accept it.
     */
-    function createWITProposal(uint weiContributing, uint weiAsking, bool aboveOrBelow, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale) public payable {
+    function createWITProposal(uint weiContributing, uint weiAsking, bool aboveOrBelow, address evaluator, uint thresholdPPTTH, string location, uint start, uint end, bool makeStale) public payable {
         require(weiContributing > 0);
         require(weiAsking > 0);
         weiAsking.add(weiContributing); // this expression will throw if the escrow amounts are too big.
@@ -233,7 +235,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         uint belowID = storageContract.getUIntValue(keccak256("WIT", tokenID, "belowID"));    
         address evaluator = storageContract.getAddressValue(keccak256("WIT", tokenID, "evaluator"));
         uint thresholdPPTTH = storageContract.getUIntValue(keccak256("WIT", tokenID, "thresholdPPTTH"));
-        bytes32 location = storageContract.getBytes32Value(keccak256("WIT", tokenID, "location"));
+        string memory location = storageContract.getStringValue(keccak256("WIT", tokenID, "location"));
         uint start = storageContract.getUIntValue(keccak256("WIT", tokenID, "start"));
         uint end = storageContract.getUIntValue(keccak256("WIT", tokenID, "end"));
         bool makeStale = storageContract.getBooleanValue(keccak256("WIT", tokenID, "makeStale"));
@@ -252,7 +254,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "belowID"), the_wit.belowID);        
         storageContract.setAddressValue(keccak256("WIT", the_wit.WITID, "evaluator"), the_wit.evaluator);
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "thresholdPPTTH"), the_wit.thresholdPPTTH);
-        storageContract.setBytes32Value(keccak256("WIT", the_wit.WITID, "location"), the_wit.location);
+        storageContract.setStringValue(keccak256("WIT", the_wit.WITID, "location"), the_wit.location);
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "start"), the_wit.start);
         storageContract.setUIntValue(keccak256("WIT", the_wit.WITID, "end"), the_wit.end);
         storageContract.setBooleanValue(keccak256("WIT", the_wit.WITID, "makeStale"), the_wit.makeStale);
@@ -269,7 +271,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         _burn(belowOwner, the_wit.belowID);
         address aboveOwner = ownerOf(the_wit.aboveID);
         _burn(aboveOwner, the_wit.aboveID);
-        saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false));
+        saveWIT(WIT(tokenID, 0, 0, 0, 0, 0, 0, "", 0, 0, false));
     }
 
 

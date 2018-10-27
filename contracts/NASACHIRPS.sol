@@ -1,5 +1,5 @@
 pragma solidity 0.4.24;
-import "./usingOraclize.sol";
+import "./oraclizeAPI_0.5.sol";
 import "./WITEvaluator.sol";
 import "./Ownable.sol";
 import "./CallbackableWIT.sol";
@@ -11,10 +11,11 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     using SafeMath for uint;
     using strings for *;
 
-    string precipScript = "QmZDDtTckCRFmRywwHQwkedYVwU79t4YGB14UNHYZzJBPv";
+    string precipScript = "QmQfpuPmAtrw1iKWksDSqP1tScWCjGN5ESUy6AocPJ6Ave";
 
     event gotNASACHIRPSCallback(string key, string result, uint remainingGas);
-    event sentNASACHIRPSOraclizeComputation(string precipScript, uint WITID, string avgedYearsStartEnd, uint thresholdFactorPPTTH, bytes32 area);
+    event sentNASACHIRPSOraclizeComputation(string precipScript, uint WITID, uint num_averaged_years, uint start, uint end, uint thresholdFactorPPTTH, string location);
+    event debug(string);
 
     /**
     * @dev 
@@ -22,19 +23,23 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     * @param start Start date / time of the term period. UNIX formatted timestamp.
     * @param end End date / time of the term period. UNIX formatted timestamp.
     * @param thresholdFactorPPTTH The threshold represented as a part per ten thousand. 10000 = average. 11000 = 10% above average.
-    * @param area A string representation of the geographic area to be evaluated. Weather API defines these.
+    * @param location A string representation of the geographic area to be evaluated. Weather API defines these.
     * @param num_averaged_years Ignores whatever is input and uses 10 years for the number of years to be averaged
     * @param runtimeParams Not used but required by the WITEvaluator interface.
     */
-    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, bytes32 area, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
-        uint gasEstimate = 500000;
-        require(gasEstimate < this.balance);
+    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, string location, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
+     //   uint gasEstimate = 500000;
+//        require(gasEstimate < this.balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
         require(100 < thresholdFactorPPTTH);
         require(thresholdFactorPPTTH < 100000);
+
         string memory avgedYearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
-        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), uint2str(uint(area))], gasEstimate);
-        sentNASACHIRPSOraclizeComputation(precipScript, WITID, avgedYearsStartEnd, thresholdFactorPPTTH, area);
+        debug("HAY");
+
+
+        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location]);
+        sentNASACHIRPSOraclizeComputation(precipScript, WITID, num_averaged_years, start, end, thresholdFactorPPTTH, location);
     }
 
 
@@ -46,12 +51,12 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     function __callback(bytes32 myid, string result) {
         require(msg.sender == oraclize_cbAddress());
         gotNASACHIRPSCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
-        var sliceResult = result.toSlice();
-        var status = sliceResult.split("&".toSlice());
-        if (!strings.equals(status, "200".toSlice())) { return; }
-        uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
-        string memory outcome = sliceResult.split("&".toSlice()).toString();
-        CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
+//        var sliceResult = result.toSlice();
+  //      var status = sliceResult.split("&".toSlice());
+    //    if (!strings.equals(status, "200".toSlice())) { return; }
+//        uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
+  //      string memory outcome = sliceResult.split("&".toSlice()).toString();
+    //    CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
     }
 
 

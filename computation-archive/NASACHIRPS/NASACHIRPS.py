@@ -11,6 +11,7 @@ import logging
     #TODO write some tests
     #TODO better validation
     #TODO print something sensible if there's a timeout / API fail
+    #TODO check for 0.00 values....
     #TODO fuzzing?
 
 
@@ -124,52 +125,61 @@ def loadArgs(args, enableLogging=False):
     edgelength is the length of the edge of the square in question.
     
     for example:
-    args = ['1', '10&1493344692&1495936692', '30000', '21.5331234,-3.1621234', '0.14255']
+    args = ['1', '10&1493344692&1495936692', '30000', '21.5331234,-3.1621234&0.14255']
     '''
 
-    log = logging.getLogger(__name__)
+    try:
+        log = logging.getLogger(__name__)
 
-    if not enableLogging:
-        log.disabled = True
+        if not enableLogging:
+            log.disabled = True
 
-    WIT_ID = args[0]
-    arg_trio = args[1].split("&")
+        WIT_ID = args[0]
+        arg_trio = args[1].split("&")
 
-    num_averaged_years = int(arg_trio[0])
-    start_date = datetime.datetime.utcfromtimestamp(int(arg_trio[1]))
-    end_date = datetime.datetime.utcfromtimestamp(int(arg_trio[2]))
+        num_averaged_years = int(arg_trio[0])
+        start_date = datetime.datetime.utcfromtimestamp(int(arg_trio[1]))
+        end_date = datetime.datetime.utcfromtimestamp(int(arg_trio[2]))
 
-    threshold_factor = int(args[2]) / 10000 #10000 = 100% 
+        threshold_factor = int(args[2]) / 10000 #10000 = 100% 
 
-    top_left_lat, top_left_lon = args[3].split(',')
-    top_left = (float(top_left_lat), float(top_left_lon))
-    edge_length = float(args[4])
-    bottom_left = ((top_left[0] - edge_length), top_left[1])
-    top_right = (top_left[0], (top_left[1] + edge_length))
-    bottom_right = ((top_left[0] - edge_length), (top_left[1] + edge_length)) 
+        coordinates, edge_length = args[3].split('&')
 
-    main(WIT_ID, 
-         num_averaged_years, 
-         start_date, 
-         end_date, 
-         threshold_factor, 
-         top_left,
-         bottom_left,
-         bottom_right,
-         top_right,
-         log)
+        top_left_lat, top_left_lon = coordinates.split(',')
+        top_left = (float(top_left_lat), float(top_left_lon))
+        edge_length = float(edge_length)
+        bottom_left = ((top_left[0] - edge_length), top_left[1])
+        top_right = (top_left[0], (top_left[1] + edge_length))
+        bottom_right = ((top_left[0] - edge_length), (top_left[1] + edge_length)) 
+    except Exception as ex:
+        print("Failed to load args. Exception: &s" % ex)
+        quit()
+
+    try:
+        main(WIT_ID, 
+             num_averaged_years, 
+             start_date, 
+             end_date, 
+             threshold_factor, 
+             top_left,
+             bottom_left,
+             bottom_right,
+             top_right,
+             log)
+    except Exception as ex:
+        print("Something weird happened. Exception: &s" % ex)
+        quit()
 
 
 if __name__ == "__main__":
-    try:
+   try:
         args = []
         args.append(os.environ['ARG0'])
         args.append(os.environ['ARG1'])
         args.append(os.environ['ARG2'])
         args.append(os.environ['ARG3'])
-        args.append(os.environ['ARG4'])
     except Exception as ex:
-        print("failed to load args. Exception: &s" % ex)
+        print("Insufficient arguments provided. Exception: &s" % ex)
         quit()
     loadArgs(args)
 
