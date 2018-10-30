@@ -14,8 +14,8 @@ Install ganache-cli on your computer. The GUI version of Ganache will sadly no l
 
 Clone this repo (if you haven't already) and install node packages.
 
-    $ git clone https://github.com/bandrebandrebandre/crop-dapp.git
-    $ cd crop-dapp
+    $ git clone https://github.com/arbol-project/arbol-ethereum-truffle.git
+    $ cd arbol-ethereum-truffle
     $ npm install
 
 We need to install ethereum bridge, which lets us make calls to Oraclize from our testing environment.
@@ -48,15 +48,26 @@ Open a new terminal window, move to your ethereum bridge directory, and start et
 
 Open a third terminal window and run the truffle tests in the crop-dapp directory with node 9.x
 
-    $ cd crop-dapp
+    $ cd arbol-ethereum-truffle
     $ nvm use node
     $ truffle test
 
 Interact with the application via Truffle console or via a front end application.
 
-    $ cd crop-dapp
+    $ cd arbol-ethereum-truffle
     $ nvm use node
     $ truffle deploy
+
+Oraclize Computation Scripts
+-------------------------
+
+Arbol uses Oraclize queries to get weather data. The Oraclize "computation" query accepts an IPFS hash which contains a (compressed) Dockerfile and accompanying files -- in our case a single python script. Oraclize deploys the docker image to an AWS micro instance. The dockerfile specifies that the python script be run. At the end of the python script, and single print statement is executed, and the script quits. The contents of this print statement are returned to the via the \__callback function to the smart contract that made the original call. Oraclize lets the script run for 5 minutes before cutting it off. See additional Oraclize documentation here: www.oraclize.it
+
+It is desirable to deploy the docker image locally and run the python script therein to faciliate testing. As of this writing, we use alpine-python3, a lightweight python3 environment, for all our queries.
+
+    $ cd arbol-ethereum-truffle/computation-archive/<relevant query>
+    $ docker run -it -v $PWD:/home/oraclize/<relevant query> frolvlad/alpine-python3
+    $ python3 <relevant query>
 
 Deploying to Rinkeby
 -------------------------
