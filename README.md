@@ -65,9 +65,12 @@ Arbol uses Oraclize queries to get weather data. The Oraclize "computation" quer
 
 It is desirable to deploy the docker image locally and run the python script therein to faciliate testing. As of this writing, we use alpine-python3, a lightweight python3 environment, for all our queries.
 
-    $ cd arbol-ethereum-truffle/computation-archive/<relevant query>
-    $ docker run -it -v $PWD:/home/oraclize/<relevant query> frolvlad/alpine-python3
-    $ python3 <relevant query>
+    $ cd arbol-ethereum-truffle/computation-archive/<relevant query directory>
+    $ docker run -it -v $PWD:/home/oraclize/<relevant query directory> frolvlad/alpine-python3
+    $ cd home/oraclize/<relevant query directory>
+    $ python3 <relevant query file>
+
+This run the alpine-python3 docker image and mount the directory with the relevant query script to /home/oraclize/[...]
 
 Deploying to Rinkeby
 -------------------------
