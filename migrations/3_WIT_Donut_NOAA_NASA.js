@@ -36,12 +36,13 @@ module.exports = function(deployer, network, accounts) {
 							if (network == "development") {
 							    A_NOAA.setLocalOAR();
 							    A_NASA.setLocalOAR();
-					    	}	    	
+					    	}					    	
 							A_DONUT.transferOwnership(A_WIT.address, {from: deployer_account});
-							A_WIT.initialize(arbolcoin_address, A_DONUT.address, A_NOAA.address, {from: deployer_account});
+							A_WIT.initialize(arbolcoin_address, A_DONUT.address, A_NOAA.address, A_NASA.address, {from: deployer_account});
 							A_NOAA.transferOwnership(A_WIT.address, {from: deployer_account});
 							A_NASA.transferOwnership(A_WIT.address, {from: deployer_account});
 							web3.eth.sendTransaction({from: deployer_account, to: A_NOAA.address, value:web3.toWei(3, "ether")}); // for oraclize callback.
+							web3.eth.sendTransaction({from: deployer_account, to: A_NASA.address, value:web3.toWei(3, "ether")}); // for oraclize callback.
 						})	
 					})
 				})

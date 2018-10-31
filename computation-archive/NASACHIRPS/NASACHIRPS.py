@@ -1,9 +1,11 @@
+
 import requests
 import datetime
 import time
 import json
 from dateutil.relativedelta import relativedelta
 import logging
+import os
 
 
     #TODO use bigfloat for decimals
@@ -80,7 +82,7 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
     print("%i&%s&%s&%s&%s&%s" % (200, WIT_ID, outcome, format(avg_of_avgs, '.5f'), format(term_avg, '.5f'), format(absolute_threshold, '.5f')))
 
     
-    #quit()
+    quit()
 
 
 def compute_avg(data, num_averaged_years, start_date, end_date, log):
@@ -152,7 +154,7 @@ def loadArgs(args, enableLogging=False):
         top_right = (top_left[0], (top_left[1] + edge_length))
         bottom_right = ((top_left[0] - edge_length), (top_left[1] + edge_length)) 
     except Exception as ex:
-        print("Failed to load args. Exception: &s" % ex)
+        print("Failed to load args. Exception: %s" % ex)
         quit()
 
     try:
@@ -167,19 +169,19 @@ def loadArgs(args, enableLogging=False):
              top_right,
              log)
     except Exception as ex:
-        print("Something weird happened. Exception: &s" % ex)
+        print("Something weird happened. Exception: %s" % ex)
         quit()
 
 
 if __name__ == "__main__":
-   try:
+    try:
         args = []
         args.append(os.environ['ARG0'])
         args.append(os.environ['ARG1'])
         args.append(os.environ['ARG2'])
         args.append(os.environ['ARG3'])
     except Exception as ex:
-        print("Insufficient arguments provided. Exception: &s" % ex)
+        print("Insufficient arguments provided. Exception: %s" % ex)
         quit()
     loadArgs(args)
 

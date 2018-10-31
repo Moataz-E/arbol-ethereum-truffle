@@ -2,6 +2,7 @@ let WeatherImmunityToken = artifacts.require("WeatherImmunityToken");
 let Arbolcoin = artifacts.require("Arbolcoin")
 let EternalDonut = artifacts.require("EternalDonut");
 let NOAAPrecipAggregate = artifacts.require("NOAAPrecipAggregate");
+let NASACHIRPS = artifacts.require("NASACHIRPS");
 let expect = require('expect');
 let utils = require("./utils.js");
 let BigNumber = require('bignumber.js');
@@ -44,7 +45,7 @@ function sleep(ms) {
 }
 
 
-async function createWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, accounts) {
+async function createNOAAWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, accounts) {
 
 
 //    function createWITProposal(uint weiContributing, uint weiAsking, bool aboveOrBelow, address evaluator, uint thresholdPPTTH, bytes32 location, uint start, uint end, bool makeStale) public payable {
@@ -61,6 +62,23 @@ async function createWIT(proposerAccount, accepterAccount, evaluatorAccount, abo
 }
 
 
+async function createNASAWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, accounts) {
+
+   // function createWITProposal(uint weiContributing, uint weiAsking, bool aboveOrBelow, address evaluator, uint thresholdPPTTH, bytes location, uint start, uint end, bool makeStale) public payable {
+
+    response = await WIT.createWITProposal(ethContribute, ethAsk, false, NASACHIRPS.address, thresholdPPTTH, "21.5331234,-3.1621234&0.14255", one_year_ago, one_year_ago + one_month, makeStale, {value: ethContribute, from: proposerAccount});
+
+    proposalID = response.logs[0].args.WITID.toNumber()
+    response = await WIT.createWITAcceptance(proposalID, {from: accepterAccount, value: ethAsk});
+
+    acceptanceID = response.logs[0].args.WITID.toNumber()
+    await WIT.evaluate(acceptanceID, "", {from: evaluatorAccount});
+ 
+
+}
+
+
+
 contract('WeatherImmunityToken', function(accounts) {
     it("should test various WIT creations and acceptances", async function() {
         this.timeout(7000000)
@@ -71,7 +89,7 @@ contract('WeatherImmunityToken', function(accounts) {
 
 
 
-        await createWIT(accounts[2], accounts[3], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
+        await createNASAWIT(accounts[2], accounts[3], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
     /*    await createWIT(accounts[2], accounts[3], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[3], accounts[2], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await createWIT(accounts[3], accounts[2], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);

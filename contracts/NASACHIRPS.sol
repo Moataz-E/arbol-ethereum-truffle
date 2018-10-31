@@ -11,7 +11,7 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     using SafeMath for uint;
     using strings for *;
 
-    string precipScript = "QmQfpuPmAtrw1iKWksDSqP1tScWCjGN5ESUy6AocPJ6Ave";
+    string precipScript = "Qma2o54AjgQxNapyVtRAeuj5sFR7YA52WM95shcM4fTFoC";
 
     event gotNASACHIRPSCallback(string key, string result, uint remainingGas);
     event sentNASACHIRPSOraclizeComputation(string precipScript, uint WITID, uint num_averaged_years, uint start, uint end, uint thresholdFactorPPTTH, string location);
@@ -28,8 +28,8 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     * @param runtimeParams Not used but required by the WITEvaluator interface.
     */
     function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, string location, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
-     //   uint gasEstimate = 500000;
-//        require(gasEstimate < this.balance);
+        uint gasEstimate = 500000;
+        require(gasEstimate < this.balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
         require(100 < thresholdFactorPPTTH);
         require(thresholdFactorPPTTH < 100000);
