@@ -15,7 +15,7 @@ contract DecoupledERC721Token is ERC721 {
     // The storage contract
     EternalDonut internal storageContract;
 
-    function totalSupply() public returns (uint) {
+    function totalSupply() public view returns (uint) {
         return storageContract.getUIntValue(keccak256("TotalSupply"));
     }
 
@@ -34,7 +34,7 @@ contract DecoupledERC721Token is ERC721 {
      * @param tokenID uint256 ID of the token to query the approval of
      * @return address currently approved to take ownership of the given token ID
      */
-    function approvedFor(uint tokenID) private returns (address) {
+    function approvedFor(uint tokenID) private view returns (address) {
         return storageContract.getAddressValue(keccak256("ApprovedFor", tokenID));
     }
 
@@ -56,7 +56,7 @@ contract DecoupledERC721Token is ERC721 {
      * @param owner address to query the tokens of
      * @return uint256[] representing the list of tokens owned by the passed address
      */
-    function tokensOf(address owner) private returns (uint[]) {
+    function tokensOf(address owner) private view returns (uint[]) {
         uint balance = balanceOf(owner);    
         uint[] memory ownedTokens = new uint[](balance.sub(1));
         return ownedTokens;

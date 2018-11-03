@@ -28,7 +28,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     */
     function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, bytes location, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
         uint gasEstimate = 500000;
-        require(gasEstimate < this.balance);
+        require(gasEstimate < address(this).balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
         require(100 < thresholdFactorPPTTH);
         require(thresholdFactorPPTTH < 100000);

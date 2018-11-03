@@ -164,7 +164,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @param tokenID The WIT to be evaluated
     * @param runtimeParams any additional parameters that are required at evaluation runtime.
     */
-   function evaluate(uint tokenID, string runtimeParams) public {
+   function evaluate(uint tokenID, string runtimeParams) public payable {
         WIT memory the_wit = getWIT(tokenID);
         require(the_wit.end < now);
         require(the_wit.aboveID != 0);
@@ -228,7 +228,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     * @dev Retrieves a certain WIT from decoupled storage. Returns the WIT inside a WIT struct.
     * @param tokenID The ID of the desired WIT.
     */
-    function getWIT(uint tokenID) private returns (WIT) {
+    function getWIT(uint tokenID) private view returns (WIT) {
         uint aboveEscrow = storageContract.getUIntValue(keccak256("WIT", tokenID, "aboveEscrow"));
         uint belowEscrow = storageContract.getUIntValue(keccak256("WIT", tokenID, "belowEscrow"));
         uint aboveID = storageContract.getUIntValue(keccak256("WIT", tokenID, "aboveID"));
@@ -314,8 +314,8 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
             address dependant = storageContract.getAddressValue(keccak256("Dependants", counter));
             Ownable(dependant).transferOwnership(newOwner);
         }
-        emit ContractDecomissioned(numDependants, this.balance, owner);
-        owner.transfer(this.balance);
+        emit ContractDecomissioned(numDependants, address(this).balance, owner);
+        owner.transfer(address(this).balance);
         //TODO get ether out of NOAAPrecipAggregate contract
     }
 
