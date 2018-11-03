@@ -15,7 +15,6 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
 
     event gotNASACHIRPSCallback(string key, string result, uint remainingGas);
     event sentNASACHIRPSOraclizeComputation(string precipScript, uint WITID, uint num_averaged_years, uint start, uint end, uint thresholdFactorPPTTH, string location);
-    event debug(string);
 
     /**
     * @dev 
@@ -35,11 +34,9 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
         require(thresholdFactorPPTTH < 100000);
 
         string memory avgedYearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
-        debug("HAY");
 
-
-        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location]);
-        sentNASACHIRPSOraclizeComputation(precipScript, WITID, num_averaged_years, start, end, thresholdFactorPPTTH, location);
+        emit oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location]);
+        emit sentNASACHIRPSOraclizeComputation(precipScript, WITID, num_averaged_years, start, end, thresholdFactorPPTTH, location);
     }
 
 
@@ -50,13 +47,13 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     */
     function __callback(bytes32 myid, string result) {
         require(msg.sender == oraclize_cbAddress());
-        gotNASACHIRPSCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
-//        var sliceResult = result.toSlice();
+        emit gotNASACHIRPSCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
+//        var sliceResult = result.toSlice();  TODO get this running!
   //      var status = sliceResult.split("&".toSlice());
     //    if (!strings.equals(status, "200".toSlice())) { return; }
-//        uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
-  //      string memory outcome = sliceResult.split("&".toSlice()).toString();
-    //    CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
+      //  uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
+        //string memory outcome = sliceResult.split("&".toSlice()).toString();
+        //emit CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
     }
 
 

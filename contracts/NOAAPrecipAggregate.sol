@@ -45,13 +45,13 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     */
     function __callback(bytes32 myid, string result) {
         require(msg.sender == oraclize_cbAddress());
-        gotNOAAPrecipAggregateCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
+        emit gotNOAAPrecipAggregateCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
         var sliceResult = result.toSlice();
         var status = sliceResult.split("&".toSlice());
         if (!strings.equals(status, "200".toSlice())) { return; }
         uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
         string memory outcome = sliceResult.split("&".toSlice()).toString();
-        CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
+        emit CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
     }
 
 

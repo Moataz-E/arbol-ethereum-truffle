@@ -115,11 +115,11 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         WIT memory new_WIT;
         if (aboveOrBelow) {
           new_WIT = WIT(ID, weiContributing, weiAsking, ID, 0, evaluator, thresholdPPTTH, location, start, end, makeStale);
-          ProposalOffered(ID, ID, 0, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);
+          emit ProposalOffered(ID, ID, 0, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);
         }
         else {
           new_WIT = WIT(ID, weiAsking, weiContributing, 0, ID, evaluator, thresholdPPTTH, location, start, end, makeStale);
-          ProposalOffered(ID, 0, ID, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);        
+          emit ProposalOffered(ID, 0, ID, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);        
         }
         saveWIT(new_WIT);
         _mint(msg.sender, ID);
@@ -141,16 +141,16 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         if (proposalWIT.aboveID == 0) { 
             expectedEscrow = proposalWIT.aboveEscrow; 
             storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "aboveID"), new_ID);
-            ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
+            emit ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
         }
         else { 
             if (proposalWIT.belowID == 0) {
                 expectedEscrow = proposalWIT.belowEscrow; 
                 storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "belowID"), new_ID);
-                ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID);        
+                emit ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID);        
             }
             else {
-                WeirdThingHappened("Someone is trying to accept a really weird WIT.");
+                emit WeirdThingHappened("Someone is trying to accept a really weird WIT.");
                 return;
             }
         }
@@ -193,13 +193,13 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
                 beneficiary = ownerOf(the_wit.belowID);
             }
             else { 
-                WeirdThingHappened("Got an unexpected evaluation outcome of...");
-                WeirdThingHappened(outcome); 
+                emit WeirdThingHappened("Got an unexpected evaluation outcome of...");
+                emit WeirdThingHappened(outcome); 
                 return;
             }
         }
         burnWIT(WITID);
-        WITEvaluated(WITID, ownerOf(the_wit.aboveID), ownerOf(the_wit.belowID), beneficiary, totalEscrow, the_wit.aboveID, the_wit.belowID);
+        emit WITEvaluated(WITID, ownerOf(the_wit.aboveID), ownerOf(the_wit.belowID), beneficiary, totalEscrow, the_wit.aboveID, the_wit.belowID);
         beneficiary.transfer(totalEscrow); //TODO can this function be repeatedly called by a malicious contract??
     }
 
@@ -220,7 +220,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         if (is_above_owner) { redemptionAmount = the_wit.aboveEscrow; }
         else { redemptionAmount = the_wit.belowEscrow; }
         msg.sender.transfer(redemptionAmount);
-        WITCancelled(tokenID, msg.sender, redemptionAmount);
+        emit WITCancelled(tokenID, msg.sender, redemptionAmount);
     }    
 
 
@@ -314,7 +314,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
             address dependant = storageContract.getAddressValue(keccak256("Dependants", counter));
             Ownable(dependant).transferOwnership(newOwner);
         }
-        ContractDecomissioned(numDependants, this.balance, owner);
+        emit ContractDecomissioned(numDependants, this.balance, owner);
         owner.transfer(this.balance);
         //TODO get ether out of NOAAPrecipAggregate contract
     }
