@@ -51,7 +51,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
         if (!strings.equals(status, "200".toSlice())) { return; }
         uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
         string memory outcome = sliceResult.split("&".toSlice()).toString();
-        emit CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
+        CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
     }
 
 
