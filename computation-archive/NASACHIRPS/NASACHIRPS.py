@@ -19,14 +19,27 @@ import os
 
 def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top_left, bottom_left, bottom_right, top_right, log):
     '''
-    Make a call to the NASA climateSERV API, access CHIRPS data, etc
+    NASA runs an API services called climateSERV, which accepts queries to the CHIRPS dataset.
 
-    Full climateserv documentation: https://climateserv.readthedocs.io/en/latest/api.html
+    CHIRPS is a global gridded dataset that is made by interpolating weather station and 
+    satellite data.
+
+    Full climateSERV documentation: https://climateserv.readthedocs.io/en/latest/api.html
+
+    In this function, we make a GET call to climateSERV to submit our query, which is based on the values
+    of the arguments to this function. 
+
+    top_left, bottom_left, bottom_right, and top_right are tuples that each represent a lat/lon coordinate
+    pair. The four points describe a box which represents the area of interest.
+
+    threshold_factor is the percentage of the historical average against which we are comparing new data.
+
+    10000 = 100%, 9000 = 90%, 11000 = 110%, etc.
 
     '''
 
 
-    square = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[0], top_left[1], \
+    box = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[0], top_left[1], \
     		 									    bottom_left[0], bottom_left[1], 
     		 									    bottom_right[0], bottom_right[1], 
     		 									    top_right[0], top_right[1])
@@ -36,8 +49,8 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
         'datatype=0'                  # (int), the unique datatype number for the dataset which this request operates on
         '&begintime=%s'               # (string), startDate for processing interval, format ("MM/DD/YYYY")
         '&endtime=%s'                 # (string), endDate for processing interval, format ("MM/DD/YYYY")
-        '&intervaltype=0'            # (int), enumerated value that represents which type of time interval to process (daily, monthly, etc). 0 = daily
-        '&operationtype=5'           # (int), enumerated value that represents which type of statistical operation to perform on the dataset ...
+        '&intervaltype=0'             # (int), enumerated value that represents which type of time interval to process (daily, monthly, etc). 0 = daily
+        '&operationtype=5'            # (int), enumerated value that represents which type of statistical operation to perform on the dataset ...
                                       # ... [[0, "max", "Max"], [1, "min", "Min"], [2, "median", "Median"], [3, "range", "Range"], [4, "sum", "Sum"], [5, "avg", "Average"]]
         '&dateType_Category=default'  
         '&geometry='                  # (object), the geometry that is defined by the user on the current client
@@ -47,14 +60,18 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
         (
             (start_date - relativedelta(years=num_averaged_years)).strftime("%m/%d/%Y"), 
             end_date.strftime("%m/%d/%Y"), 
-            square
+            box
         )
     )
     log.info("\n\n\n\n")
     log.info("Querying API")
     log.info(str(request_url))
 
-    job_id = requests.get(request_url).text[2:-2]
+    response = requests.get(request_url)
+    log.info("status code: " + str(response.status_code))
+    job_id = response.text[2:-2]
+
+
     progress_url = 'https://climateserv.servirglobal.net/chirps/getDataRequestProgress/?id=%s' % job_id
 
     percent_complete = '0'
@@ -64,7 +81,6 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
         log.info("Job " + percent_complete + "% complete")
 
     result = requests.get('http://climateserv.servirglobal.net/chirps/getDataFromRequest/?id=%s' % job_id)
-    log.debug(str(result.text))
 
     avgs = compute_avg(json.loads(result.text)['data'], num_averaged_years, start_date, end_date, log)
     log.info(str(avgs))
