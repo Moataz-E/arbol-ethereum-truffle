@@ -34,8 +34,7 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
         require(thresholdFactorPPTTH < 100000);
 
         string memory avgedYearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
-
-        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location]);
+        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location], 500000);
         emit sentNASACHIRPSOraclizeComputation(precipScript, WITID, num_averaged_years, start, end, thresholdFactorPPTTH, location);
     }
 
@@ -45,15 +44,15 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     * @param myid Something from oraclize related to verification that we don't currently use.
     * @param result The result of the oraclize call in the form "http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold"
     */
-    function __callback(bytes32 myid, string result) {
+    function __callback(bytes32 myid, string result) public {
         require(msg.sender == oraclize_cbAddress());
-        emit gotNASACHIRPSCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
-//        var sliceResult = result.toSlice();  //TODO get this running!
-  //      var status = sliceResult.split("&".toSlice());
-    //    if (!strings.equals(status, "200".toSlice())) { return; }
-      //  uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
-        //string memory outcome = sliceResult.split("&".toSlice()).toString();
-        //CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
+        emit gotNASACHIRPSCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, gasleft());
+        var sliceResult = result.toSlice();
+        var status = sliceResult.split("&".toSlice());
+        if (!strings.equals(status, "200".toSlice())) { return; }
+        uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
+        string memory outcome = sliceResult.split("&".toSlice()).toString();
+        CallbackableWIT(the_owner).evaluatorCallback(WITID, outcome);
     }
 
 
@@ -61,7 +60,6 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     * @dev We set an OAR when using ganache + bridge.
     */
     function setLocalOAR() public onlyContractOwner {
-        //This is only needed when using a local deployment on bridge.
         OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
     }
 

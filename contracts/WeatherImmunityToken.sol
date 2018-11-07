@@ -79,7 +79,6 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         testmode = true;
       }
 
-    event debug(bytes asdf);
 
     /**
     * @dev Create a WIT without a partner. (A proposal.)
@@ -198,7 +197,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
                 return;
             }
         }
-        burnWIT(WITID);
+        burnWIT(WITID);  
         emit WITEvaluated(WITID, ownerOf(the_wit.aboveID), ownerOf(the_wit.belowID), beneficiary, totalEscrow, the_wit.aboveID, the_wit.belowID);
         beneficiary.transfer(totalEscrow); //TODO can this function be repeatedly called by a malicious contract??
     }
@@ -314,8 +313,8 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
             address dependant = storageContract.getAddressValue(keccak256("Dependants", counter));
             Ownable(dependant).transferOwnership(newOwner);
         }
-        emit ContractDecomissioned(numDependants, address(this).balance, owner);
-        owner.transfer(address(this).balance);
+        emit ContractDecomissioned(numDependants, address(this).balance, the_owner);
+        the_owner.transfer(address(this).balance);
         //TODO get ether out of NOAAPrecipAggregate contract
     }
 

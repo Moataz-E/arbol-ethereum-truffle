@@ -14,7 +14,7 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     string precipScript = "QmRNQhKRThYCQe38Lycj7dTNVCFQ7bFnpQdF8NxqF9jPi4";
 
     event gotNOAAPrecipAggregateCallback(string key, string result, uint remainingGas);
-    event sentNOAAPrecipAggregateOraclizeComputation(string precipScript, uint WITID, string avgedYearsStartEnd, uint thresholdFactorPPTTH, bytes location);
+    event sentNOAAPrecipAggregateOraclizeComputation(string precipScript, uint WITID, string avgedYearsStartEnd, uint thresholdFactorPPTTH, string location);
 
     /**
     * @dev 
@@ -26,15 +26,15 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     * @param num_averaged_years Ignores whatever is input and uses 10 years for the number of years to be averaged
     * @param runtimeParams Not used but required by the WITEvaluator interface.
     */
-    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, bytes location, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
+    function evaluateWIT(uint WITID, uint start, uint end, uint thresholdFactorPPTTH, string location, uint num_averaged_years, string runtimeParams) payable public onlyContractOwner {
         uint gasEstimate = 500000;
         require(gasEstimate < address(this).balance);
         require(end.sub(start) < 31618800); //number of seconds in a year
         require(100 < thresholdFactorPPTTH);
         require(thresholdFactorPPTTH < 100000);
         string memory avgedYearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
-      //  oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location], gasEstimate);
-        //sentNOAAPrecipAggregateOraclizeComputation(precipScript, WITID, avgedYearsStartEnd, thresholdFactorPPTTH, location);
+        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location], gasEstimate);
+        sentNOAAPrecipAggregateOraclizeComputation(precipScript, WITID, avgedYearsStartEnd, thresholdFactorPPTTH, location);
     }
 
 
@@ -43,15 +43,15 @@ contract NOAAPrecipAggregate is usingOraclize, WITEvaluator, Ownable {
     * @param myid Something from oraclize related to verification that we don't currently use.
     * @param result The result of the oraclize call in the form "http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold"
     */
-    function __callback(bytes32 myid, string result) {
+    function __callback(bytes32 myid, string result) public {
         require(msg.sender == oraclize_cbAddress());
-        emit gotNOAAPrecipAggregateCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, msg.gas);
+        emit gotNOAAPrecipAggregateCallback("http-response-status-code&wit-id&outcome&average-precpitation&term-precipitation&absolute-threshold", result, gasleft());
         var sliceResult = result.toSlice();
         var status = sliceResult.split("&".toSlice());
         if (!strings.equals(status, "200".toSlice())) { return; }
         uint WITID =  parseInt(sliceResult.split("&".toSlice()).toString());
         string memory outcome = sliceResult.split("&".toSlice()).toString();
-        CallbackableWIT(owner).evaluatorCallback(WITID, outcome);
+        CallbackableWIT(the_owner).evaluatorCallback(WITID, outcome);
     }
 
 

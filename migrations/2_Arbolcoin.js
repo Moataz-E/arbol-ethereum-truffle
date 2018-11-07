@@ -22,4 +22,3 @@ module.exports = function(deployer, network, accounts) {
     deployer.deploy(ARBOL, {from: deployer_account})
 }
 
-
