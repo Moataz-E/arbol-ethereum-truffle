@@ -30,21 +30,21 @@
     "absolutePath": "/Users/benandre/cropcrop/contracts/CallbackableWIT.sol",
     "exportedSymbols": {
       "CallbackableWIT": [
-        44
+        9
       ]
     },
-    "id": 45,
+    "id": 10,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 36,
+        "id": 1,
         "literals": [
           "solidity",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:1"
+        "src": "0:23:0"
       },
       {
         "baseContracts": [],
@@ -52,9 +52,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 44,
+        "id": 9,
         "linearizedBaseContracts": [
-          44
+          9
         ],
         "name": "CallbackableWIT",
         "nodeType": "ContractDefinition",
@@ -62,7 +62,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 43,
+            "id": 8,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -70,16 +70,16 @@
             "name": "evaluatorCallback",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 41,
+              "id": 6,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 38,
+                  "id": 3,
                   "name": "WITID",
                   "nodeType": "VariableDeclaration",
-                  "scope": 43,
-                  "src": "80:10:1",
+                  "scope": 8,
+                  "src": "80:10:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -87,10 +87,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 37,
+                    "id": 2,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "80:4:1",
+                    "src": "80:4:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -101,11 +101,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 40,
+                  "id": 5,
                   "name": "outcome",
                   "nodeType": "VariableDeclaration",
-                  "scope": 43,
-                  "src": "92:14:1",
+                  "scope": 8,
+                  "src": "92:14:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -113,10 +113,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 39,
+                    "id": 4,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "92:6:1",
+                    "src": "92:6:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -126,47 +126,47 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "79:28:1"
+              "src": "79:28:0"
             },
             "payable": false,
             "returnParameters": {
-              "id": 42,
+              "id": 7,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "114:0:1"
+              "src": "114:0:0"
             },
-            "scope": 44,
-            "src": "53:62:1",
+            "scope": 9,
+            "src": "53:62:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 45,
-        "src": "25:92:1"
+        "scope": 10,
+        "src": "25:92:0"
       }
     ],
-    "src": "0:117:1"
+    "src": "0:117:0"
   },
   "legacyAST": {
     "absolutePath": "/Users/benandre/cropcrop/contracts/CallbackableWIT.sol",
     "exportedSymbols": {
       "CallbackableWIT": [
-        44
+        9
       ]
     },
-    "id": 45,
+    "id": 10,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 36,
+        "id": 1,
         "literals": [
           "solidity",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:1"
+        "src": "0:23:0"
       },
       {
         "baseContracts": [],
@@ -174,9 +174,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 44,
+        "id": 9,
         "linearizedBaseContracts": [
-          44
+          9
         ],
         "name": "CallbackableWIT",
         "nodeType": "ContractDefinition",
@@ -184,7 +184,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 43,
+            "id": 8,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -192,16 +192,16 @@
             "name": "evaluatorCallback",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 41,
+              "id": 6,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 38,
+                  "id": 3,
                   "name": "WITID",
                   "nodeType": "VariableDeclaration",
-                  "scope": 43,
-                  "src": "80:10:1",
+                  "scope": 8,
+                  "src": "80:10:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -209,10 +209,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 37,
+                    "id": 2,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "80:4:1",
+                    "src": "80:4:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -223,11 +223,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 40,
+                  "id": 5,
                   "name": "outcome",
                   "nodeType": "VariableDeclaration",
-                  "scope": 43,
-                  "src": "92:14:1",
+                  "scope": 8,
+                  "src": "92:14:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -235,10 +235,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 39,
+                    "id": 4,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "92:6:1",
+                    "src": "92:6:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -248,27 +248,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "79:28:1"
+              "src": "79:28:0"
             },
             "payable": false,
             "returnParameters": {
-              "id": 42,
+              "id": 7,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "114:0:1"
+              "src": "114:0:0"
             },
-            "scope": 44,
-            "src": "53:62:1",
+            "scope": 9,
+            "src": "53:62:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 45,
-        "src": "25:92:1"
+        "scope": 10,
+        "src": "25:92:0"
       }
     ],
-    "src": "0:117:1"
+    "src": "0:117:0"
   },
   "compiler": {
     "name": "solc",
@@ -276,5 +276,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-11-05T21:48:04.910Z"
+  "updatedAt": "2018-11-07T18:56:51.743Z"
 }
