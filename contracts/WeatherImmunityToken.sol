@@ -53,10 +53,11 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
     bool private testmode = true;
 
     event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
-    event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, string location, uint start, uint end, bool makeStale);
+    event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, address aboveOwner, address belowOwner, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, string location, uint start, uint end, bool makeStale);
     event WITEvaluated(uint indexed WITID, address indexed aboveOwner, address indexed belowOwner, address beneficiary, uint weiPayout, uint aboveID, uint belowID);
     event WITCancelled(uint indexed WITID, address indexed owner, uint indexed amountRedeemed);
     event ContractDecomissioned(uint numDependants, uint balance, address recepientOfEscrow);
+    event WITEvaluationInvoked(uint indexed WITID, address indexed invoker, address indexed evaluator);
     event WeirdThingHappened(string thingThatHappened);
 
 
@@ -114,11 +115,11 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         WIT memory new_WIT;
         if (aboveOrBelow) {
           new_WIT = WIT(ID, weiContributing, weiAsking, ID, 0, evaluator, thresholdPPTTH, location, start, end, makeStale);
-          emit ProposalOffered(ID, ID, 0, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);
+          emit ProposalOffered(ID, ID, 0, msg.sender, address(0), weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);
         }
         else {
           new_WIT = WIT(ID, weiAsking, weiContributing, 0, ID, evaluator, thresholdPPTTH, location, start, end, makeStale);
-          emit ProposalOffered(ID, 0, ID, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);        
+          emit ProposalOffered(ID, 0, ID, address(0), msg.sender, weiContributing, weiAsking, evaluator, thresholdPPTTH, location, start, end, makeStale);        
         }
         saveWIT(new_WIT);
         _mint(msg.sender, ID);
@@ -170,6 +171,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         require(the_wit.belowID != 0);
         WITEvaluator evaluator = WITEvaluator(the_wit.evaluator); 
         evaluator.evaluateWIT.value(msg.value)(tokenID, the_wit.start, the_wit.end, the_wit.thresholdPPTTH, the_wit.location, 10, "");
+        emit WITEvaluationInvoked(the_wit.WITID, msg.sender, the_wit.evaluator); 
     }
 
 
@@ -197,8 +199,8 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
                 return;
             }
         }
-        burnWIT(WITID);  
         emit WITEvaluated(WITID, ownerOf(the_wit.aboveID), ownerOf(the_wit.belowID), beneficiary, totalEscrow, the_wit.aboveID, the_wit.belowID);
+        burnWIT(WITID);
         beneficiary.transfer(totalEscrow); //TODO can this function be repeatedly called by a malicious contract??
     }
 
