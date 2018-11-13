@@ -39,38 +39,78 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
     '''
 
 
-    box = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[0], top_left[1], \
-    		 									    bottom_left[0], bottom_left[1], 
-    		 									    bottom_right[0], bottom_right[1], 
-    		 									    top_right[0], top_right[1])
+    box = [[top_left[0],     top_left[1]],
+           [bottom_left[0],  bottom_left[1]],
+           [bottom_right[0], bottom_right[1]],
+           [top_right[0],    top_right[1]]]
 
-    request_url = (
-        'https://climateserv.servirglobal.net/chirps/submitDataRequest/?'
-        'datatype=0'                  # (int), the unique datatype number for the dataset which this request operates on
-        '&begintime=%s'               # (string), startDate for processing interval, format ("MM/DD/YYYY")
-        '&endtime=%s'                 # (string), endDate for processing interval, format ("MM/DD/YYYY")
-        '&intervaltype=0'             # (int), enumerated value that represents which type of time interval to process (daily, monthly, etc). 0 = daily
-        '&operationtype=5'            # (int), enumerated value that represents which type of statistical operation to perform on the dataset ...
-                                      # ... [[0, "max", "Max"], [1, "min", "Min"], [2, "median", "Median"], [3, "range", "Range"], [4, "sum", "Sum"], [5, "avg", "Average"]]
-        '&dateType_Category=default'  
-        '&geometry='                  # (object), the geometry that is defined by the user on the current client
-            '{"type":"Polygon",'
-            '"coordinates":[%s]}' 
+    url = "https://climateserv.servirglobal.net/chirps/submitDataRequest/"
+    querystring = {"callback":"successCallback"}
+    payload = (
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"datatype\"\r\n"
+        "\r\n"
+        "0\r\n"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"begintime\"\r\n"
+        "\r\n"
+        "%s\r\n"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"endtime\"\r\n"
+        "\r\n"
+        "%s\r\n"
+        "------&&&"
+        "\r\nContent-Disposition: form-data; name=\"intervaltype\"\r\n"
+        "\r\n"
+        "0\r\n"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"operationtype\"\r\n"
+        "\r\n"
+        "5\r\n"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"callback\"\r\n"
+        "\r\n"
+        "successCallback\r\n"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"dateType_Category\"\r\n"
+        "\r\n"
+        "default"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"isZip_CurrentDataType\"\r\n"
+        "\r\n"
+        "false\r\n"
+        "------&&&\r\n"
+        "Content-Disposition: form-data; name=\"geometry\"\r\n"
+        "\r\n"
+        "{\"type\":\"Polygon\",\"coordinates\":[%s]}\r\n"
+        "------&&&--" 
         %
         (
             (start_date - relativedelta(years=num_averaged_years)).strftime("%m/%d/%Y"), 
             end_date.strftime("%m/%d/%Y"), 
-            box
+            str(box)
         )
     )
+
+    headers = {
+        'content-type': "multipart/form-data; boundary=----&&&",
+        'Content-Type': "application/json",
+        'cache-control': "no-cache"
+    }
+
     log.info("\n\n\n\n")
     log.info("Querying API")
-    log.info(str(request_url))
+    log.info(str(payload))
 
-    response = requests.get(request_url)
-    log.info("status code: " + str(response.status_code))
-    job_id = response.text[2:-2]
+    #response = requests.get(request_url)
+    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
 
+    if response.status_code != 200:
+        print(response.text)
+        print("%i&%s&%s&%s&%s&%s" % (response.status_code, 0, 0, 0, 0, 0))
+        quit()
+
+    job_id = response.text[18:-3]
 
     progress_url = 'https://climateserv.servirglobal.net/chirps/getDataRequestProgress/?id=%s' % job_id
 
@@ -81,6 +121,7 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
         log.info("Job " + percent_complete + "% complete")
 
     result = requests.get('http://climateserv.servirglobal.net/chirps/getDataFromRequest/?id=%s' % job_id)
+    log.info("result: " + str(result.text))
 
     avgs = compute_avg(json.loads(result.text)['data'], num_averaged_years, start_date, end_date, log)
     log.info(str(avgs))
