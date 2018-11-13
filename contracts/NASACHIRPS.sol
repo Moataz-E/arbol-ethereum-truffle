@@ -11,7 +11,8 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     using SafeMath for uint;
     using strings for *;
 
-    string precipScript = "Qma2o54AjgQxNapyVtRAeuj5sFR7YA52WM95shcM4fTFoC";
+//    string precipScript = "Qma2o54AjgQxNapyVtRAeuj5sFR7YA52WM95shcM4fTFoC";  //python3
+    string precipScript = "QmZSpjrAaqKWDHH8RYBFiEgtEtmCJdtnpNRCmnzuh8K9Rq";    //python2
 
     event gotNASACHIRPSCallback(string key, string result, uint remainingGas);
     event sentNASACHIRPSOraclizeComputation(string precipScript, uint WITID, uint num_averaged_years, uint start, uint end, uint thresholdFactorPPTTH, string location);
@@ -34,7 +35,7 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
         require(thresholdFactorPPTTH < 100000);
 
         string memory avgedYearsStartEnd = strConcat("10", "&", uint2str(start), "&", uint2str(end));
-        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location], 500000);
+        oraclize_query("computation", [precipScript, uint2str(WITID), avgedYearsStartEnd, uint2str(thresholdFactorPPTTH), location], 80000);
         emit sentNASACHIRPSOraclizeComputation(precipScript, WITID, num_averaged_years, start, end, thresholdFactorPPTTH, location);
     }
 
