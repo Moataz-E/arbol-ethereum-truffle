@@ -52,7 +52,7 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
 
     bool private testmode = true;
 
-    event ProposalAccepted(uint indexed WITID, uint indexed aboveID, uint indexed belowID);
+    event ProposalAccepted(uint indexed WITID, uint aboveID, uint belowID, address aboveOwner, address belowOwner, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, string location, uint start, uint end, bool makeStale);
     event ProposalOffered(uint indexed WITID, uint aboveID, uint belowID, address aboveOwner, address belowOwner, uint indexed weiContributing,  uint indexed weiAsking, address evaluator, uint thresholdPPTTH, string location, uint start, uint end, bool makeStale);
     event WITEvaluated(uint indexed WITID, address indexed aboveOwner, address indexed belowOwner, address beneficiary, uint weiPayout, uint aboveID, uint belowID);
     event WITCancelled(uint indexed WITID, address indexed owner, uint indexed amountRedeemed);
@@ -141,13 +141,13 @@ contract WeatherImmunityToken is DecoupledERC721Token, Ownable, CallbackableWIT 
         if (proposalWIT.aboveID == 0) { 
             expectedEscrow = proposalWIT.aboveEscrow; 
             storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "aboveID"), new_ID);
-            emit ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID);
+            emit ProposalAccepted(proposalWIT.WITID, new_ID, proposalWIT.WITID, msg.sender, ownerOf(proposalWIT.belowID), msg.value, proposalWIT.belowEscrow, proposalWIT.evaluator, proposalWIT.thresholdPPTTH, proposalWIT.location, proposalWIT.start, proposalWIT.end, proposalWIT.makeStale);
         }
         else { 
             if (proposalWIT.belowID == 0) {
-                expectedEscrow = proposalWIT.belowEscrow; 
+                expectedEscrow = proposalWIT.belowEscrow;
                 storageContract.setUIntValue(keccak256("WIT", proposalWIT.WITID, "belowID"), new_ID);
-                emit ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID);        
+                emit ProposalAccepted(proposalWIT.WITID, proposalWIT.WITID, new_ID, ownerOf(proposalWIT.aboveID), msg.sender, proposalWIT.aboveEscrow, msg.value, proposalWIT.evaluator, proposalWIT.thresholdPPTTH, proposalWIT.location, proposalWIT.start, proposalWIT.end, proposalWIT.makeStale);
             }
             else {
                 emit WeirdThingHappened("Someone is trying to accept a really weird WIT.");
