@@ -39,10 +39,10 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
     '''
 
 
-    box = [[top_left[0],     top_left[1]],
-           [bottom_left[0],  bottom_left[1]],
-           [bottom_right[0], bottom_right[1]],
-           [top_right[0],    top_right[1]]]
+    box = [[top_left[1],     top_left[0]],
+           [bottom_left[1],  bottom_left[0]],
+           [bottom_right[1], bottom_right[0]],
+           [top_right[1],    top_right[0]]]
 
     url = "https://climateserv.servirglobal.net/chirps/submitDataRequest/"
     querystring = {"callback":"successCallback"}

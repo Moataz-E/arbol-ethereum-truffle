@@ -38,19 +38,20 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
 
     '''
 
-
-    box = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[0], top_left[1], \
-                                                    bottom_left[0], bottom_left[1], 
-                                                    bottom_right[0], bottom_right[1], 
-                                                    top_right[0], top_right[1])
+    # Important.
+    # NASA CHIRPS uses the ordering (lon, lat) instead of the conventional (lat, lon)!
+    box = '[[%f,%f],[%f,%f],[%f,%f],[%f,%f]]' % (top_left[1], top_left[0], \
+                                                    bottom_left[1], bottom_left[0], 
+                                                    bottom_right[1], bottom_right[0], 
+                                                    top_right[1], top_right[0])
 
     request_url = (
         'https://climateserv.servirglobal.net/chirps/submitDataRequest/?'
         'datatype=0'                  # (int), the unique datatype number for the dataset which this request operates on
         '&begintime=%s'               # (string), startDate for processing interval, format ("MM/DD/YYYY")
         '&endtime=%s'                 # (string), endDate for processing interval, format ("MM/DD/YYYY")
-        '&intervaltype=0'             # (int), enumerated value that represents which type of time interval to process (daily, monthly, etc). 0 = daily
-        '&operationtype=5'            # (int), enumerated value that represents which type of statistical operation to perform on the dataset ...
+        '&intervaltype=0'             # (int), enumerated value that represents the type of time interval to process (daily, monthly, etc). 0 = daily
+        '&operationtype=5'            # (int), enumerated value that represents the type of statistical operation to perform on the dataset ...
                                       # ... [[0, "max", "Max"], [1, "min", "Min"], [2, "median", "Median"], [3, "range", "Range"], [4, "sum", "Sum"], [5, "avg", "Average"]]
         '&dateType_Category=default'  
         '&geometry='                  # (object), the geometry that is defined by the user on the current client
@@ -97,7 +98,6 @@ def main(WIT_ID, num_averaged_years, start_date, end_date, threshold_factor, top
 
     print("%i&%s&%s&%s&%s&%s" % (200, WIT_ID, outcome, format(avg_of_avgs, '.5f'), format(term_avg, '.5f'), format(absolute_threshold, '.5f')))
 
-    
     quit()
 
 
@@ -105,12 +105,15 @@ def compute_avg(data, num_averaged_years, start_date, end_date, log):
     '''
     Takes some NASA CHIRPS API JSON data, and performs some calculations on it.
 
-    We want to find the average to
+    We want to find the average to 
     '''
+
+    # initialize a table of averages. One average for each year in the total number of years to be averged together.
     avg_table = {}
     for year in range(0, num_averaged_years + 1): 
         avg_table[start_date - relativedelta(years=year), end_date - relativedelta(years=year)] = (0,0)
 
+    # 
     for day in data:
         for a_range in avg_table.keys():
             date = datetime.datetime.strptime(day['date'], '%m/%d/%Y')
