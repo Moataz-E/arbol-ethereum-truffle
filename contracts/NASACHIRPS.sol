@@ -11,8 +11,7 @@ contract NASACHIRPS is usingOraclize, WITEvaluator, Ownable {
     using SafeMath for uint;
     using strings for *;
 
-//    string precipScript = "Qma2o54AjgQxNapyVtRAeuj5sFR7YA52WM95shcM4fTFoC";  //python3
-    string precipScript = "QmZSpjrAaqKWDHH8RYBFiEgtEtmCJdtnpNRCmnzuh8K9Rq";    //python2
+    string precipScript = "QmPmmZkb8um5C6z6diGKDvD1ySL3e9tRvHhZFVERedRfGY";    //python3
 
     event gotNASACHIRPSCallback(string key, string result, uint remainingGas);
     event sentNASACHIRPSOraclizeComputation(string precipScript, uint WITID, uint num_averaged_years, uint start, uint end, uint thresholdFactorPPTTH, string location);
