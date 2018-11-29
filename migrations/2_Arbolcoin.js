@@ -1,7 +1,4 @@
-var DONUT = artifacts.require("./EternalDonut.sol");	
-var WIT = artifacts.require("./WeatherImmunityToken.sol");
 var ARBOL = artifacts.require("./Arbolcoin.sol");
-var NOAA = artifacts.require("./NOAAPrecipAggregate.sol");
 
 module.exports = function(deployer, network, accounts) {
 
