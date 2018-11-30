@@ -3,6 +3,7 @@ var WIT = artifacts.require("./WeatherImmunityToken.sol");
 var ARBOL = artifacts.require("./Arbolcoin.sol");
 var NOAA = artifacts.require("./NOAAPrecipAggregate.sol");
 var NASA = artifacts.require("./NASACHIRPS.sol");
+var GUSD = artifacts.require("./GadrianDollar.sol");
 
 module.exports = function(deployer, network, accounts) {
 
@@ -33,16 +34,18 @@ module.exports = function(deployer, network, accounts) {
 			WIT.deployed().then(function(A_WIT) {
 				NOAA.deployed().then(function(A_NOAA) {
 				    NASA.deployed().then(function(A_NASA) {
-						if (network == "development") {
-						    A_NOAA.setLocalOAR();
-						    A_NASA.setLocalOAR();
-				    	}				
-						A_DONUT.transferOwnership(A_WIT.address, {from: deployer_account});
-						A_NOAA.transferOwnership(A_WIT.address, {from: deployer_account});
-						A_NASA.transferOwnership(A_WIT.address, {from: deployer_account});
-						A_WIT.initialize(arbolcoin_address, A_DONUT.address, A_NOAA.address, A_NASA.address, {from: deployer_account});
-						web3.eth.sendTransaction({from: deployer_account, to: A_NOAA.address, value:web3.toWei(3, "ether")}); // for oraclize callback.
-						web3.eth.sendTransaction({from: deployer_account, to: A_NASA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
+				    	GUSD.deployed().then(function(A_GUSD) {
+							if (network == "development") {
+							    A_NOAA.setLocalOAR();
+							    A_NASA.setLocalOAR();
+					    	}				
+							A_DONUT.transferOwnership(A_WIT.address, {from: deployer_account});
+							A_NOAA.transferOwnership(A_WIT.address, {from: deployer_account});
+							A_NASA.transferOwnership(A_WIT.address, {from: deployer_account});
+							A_WIT.initialize(arbolcoin_address, A_DONUT.address, A_NOAA.address, A_NASA.address, A_GUSD.address, {from: deployer_account});
+							web3.eth.sendTransaction({from: deployer_account, to: A_NOAA.address, value:web3.toWei(3, "ether")}); // for oraclize callback.
+							web3.eth.sendTransaction({from: deployer_account, to: A_NASA.address, value:web3.toWei(5, "ether")}); // for oraclize callback.
+						})
 					})	
 				})
 			})

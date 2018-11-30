@@ -3,6 +3,7 @@ let Arbolcoin = artifacts.require("Arbolcoin")
 let EternalDonut = artifacts.require("EternalDonut");
 let NOAAPrecipAggregate = artifacts.require("NOAAPrecipAggregate");
 let NASACHIRPS = artifacts.require("NASACHIRPS");
+let GadrianDollar = artifacts.require("GadrianDollar");
 let expect = require('expect');
 let utils = require("./utils.js");
 let BigNumber = require('bignumber.js');
@@ -17,7 +18,7 @@ let two_months_from_now = now + (2 * one_month);
 let one_year_ago = now - one_year;
 
 
-async function testNOAAWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, accounts) {
+async function testNOAAWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, GUSD, accounts) {
 
     response = await WIT.createWITProposal(ethContribute, ethAsk, false, NOAAPrecipAggregate.address, thresholdPPTTH, "261", one_year_ago, one_year_ago + one_month, makeStale, {value: ethContribute, from: proposerAccount});
     proposalID = response.logs[0].args.WITID.toNumber()
@@ -28,11 +29,12 @@ async function testNOAAWIT(proposerAccount, accepterAccount, evaluatorAccount, a
 }
 
 
-async function testNASAWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, accounts) {
-
-    response = await WIT.createWITProposal(ethContribute, ethAsk, false, NASACHIRPS.address, thresholdPPTTH, "21.5331234,-3.1621234&0.14255", one_year_ago, one_year_ago + one_month, makeStale, {value: ethContribute, from: proposerAccount});
-    proposalID = response.logs[0].args.WITID.toNumber();
-    response = await WIT.createWITAcceptance(proposalID, {from: accepterAccount, value: ethAsk});
+async function testNASAWIT(proposerAccount, accepterAccount, evaluatorAccount, aboveOrBelow, thresholdPPTTH, ethAsk, ethContribute, start, end, makeStale, WIT, ARBOL, GUSD, accounts) {
+    response = await GUSD.approve(WIT.address, ethContribute, {from: proposerAccount});
+    response = await WIT.createWITProposal(ethContribute, ethAsk, false, NASACHIRPS.address, thresholdPPTTH, "21.5331234,-3.1621234&0.14255", one_year_ago, one_year_ago + one_month, makeStale, true, {from: proposerAccount});
+    proposalID = response.logs[1].args.WITID.toNumber();
+    await GUSD.approve(WIT.address, ethAsk, {from: accepterAccount});
+    response = await WIT.createWITAcceptance(proposalID, {from: accepterAccount});
     acceptanceID = response.logs[0].args.WITID.toNumber();
     await WIT.evaluate(acceptanceID, "", {from: evaluatorAccount});
  
@@ -45,9 +47,12 @@ contract('WeatherImmunityToken', function(accounts) {
         let ARBOL = await Arbolcoin.deployed();
         let DONUT = await EternalDonut.deployed();
         let NOAA = await NOAAPrecipAggregate.deployed();
+        let GUSD = await GadrianDollar.deployed();
 
-        await testNASAWIT(accounts[2], accounts[3], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
-        await testNASAWIT(accounts[2], accounts[3], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
+        await GUSD.transfer(accounts[2], 1000000000000000000, {from: accounts[1]});      
+        await GUSD.transfer(accounts[3], 4000000000000000000, {from: accounts[1]});
+        await testNASAWIT(accounts[2], accounts[3], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, GUSD, accounts, true);
+     /*   await testNASAWIT(accounts[2], accounts[3], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await testNASAWIT(accounts[3], accounts[2], accounts[2], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await testNASAWIT(accounts[3], accounts[2], accounts[3], false, 10000, 100000000000000000, 400000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await testNASAWIT(accounts[2], accounts[3], accounts[2], false, 10000, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
@@ -136,8 +141,8 @@ contract('WeatherImmunityToken', function(accounts) {
         await testNASAWIT(accounts[2], accounts[3], accounts[3], true, 12500, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await testNASAWIT(accounts[3], accounts[2], accounts[2], true, 12500, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
         await testNASAWIT(accounts[3], accounts[2], accounts[3], true, 12500, 400000000000000000, 100000000000000000, now - one_year, now - one_year + one_month, false, WIT, ARBOL, accounts);
-
-        await utils.sleep(1200000);  
+*/
+        await utils.sleep(400000);  
 
         await WIT.revert(); 
 
